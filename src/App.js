@@ -1,9 +1,18 @@
+import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import Prueba from './Prueba';
 
 function App() {
+  const [isDarkMode, setIsDarkMode] = useState(false); // Estado para el tema
+
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode); // Alternar entre claro y oscuro
+  };
+
   return (
-    <div className="App">
+    <div className={isDarkMode ? "App dark-mode" : "App light-mode"}>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
@@ -17,8 +26,15 @@ function App() {
         >
           Learn React
         </a>
+        <MyButton toggleTheme={toggleTheme} />
       </header>
     </div>
+  );
+}
+
+function MyButton({ toggleTheme }) {
+  return (
+    <button onClick={toggleTheme}>Toggle Theme</button>
   );
 }
 
