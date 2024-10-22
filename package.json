@@ -1,0 +1,12 @@
+{
+    "name": "tu-proyecto",
+    "version": "1.0.0",
+    "scripts": {
+        "start": "concurrently \"npm start --prefix frontend\" \"cd backend && npm start\"",
+        "frontend": "react-scripts start",
+        "backend": "node index.js"
+    },
+    "devDependencies": {
+        "concurrently": "^9.0.1"
+    }
+}
