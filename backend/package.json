@@ -11,5 +11,8 @@
   "proxy": "http://localhost:3001",
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "mysql2": "^3.11.3"
+  }
 }
