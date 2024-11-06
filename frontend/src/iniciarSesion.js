@@ -2,6 +2,9 @@ import React from 'react';
 import './iniciarSesion.css';
 
 function IniciarSesion() {
+  //const [username, setUsername] = useState('');
+  //const [password, setPassword] = useState('');
+
   return (
     <div className="fondo-login">
         <div className="cuadrado-central">

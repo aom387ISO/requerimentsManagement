@@ -114,3 +114,73 @@
 .priority-3 {
   background-color: #8b8b8b;
 }
+
+.square {
+  width: 80vw; /* En % al tamaño de la pantaña */
+  height: 80vh; 
+  background-color: #f0f0f0;
+  border: 2px solid #333;  
+  position: fixed; 
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+  margin-top: 500px;
+}
+
+.close-button {
+  padding: 20px 200px;
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 280px;
+}
+
+.close-button:hover {
+  background-color: #c0392b;
+}
+
+.accept-button {
+  padding: 20px 200px;
+  background-color: #2ecc71;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 280px;
+}
+
+.accept-button:hover {
+  background-color: #27ae60;
+}
+
+.big-text {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  margin-right: 20px;
+  color: black;
+  padding-left: 500px;
+}
+
+.weight-label {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  padding-left: 500px; 
+  color: black
+}
