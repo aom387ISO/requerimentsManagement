@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import './iniciarSesion.css';
+import InicioCliente from './inicioCliente';
+import ReactDOM from 'react-dom/client';
+import './index.css';
 
 function IniciarSesion() {
-  const [username, setUsername] = useState('');
+  const [correo, setCorreo] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
@@ -12,17 +15,28 @@ function IniciarSesion() {
       const response = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ usuario: username, contrasena: password })
+        body: JSON.stringify({ correo: correo, contrasena: password })
       });
             
       const data = await response.json();
 
       if (data.success) {
         console.log('Usuario autenticado:', data.user);
-        // Redirige o guarda el estado de sesión del usuario aquí
+        console.log('id de prueba');
+
+        if(data.user.idCliente !== 0){
+          const root = ReactDOM.createRoot(document.getElementById('root'));
+          root.render(
+            <React.StrictMode>
+              <InicioCliente/>
+            </React.StrictMode>
+          );
+        }
+        
       } else {
         setError(data.message);
       }
+
     } catch (error) {
       console.error('Error en la solicitud:', error);
       setError('Error de conexión');
@@ -35,11 +49,11 @@ function IniciarSesion() {
         <h1>Iniciar Sesión</h1>
         <form className="formulario-central" onSubmit={handleSubmit}>
           <label>Usuario:</label>
-          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+          <input type="text" value={correo} onChange={(e) => setCorreo(e.target.value)} />
           <label>Contraseña:</label>
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
           <button type="submit">Iniciar Sesión</button>
-          {error && <p className="error">{error}</p>}
+          {error && <p style={{ color: 'red' }}  className="error">{error}</p>}
         </form>
       </div>
     </div>
