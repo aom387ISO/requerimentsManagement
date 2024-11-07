@@ -31,6 +31,8 @@ function IniciarSesion() {
               <InicioCliente/>
             </React.StrictMode>
           );
+        }else{
+          
         }
         
       } else {
