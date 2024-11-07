@@ -1,0 +1,45 @@
+.fondo-login {
+    background-color: #282b30; 
+    height: 100vh; 
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+  }
+
+  .cuadrado-central{
+    background-color: #36393e;
+    border: 4px solid #555555;
+    border-radius: 10px;
+    height: 400px;
+    width: 300px;
+    align-items: center;
+    flex-direction: column;
+    display:flex;
+  }
+
+  .cuadrado-central h1{
+    color: white;
+  }
+
+  .formulario-central {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .formulario-central label {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: white;
+  }
+  
+  .formulario-central input {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+
+  .formulario-central button {
+    padding: 5px 18px;
+    font-size: 18px;
+    border-radius: 5px;
+    background-color: #939393;
+  }

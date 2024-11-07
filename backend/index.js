@@ -4,6 +4,7 @@ console.log('Hola, Node.js!');
 const mysql = require('mysql2');
 const express = require('express');
 const loginRouter = require('./login');
+const eliminarClienteRouter = require('./eliminarClienteBackend');
 const app = express();
 
 app.use(express.json());
@@ -31,6 +32,9 @@ async function getClientes() {
 
   // Ruta principal para la lógica de login
   app.use('/api', loginRouter);
+
+  app.use('/api', eliminarClienteRouter);
+
   
   app.listen(3001, () => {
     console.log('Servidor iniciado en el puerto 3001');
