@@ -11,8 +11,26 @@ function CrearCliente() {
     const [contrasena2, setContrasena2] = useState('');
     const [error, setError] = useState('');
 
+    const validarEmail = (email) => {
+        const re = /^(([^<>()[\\]\\\\.,;:\s@"]+(\.[^<>()[\\]\\\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());  
+    
+      };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!nombre || !apellido || !correo || !contrasena || !contrasena2) {
+            setError('Todos los campos son obligatorios.');
+            return;
+          }
+
+        if  
+        (!validarEmail(correo)) {
+             setError('El correo electrónico introducido no es válido.');
+             return;
+        }
+       
         try {
           const response = await fetch('/api/crearCliente', {
             method: 'POST',

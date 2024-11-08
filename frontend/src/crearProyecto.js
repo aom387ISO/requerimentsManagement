@@ -11,6 +11,12 @@ function CrearProyecto() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!nombre || !peso || !esfuerzo) {
+            setError('Todos los campos son obligatorios.');
+            return;
+          }
+
         try {
           const response = await fetch('/api/crearProyecto', {
             method: 'POST',
