@@ -7,6 +7,7 @@ const loginRouter = require('./login');
 const eliminarClienteRouter = require('./eliminarClienteBackend');
 const crearProyectoRouter = require('./crearProyecto');
 const crearClienteRouter = require('./crearCliente');
+const obtenerClientesRouter = require('./obtenerClientes');
 const app = express();
 
 app.use(express.json());
@@ -39,7 +40,10 @@ async function getClientes() {
 
   app.use('/api', crearProyectoRouter);
 
-  app.use('/api', crearClienteRouter);
+  //app.use('/api', crearClienteRouter);
+
+  app.use('/api', obtenerClientesRouter);
+
 
   app.listen(3001, () => {
     console.log('Servidor iniciado en el puerto 3001');

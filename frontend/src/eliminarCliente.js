@@ -1,48 +1,89 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './eliminarCliente.css';
-import ListadoClientes from './listadoClientes';
 
-function EliminarCliente({ cliente, onEliminar }) {
+function EliminarCliente() {
+  const [clientes, setClientes] = useState([]);
   const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
-  const [mensaje, setMensaje] = useState('');
+  const [error, setError] = useState('');
 
-  const handleSelectCliente = (cliente) => {
-    setClienteSeleccionado(cliente);
-  };
-
-  const handleEliminar = async () => {
-    try {
-      const response = await fetch('/api/eliminarClienteBackend', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ correo: cliente.correo })
+  useEffect(() => {
+    console.log('useEffect ejecutado'); 
+    fetch('/api/obtenerClientes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success && Array.isArray(data.clientes)) {
+          console.log('Clientes cargados:', data.clientes);
+          setClientes(data.clientes);
+        } else {
+          setError(data.message || 'Error al cargar los clientes');
+        }
+      })
+      .catch(error => {
+        console.error('Error al obtener los clientes:', error);
+        setError('Error al cargar los clientes');
       });
-      
-      const data = await response.json();
-      if (data.success) {
-        alert('Cliente marcado como eliminado');
-        onEliminar(cliente);
-      } else {
-        alert('Error al eliminar el cliente');
-      }
-    } catch (error) {
-      console.error('Error al eliminar el cliente:', error);
-    }
+  }, []);
+  
+  
+  const handleSelectCliente = (clienteId) => {
+    console.log("Cliente seleccionado:", clienteId);
+    setClienteSeleccionado(clienteId);
   };
   
+  const handleEliminarCliente = async () => {
+    if (!clienteSeleccionado) return;
+
+    try {
+      const response = await fetch(`/api/eliminarCliente/${clienteSeleccionado}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ estaEliminado: true })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setClientes(clientes.filter(cliente => cliente.id !== clienteSeleccionado));
+        setClienteSeleccionado(null);
+        alert('Cliente eliminado exitosamente.');
+      } else {
+        setError(data.message || 'Error al eliminar el cliente');
+      }
+    } catch (error) {
+      console.error('Error en la solicitud:', error);
+      setError('Error de conexión al eliminar el cliente');
+    }
+  };
+
   return (
-    <div className="eliminar-cliente">
-      <h2>Eliminar Cliente</h2>
-      {clienteSeleccionado ? (
-        <div>
-          <p>¿Estás seguro de que deseas eliminar a {clienteSeleccionado.nombre}?</p>
-          <button onClick={handleEliminar}>Eliminar</button>
-          <button onClick={() => setClienteSeleccionado(null)}>Cancelar</button>
-          {mensaje && <p>{mensaje}</p>}
+    <div className='fondo-eliminar-cliente'>
+      <div className='contenedor-formulario-central'>
+        <div className='cuadrado-formulario-central'>
+          <h1>Eliminación de un cliente</h1>
+          {error && <p style={{ color: 'red' }} className="error">{error}</p>}
+          <ul>
+            {clientes.map(cliente => (
+              <li
+                key={cliente.id}
+                onClick={() => handleSelectCliente(cliente.id)}
+                className={clienteSeleccionado === cliente.id ? 'seleccionado' : ''}
+              >
+                {cliente.correo}
+              </li>
+            ))}
+          </ul>
+          <button 
+            onClick={handleEliminarCliente} 
+            disabled={!clienteSeleccionado}
+            className={clienteSeleccionado ? 'boton-eliminar-seleccionado' : 'boton-eliminar'}
+          >
+            Eliminar Cliente
+          </button>
         </div>
-      ) : (
-        <ListadoClientes onSelectCliente={handleSelectCliente} />
-      )}
+      </div>
     </div>
   );
 }
