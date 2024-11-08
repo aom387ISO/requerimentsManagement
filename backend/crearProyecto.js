@@ -17,16 +17,30 @@ router.post('/crearProyecto', async (req, res) => {
       console.log('Resultado de la consulta:', rows);
   
       if (rows.length > 0) {
-        res.status(401).json({ success: false, message: 'Credenciales inválidas' });
+
+        const proyectoExistente = rows[0];
+
+        if(proyectoExistente.estaEliminado){
+            await pool.promise().query(
+                'UPDATE Proyecto SET nombreProyecto = ?, peso = ?, prioridad =?, esfuerzo = ?, estaEliminado = ? WHERE idProyecto = ?',
+                [nombre, peso, -1, esfuerzo, false, proyectoExistente.idProyecto]
+            );
+            res.status(200).json({
+                success: true,
+                message: 'Proyecto restaurado correctamente.'
+            });
+        }else{
+            res.status(401).json({ success: false, message: 'Proyecto existente' });
+        }
 
       } else {
         const [rows] = await pool.promise().query('SELECT MAX(idProyecto) as maxId FROM Proyecto');
         const maxId = rows[0].maxId || 0;
-
+        const id = maxId + 1;
         
         await pool.promise().query(
             'INSERT INTO Proyecto (idProyecto, nombreProyecto, peso, prioridad, esfuerzo, estaEliminado) VALUES (?, ?, ?, ?, ?, ?)',
-            [maxId + 1, nombre, peso, -1, esfuerzo, false]
+            [id, nombre, peso, -1, esfuerzo, false]
         )
 
         res.status(201).json({

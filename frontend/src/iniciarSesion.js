@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './iniciarSesion.css';
 import InicioCliente from './inicioCliente';
+import InicioAdmin from './inicioAdmin';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 
@@ -32,7 +33,12 @@ function IniciarSesion() {
             </React.StrictMode>
           );
         }else{
-          
+          const root = ReactDOM.createRoot(document.getElementById('root'));
+          root.render(
+            <React.StrictMode>
+              <InicioAdmin/>
+            </React.StrictMode>
+          );
         }
         
       } else {
