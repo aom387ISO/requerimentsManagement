@@ -5,6 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import IniciarSesion from './iniciarSesion';
 import CrearProyecto from "./crearProyecto"
 import EliminarCliente from './eliminarCliente';
+import InicioAdmin from './inicioAdmin';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
