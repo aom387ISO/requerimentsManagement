@@ -1,0 +1,71 @@
+.fondo-crear-proyecto {
+    background-color: #282b30; 
+    height: 100vh; 
+  }
+
+.boton-volver{
+  position:absolute;
+  top:60px;
+  left:60px;
+  background-color: #484c52;
+  width:100px;
+  height: 50px;
+  font-size: 20px;
+  color:rgb(234, 232, 232);
+  border-radius: 8px;
+}
+
+.boton-volver:active{
+  background-color: #383c42;
+}
+
+.contenedor-formulario{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.cuadrado-formulario{
+  background-color: #36393e;
+  border: 4px solid #555555;
+  border-radius: 10px;
+  height: 72%;
+  width: 60%;
+  flex-direction: column;
+}
+
+.cuadrado-formulario h1{
+  color:rgb(234, 232, 232);
+  align-items: center;
+  flex-direction: column;
+  display:flex;
+  font-size: 40px;
+}
+
+.cuadrado-formulario p{
+  color:rgb(234, 232, 232);
+  font-size: 24px;
+  margin-left: 42px;
+}
+
+.cuadrado-formulario input{
+  font-size: 25px;
+  margin-bottom: 20px;
+  margin-left: 42px;
+}
+
+.cuadrado-formulario button{
+  width:150px;
+  height: 50px;
+  font-size: 20px;
+  border-radius: 5px;
+  background-color: #939393;
+  position:absolute;
+  margin-left:27%;
+  margin-top:20px;
+}
+
+.cuadrado-formulario button:active{
+    background-color: #676767;
+}

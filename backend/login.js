@@ -8,7 +8,7 @@ router.post('/login', async (req, res) => {
   const pool = req.app.get('pool');
   try {
     const [rows] = await pool.promise().query(
-      'SELECT * FROM Cliente WHERE correo = ? AND contrasena = ?',[correo, contrasena]
+      'SELECT * FROM Cliente WHERE correo = ? AND contrasena = ? AND estaEliminado = ?',[correo, contrasena, false]
     );
     
     console.log('Valor de usuario recibido:', correo);

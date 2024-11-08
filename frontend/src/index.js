@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import IniciarSesion from './iniciarSesion';
-import InicioCliente from './inicioCliente';
+import CrearProyecto from "./crearProyecto"
 import EliminarCliente from './eliminarCliente';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <EliminarCliente/>
+    <CrearProyecto/>
   </React.StrictMode>
 );
 
