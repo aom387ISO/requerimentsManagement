@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import "./crearCliente.css"
+import "./clienteCrear.css";
 import ReactDOM from 'react-dom/client';
 import InicioAdmin from './inicioAdmin';
 
 function CrearCliente() {
     const [nombre, setNombre] = useState('');
-    const [peso, setPeso] = useState(0);
-    const [esfuerzo, setEsfuerzo] = useState(0);
+    const [apellido, setApellido] = useState('');
+    const [correo, setCorreo] = useState('');
+    const [contrasena, setContrasena] = useState('');
+    const [contrasena2, setContrasena2] = useState('');
     const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
@@ -15,7 +17,7 @@ function CrearCliente() {
           const response = await fetch('/api/crearCliente', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nombre: nombre, peso: peso, esfuerzo: esfuerzo })
+            body: JSON.stringify({ nombre: nombre, apellido: apellido, correo: correo, contrasena: contrasena, contrasena2: contrasena2 })
           });
                 
           const data = await response.json();
@@ -47,33 +49,44 @@ function CrearCliente() {
     }
 
     return(
-        <div className = "fondo-crear-proyecto">
+        <div className = "fondo-crear-cliente">
             <button className='boton-volver' onClick={handleVolver}>Volver</button>
 
-            <div className='contenedor-formulario'>
-                <div className='cuadrado-formulario'>
+            <div className="contenedor-formulario-central">
+                <div className='cuadrado-formulario-central'>
                 <h1>Formulario de creación de un cliente</h1>
                     <form onSubmit={handleSubmit}>
                         <div>
                             <p>
-                                Nombre del proyecto:
+                                Nombre del cliente:
                             </p>
-                            <input type="text" placeholder="Introduzca el nombre del proyecto" style={{ width: '90%' }} value={nombre} onChange={(e) => setNombre(e.target.value)}></input>
+                            <input type="text" placeholder="Introduzca el nombre del cliente" style={{ width: '90%' }} value={nombre} onChange={(e) => setNombre(e.target.value)}></input>
                         </div>
                         <div>
                             <p>
-                                Peso del proyecto: 
+                                Apellidos del cliente:
                             </p>
-                            <input type="number" min="0" max="5" step="1" placeholder="Introduzque entre 0 y 5" style={{ width: '24%' }} value={peso} onChange={(e) => setPeso(e.target.value)}></input>
+                            <input type="text" placeholder="Introduzca los apellidos del cliente" style={{ width: '90%' }} value={apellido} onChange={(e) => setApellido(e.target.value)}></input>
                         </div>
                         <div>
                             <p>
-                                Esfuerzo del proyecto: 
+                                Correo del cliente:
                             </p>
-                            <input type="number" placeholder="Introduzque el esfuerzo del proyecto" style={{ width: '90%' }} value={esfuerzo} onChange={(e) => setEsfuerzo(e.target.value)}></input>
+                            <input type="text" placeholder="Introduzca el correo electrónico del cliente" style={{ width: '90%' }} value={correo} onChange={(e) => setCorreo(e.target.value)}></input>
                         </div>
-
-                        <button type="submit">Crear proyecto</button>
+                        <div>
+                            <p>
+                                Contraseña del cliente:
+                            </p>
+                            <input type="password" placeholder="Introduzca la contraseña del cliente" style={{ width: '25%' }} value={contrasena} onChange={(e) => setContrasena(e.target.value)}></input>
+                        </div>
+                        <div>
+                            <p>
+                                Introduzca de nuevo la contraseña:
+                            </p>
+                            <input type="password" placeholder="Introduzca de nuevo la contraseña" style={{ width: '25%' }} value={contrasena2} onChange={(e) => setContrasena2(e.target.value)}></input>
+                        </div>
+                        <button type="submit">Crear cliente</button>
                         {error && <p style={{ color: 'red' }}  className="error">{error}</p>}
                     </form>
                 </div>

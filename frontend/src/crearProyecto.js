@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import "./crearProyecto.css"
+import "./crearProyecto.css";
 import ReactDOM from 'react-dom/client';
 import InicioAdmin from './inicioAdmin';
 

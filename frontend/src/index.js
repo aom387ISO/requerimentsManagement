@@ -4,13 +4,14 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import IniciarSesion from './iniciarSesion';
 import CrearProyecto from "./crearProyecto"
+import CrearCliente from './crearCliente';
 import EliminarCliente from './eliminarCliente';
 import InicioAdmin from './inicioAdmin';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <CrearProyecto/>
+    <CrearCliente/>
   </React.StrictMode>
 );
 
