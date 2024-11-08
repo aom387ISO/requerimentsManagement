@@ -5,7 +5,8 @@ const mysql = require('mysql2');
 const express = require('express');
 const loginRouter = require('./login');
 const eliminarClienteRouter = require('./eliminarClienteBackend');
-const crearProyectoRouter = require('./crearProyecto')
+const crearProyectoRouter = require('./crearProyecto');
+const crearClienteRouter = require('./crearCliente');
 const app = express();
 
 app.use(express.json());
@@ -37,6 +38,8 @@ async function getClientes() {
   app.use('/api', eliminarClienteRouter);
 
   app.use('/api', crearProyectoRouter);
+
+  app.use('/api', crearClienteRouter);
 
   app.listen(3001, () => {
     console.log('Servidor iniciado en el puerto 3001');

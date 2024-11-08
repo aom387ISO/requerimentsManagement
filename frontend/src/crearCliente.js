@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import "./crearProyecto.css"
+import "./crearCliente.css"
 import ReactDOM from 'react-dom/client';
 import InicioAdmin from './inicioAdmin';
 
-function CrearProyecto() {
+function CrearCliente() {
     const [nombre, setNombre] = useState('');
     const [peso, setPeso] = useState(0);
     const [esfuerzo, setEsfuerzo] = useState(0);
@@ -12,7 +12,7 @@ function CrearProyecto() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-          const response = await fetch('/api/crearProyecto', {
+          const response = await fetch('/api/crearCliente', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ nombre: nombre, peso: peso, esfuerzo: esfuerzo })
@@ -52,7 +52,7 @@ function CrearProyecto() {
 
             <div className='contenedor-formulario'>
                 <div className='cuadrado-formulario'>
-                    <h1>Formulario de creación de un proyecto</h1>
+                <h1>Formulario de creación de un cliente</h1>
                     <form onSubmit={handleSubmit}>
                         <div>
                             <p>
@@ -84,4 +84,4 @@ function CrearProyecto() {
     
 }
 
-export default CrearProyecto;
+export default CrearCliente;
