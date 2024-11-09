@@ -47,7 +47,7 @@ function EliminarCliente() {
       console.log(data);
 
       if (data.success) {
-        setClientes(clientes.filter(cliente => cliente.id !== clienteSeleccionado));
+        setClientes(clientes.filter(cliente => cliente.idCliente !== clienteSeleccionado));
         console.log(clientes); 
         setClienteSeleccionado(null);
         alert('Cliente eliminado exitosamente.');
@@ -77,15 +77,7 @@ function EliminarCliente() {
           <h1>Eliminación de un cliente</h1>
           {error && <p style={{ color: 'red' }} className="error">{error}</p>}
           <ul>
-            {clientes.map(cliente => (
-              <li
-                key={cliente.id}
-                onClick={() => handleSelectCliente(cliente.idCliente)}
-                className={clienteSeleccionado === cliente.id ? 'seleccionado' : ''}
-              >
-                {cliente.correo}
-              </li>
-            ))}
+          {listaCliente}
           </ul>
           <button 
             onClick={handleEliminarCliente} 

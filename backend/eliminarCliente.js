@@ -2,26 +2,26 @@ const express = require('express');
 const pool = require('./db'); 
 const router = express.Router();
 
-router.post('/eliminarClienteBackend', async (req, res) => {
+router.put('/eliminarCliente/:id', async (req, res) => {
     console.log('Ruta de borrado alcanzada');
-    const { correo } = req.body;
+    const { id } = req.params;
+    const { estaEliminado } = req.body; 
     const pool = req.app.get('pool');
     try {
       const [rows] = await pool.promise().query(
-        'SELECT * FROM Cliente WHERE correo = ?',[correo]
+        'SELECT * FROM Cliente WHERE idCliente = ?',[id]
       );
       
-      console.log('Valor de usuario recibido:', correo);
       console.log('Resultado de la consulta:', rows);
   
       if (rows.length > 0) {
         await pool.promise().query(
-            'UPDATE Cliente SET estaEliminado = ? WHERE correo = ?', [true, correo]
-          );
+          'UPDATE Cliente SET estaEliminado = ? WHERE idCliente = ?', [estaEliminado, id]
+        );
   
           res.json({ success: true, message: 'Cliente marcado como eliminado' });
       } else {
-        res.status(401).json({ success: false, message: 'Correo incorrecto' });
+        res.status(401).json({ success: false, message: 'ID incorrecto' });
       }
     } catch (error) {
       console.error('Error al ejecutar la consulta:', error);

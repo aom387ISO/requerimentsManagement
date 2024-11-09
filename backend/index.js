@@ -4,7 +4,7 @@ console.log('Hola, Node.js!');
 const mysql = require('mysql2');
 const express = require('express');
 const loginRouter = require('./login');
-const eliminarClienteRouter = require('./eliminarClienteBackend');
+const eliminarClienteRouter = require('./eliminarCliente');
 const crearProyectoRouter = require('./crearProyecto');
 const crearClienteRouter = require('./crearCliente');
 const obtenerClientesRouter = require('./obtenerClientes');
