@@ -1,0 +1,97 @@
+/* Fondo general de la página */
+.fondo-crear-tarea {
+  background-color: #282b30; 
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+/* Contenedor del formulario */
+.contenedor-formulario {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Cuadro principal del formulario */
+.cuadrado-formulario {
+  background-color: #36393e;
+  border: 4px solid #555555;
+  border-radius: 10px;
+  padding: 30px 100px;
+  width: 100%;  
+  height: 100%;
+  max-width: 1000px; 
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Título */
+.cuadrado-formulario h1 {
+  color: #eae8e8;
+  font-size: 36px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Etiquetas */
+.cuadrado-formulario label {
+  color: #eae8e8;
+  font-size: 18px;
+  width: 100%;
+  margin-bottom: 5px;
+  text-align: left;
+  font-weight: bold;
+}
+
+/* Campos de entrada de texto y número */
+.cuadrado-formulario input, .cuadrado-formulario select {
+  font-size: 18px;
+  padding: 8px;
+  margin-bottom: 20px;
+  width: 100%;
+  border: 2px solid #555555;
+  border-radius: 5px;
+  background-color: #2f3136;
+  color: #eae8e8;
+}
+
+/* Botón */
+.cuadrado-formulario button {
+  width: 100%;
+  max-width: 200px;
+  padding: 10px;
+  font-size: 18px;
+  border-radius: 5px;
+  background-color: #939393;
+  color: #282b30;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  margin-top: 20px;
+  transition: background-color 0.3s;
+}
+
+.cuadrado-formulario button:hover {
+  background-color: #787878;
+}
+
+.cuadrado-formulario button:active {
+  background-color: #676767;
+}
+
+/* Mensaje de error */
+.error {
+  color: red;
+  font-size: 16px;
+  margin-top: 10px;
+  text-align: center;
+}
