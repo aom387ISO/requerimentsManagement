@@ -8,6 +8,8 @@ const eliminarClienteRouter = require('./eliminarClienteBackend');
 const crearProyectoRouter = require('./crearProyecto');
 const crearClienteRouter = require('./crearCliente');
 const obtenerClientesRouter = require('./obtenerClientes');
+const modificarPesoTareaRouter = require('./modificarPesoTarea');
+
 const app = express();
 
 app.use(express.json());
@@ -43,6 +45,8 @@ async function getClientes() {
   //app.use('/api', crearClienteRouter);
 
   app.use('/api', obtenerClientesRouter);
+
+  app.use('/api', modificarPesoTareaRouter);
 
 
   app.listen(3001, () => {
