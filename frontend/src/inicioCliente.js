@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import './incioCliente.css';
+import ReactDOM from 'react-dom/client';
+import './iniciarSesion';
+import IniciarSesion from './iniciarSesion';
 
 const data = [
   {
@@ -41,10 +44,19 @@ function InicioCliente() {
     setSelectedWeight(weight);
   };
 
+  const handleCerrarSesion = () => {
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      <React.StrictMode>
+        <IniciarSesion />
+      </React.StrictMode>
+    );
+}
+
   return (
     <div className="main-container">
       <div className="header">
-        <button className="logout-button">Cerrar sesión</button>
+        <button className="logout-button" onClick={handleCerrarSesion}>Cerrar sesión</button>
       </div>
 
       <div className="table-container">
