@@ -58,6 +58,16 @@ function EliminarCliente() {
     }
   };
 
+  const listaCliente =clientes.map(cliente => (
+    <li
+      key={cliente.idCliente}
+      onClick={() => handleSelectCliente(cliente.idCliente)}
+      className={clienteSeleccionado === cliente.idCliente ? 'seleccionado' : ''}
+    >
+      {cliente.correo}
+    </li>
+  ))
+
   return (
     <div className='fondo-eliminar-cliente'>
       <div className='contenedor-formulario-central'>
@@ -65,15 +75,7 @@ function EliminarCliente() {
           <h1>Eliminación de un cliente</h1>
           {error && <p style={{ color: 'red' }} className="error">{error}</p>}
           <ul>
-            {clientes.map(cliente => (
-              <li
-                key={cliente.id}
-                onClick={() => handleSelectCliente(cliente.id)}
-                className={clienteSeleccionado === cliente.id ? 'seleccionado' : ''}
-              >
-                {cliente.correo}
-              </li>
-            ))}
+            {listaCliente}
           </ul>
           <button 
             onClick={handleEliminarCliente} 
