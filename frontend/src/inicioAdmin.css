@@ -1,4 +1,66 @@
-.fondo-inicio-admin {
-    background-color: #282b30; 
-    height: 100vh; 
-  }
+/* Ensure the main container and table are full-width */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+.header {
+  display: flex;
+  justify-content:space-between;
+  background-color: #6a6868;
+  padding: 10px;
+  width: 100%;
+}
+
+.header button, .delete-button, .logout-button {
+  padding: 8px 16px;
+  font-size: 0.9em;
+  margin: 0 4px;
+
+}
+
+.table-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.project-row, .requirement-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #ccc;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.project-name, .requirement-name {
+  flex: 2;
+  padding: 0 10px;
+}
+
+.weight, .effort, .priority {
+  flex: 1;
+  text-align: center;
+}
+
+/* Square popup adjustments */
+.square {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 400px;
+  padding: 20px;
+  background-color: white;
+  border: 2px solid #ddd;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.button-container button {
+  padding: 5px 10px;
+}
