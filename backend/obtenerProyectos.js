@@ -10,7 +10,7 @@ router.post('/obtenerProyectos', async (req, res) => {
     );
 
     if (rows.length > 0) {
-      res.json({ success: true, clientes: rows });
+      res.json({ success: true, proyectos: rows });
     } else {
       res.json({ success: false, message: 'No se encontraron proyectos activos' });
     }

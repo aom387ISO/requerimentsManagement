@@ -7,11 +7,12 @@ import CrearProyecto from "./crearProyecto"
 import CrearCliente from './crearCliente';
 import EliminarCliente from './eliminarCliente';
 import InicioAdmin from './inicioAdmin';
+import VistaListaDeProyectoAnadirCliente from './vistaListaDeProyectoAnadirCliente';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <EliminarCliente/>
+    <VistaListaDeProyectoAnadirCliente/>
   </React.StrictMode>
 );
 
