@@ -5,9 +5,11 @@ const mysql = require('mysql2');
 const express = require('express');
 const loginRouter = require('./login');
 const eliminarClienteRouter = require('./eliminarCliente');
+const eliminarProyectoRouter = require('./eliminarProyecto');
 const crearProyectoRouter = require('./crearProyecto');
 const crearClienteRouter = require('./crearCliente');
 const obtenerClientesRouter = require('./obtenerClientes');
+const obtenerProyectosRouter = require('./obtenerClientes');
 const modificarPesoTareaRouter = require('./modificarPesoTarea');
 
 const app = express();
@@ -40,11 +42,15 @@ async function getClientes() {
 
   app.use('/api', eliminarClienteRouter);
 
+  app.use('/api', eliminarProyectoRouter);
+
   app.use('/api', crearProyectoRouter);
 
-  //app.use('/api', crearClienteRouter);
+  app.use('/api', crearClienteRouter);
 
   app.use('/api', obtenerClientesRouter);
+
+  app.use('/api', obtenerProyectosRouter);
 
   app.use('/api', modificarPesoTareaRouter);
 
