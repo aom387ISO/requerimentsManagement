@@ -44,9 +44,11 @@ function EliminarCliente() {
       });
 
       const data = await response.json();
+      console.log(data);
 
       if (data.success) {
         setClientes(clientes.filter(cliente => cliente.id !== clienteSeleccionado));
+        console.log(clientes); 
         setClienteSeleccionado(null);
         alert('Cliente eliminado exitosamente.');
       } else {
@@ -68,7 +70,7 @@ function EliminarCliente() {
             {clientes.map(cliente => (
               <li
                 key={cliente.id}
-                onClick={() => handleSelectCliente(cliente.id)}
+                onClick={() => handleSelectCliente(cliente.idCliente)}
                 className={clienteSeleccionado === cliente.id ? 'seleccionado' : ''}
               >
                 {cliente.correo}
