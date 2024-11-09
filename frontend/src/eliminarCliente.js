@@ -60,6 +60,16 @@ function EliminarCliente() {
     }
   };
 
+  const listaCliente =clientes.map(cliente => (
+    <li
+      key={cliente.idCliente}
+      onClick={() => handleSelectCliente(cliente.idCliente)}
+      className={clienteSeleccionado === cliente.idCliente ? 'seleccionado' : ''}
+    >
+      {cliente.correo}
+    </li>
+  ))
+
   return (
     <div className='fondo-eliminar-cliente'>
       <div className='contenedor-formulario-central'>

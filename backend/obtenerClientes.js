@@ -6,7 +6,7 @@ router.post('/obtenerClientes', async (req, res) => {
   const pool = req.app.get('pool');
   try {
     const [rows] = await pool.promise().query(
-      'SELECT * FROM Cliente WHERE idCliente != ? && estaEliminado = ?', [0,0]
+      'SELECT * FROM Cliente WHERE idCliente != ? && estaEliminado = ?', [0,false]
     );
 
     if (rows.length > 0) {
