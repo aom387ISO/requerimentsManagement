@@ -15,6 +15,7 @@ const anadirClienteProyecto = require('./anadirClienteProyecto');
 const listaClientesEnProyecto = require('./listaClientesEnProyecto');
 const listaProyecto = require('./listaProyectos');
 const verProyectosRouter = require('./verProyectos');
+const verProyectosClienteRouter = require('./verProyectosCliente');
 const app = express();
 
 app.use(express.json());
