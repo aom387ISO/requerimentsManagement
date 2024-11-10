@@ -1,7 +1,8 @@
 const express = require('express');
+const pool = require('./db'); 
 const router = express.Router();
 
-router.post('/agregarTarea', async (req, res) => {
+router.post('/anadirTarea', async (req, res) => {
   const pool = req.app.get('pool');
   
   const {
