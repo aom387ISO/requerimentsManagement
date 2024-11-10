@@ -1,0 +1,97 @@
+/* Fondo general de la página */
+.fondo-crear-tarea {
+  background-color: #2a2d34; /* Color ligeramente diferente para distinguirlo */
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+/* Contenedor del formulario */
+.contenedor-formulario {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Cuadro principal del formulario */
+.cuadrado-formulario {
+  background-color: #3a3d42; /* Cambio de fondo para dar distinción */
+  border: 4px solid #666666; /* Cambio de color de borde */
+  border-radius: 10px;
+  padding: 30px 100px;
+  width: 100%;  
+  height: 100%;
+  max-width: 1000px; 
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Título */
+.cuadrado-formulario h1 {
+  color: #f2f2f2; /* Color más claro para destacar */
+  font-size: 36px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Etiquetas */
+.cuadrado-formulario label {
+  color: #d1d1d1;
+  font-size: 18px;
+  width: 100%;
+  margin-bottom: 5px;
+  text-align: left;
+  font-weight: bold;
+}
+
+/* Campos de entrada de texto y número */
+.cuadrado-formulario input, .cuadrado-formulario select {
+  font-size: 18px;
+  padding: 8px;
+  margin-bottom: 20px;
+  width: 100%;
+  border: 2px solid #666666; /* Color de borde consistente con el cambio de diseño */
+  border-radius: 5px;
+  background-color: #32353a;
+  color: #f2f2f2;
+}
+
+/* Botón */
+.cuadrado-formulario button {
+  width: 100%;
+  max-width: 200px;
+  padding: 10px;
+  font-size: 18px;
+  border-radius: 5px;
+  background-color: #4b89dc; /* Cambio de color para resaltar la acción de modificación */
+  color: #f2f2f2;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  margin-top: 20px;
+  transition: background-color 0.3s;
+}
+
+.cuadrado-formulario button:hover {
+  background-color: #3b79cc; /* Color de hover para el botón */
+}
+
+.cuadrado-formulario button:active {
+  background-color: #2b69bc; /* Color de activación para el botón */
+}
+
+/* Mensaje de error */
+.error {
+  color: #ff4d4d; /* Color de error más visible */
+  font-size: 16px;
+  margin-top: 10px;
+  text-align: center;
+}

@@ -8,6 +8,8 @@ import CrearCliente from './crearCliente';
 import EliminarCliente from './eliminarCliente';
 import InicioAdmin from './inicioAdmin';
 import VistaListaDeProyectoAnadirCliente from './vistaListaDeProyectoAnadirCliente';
+import AnadirTarea from './anadirTarea'
+import EditarTarea from './editarTarea'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
