@@ -11,7 +11,7 @@ function InicioCliente() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch('/api/verProyectos', {
+    fetch('/api/verProyectosCliente', {
       method: 'GET', // Cambiar a GET para obtener los datos
       headers: { 'Content-Type': 'application/json' },
     })
