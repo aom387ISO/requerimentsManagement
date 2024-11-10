@@ -1,10 +1,12 @@
 const express = require('express');
-const pool = require('./db');  // No es necesario crear una nueva constante pool
+const pool = require('./db');
 const router = express.Router();
 
-// Ruta para obtener proyectos y tareas de un cliente específico
-router.get('/verProyectosCliente', async (req, res) => {
-    const idCliente = req.query.idCliente; // Obtener el idCliente de los parámetros de la solicitud
+// Ruta para obtener proyectos y tareas de un cliente específico usando parámetro de ruta
+router.get('/verProyectosCliente/:id', async (req, res) => {
+    const idCliente = req.params.id; // Obtener el idCliente desde el parámetro de ruta
+    console.log('idCliente backend es:', idCliente);
+    const pool = req.app.get('pool');
 
     try {
         // Consulta para obtener los proyectos del cliente específico
@@ -22,8 +24,8 @@ router.get('/verProyectosCliente', async (req, res) => {
             // Consulta para obtener las tareas asociadas a los proyectos de este cliente
             const [tareas] = await pool.promise().query(
                 `SELECT t.idTarea, t.nombreTarea, t.esfuerzo, t.tiempoMinutos, t.prioridad, t.Proyecto_idProyecto
-                 FROM Tarea t
-                 WHERE t.estaEliminado = 0`
+                FROM Tarea t
+                WHERE t.estaEliminado = 0`
             );
 
             // Asocia cada tarea al proyecto correspondiente

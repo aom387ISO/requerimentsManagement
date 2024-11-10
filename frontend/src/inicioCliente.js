@@ -4,14 +4,16 @@ import ReactDOM from 'react-dom/client';
 import './iniciarSesion';
 import IniciarSesion from './iniciarSesion';
 
-function InicioCliente() {
+function InicioCliente({idCliente}) {
   const [expandedRows, setExpandedRows] = useState({});
   const [showSquare, setShowSquareState] = useState(false);
   const [selectedWeight, setSelectedWeight] = useState(null);
   const [data, setData] = useState([]);
-
+  
+  console.log('idCliente es:', idCliente);
+  
   useEffect(() => {
-    fetch('/api/verProyectosCliente', {
+    fetch(`/api/verProyectosCliente/${idCliente}`, {
       method: 'GET', // Cambiar a GET para obtener los datos
       headers: { 'Content-Type': 'application/json' },
     })
@@ -25,7 +27,7 @@ function InicioCliente() {
         }
       })
       .catch((error) => console.error('Error al obtener datos:', error));
-  }, []);
+  }, [idCliente]);
 
   const toggleRow = (index) => {
     setExpandedRows({

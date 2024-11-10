@@ -9,6 +9,7 @@ function IniciarSesion() {
   const [correo, setCorreo] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [idCliente, setIdCliente] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,20 +21,20 @@ function IniciarSesion() {
       });
             
       const data = await response.json();
+      const root = ReactDOM.createRoot(document.getElementById('root'));
 
       if (data.success) {
         console.log('Usuario autenticado:', data.user);
         console.log('id de prueba');
+        setIdCliente(data.user.idCliente);
 
         if(data.user.idCliente !== 0){
-          const root = ReactDOM.createRoot(document.getElementById('root'));
           root.render(
             <React.StrictMode>
-              <InicioCliente/>
+              <InicioCliente idCliente={data.user.idCliente} /> 
             </React.StrictMode>
           );
         }else{
-          const root = ReactDOM.createRoot(document.getElementById('root'));
           root.render(
             <React.StrictMode>
               <InicioAdmin/>
