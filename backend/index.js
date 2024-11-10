@@ -67,6 +67,8 @@ async function getClientes() {
   app.use('/api', listaProyecto);
 
   app.use('/api', verProyectosRouter); 
+  
+  app.use('/api', verProyectosClienteRouter); 
 
   app.listen(3001, () => {
     console.log('Servidor iniciado en el puerto 3001');

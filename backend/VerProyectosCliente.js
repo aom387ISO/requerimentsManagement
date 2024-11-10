@@ -4,7 +4,7 @@ const router = express.Router();
 
 // Ruta para obtener proyectos y tareas de un cliente específico
 router.get('/verProyectosCliente', async (req, res) => {
-    const { idCliente } = req.params; // Obtener el idCliente de los parámetros de la solicitud
+    const idCliente = req.query.idCliente; // Obtener el idCliente de los parámetros de la solicitud
 
     try {
         // Consulta para obtener los proyectos del cliente específico
