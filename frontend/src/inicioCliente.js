@@ -17,6 +17,7 @@ function InicioCliente() {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log('Datos JSON obtenidos:', data); 
         if (data.success) {
           setData(data.proyectos); // Cambié 'setProjects' a 'setData' para usar el estado correcto
         } else {
@@ -75,20 +76,20 @@ function InicioCliente() {
               <button onClick={() => toggleRow(index)}>
                 {expandedRows[index] ? '-' : '+'}
               </button>
-              <span className="project-name">{project.projectName}</span>
+              <span className="project-name">{project.nombreProyecto}</span>
             </div>
 
             {expandedRows[index] && project.requirements.map((req, reqIndex) => (
               <div key={reqIndex} className="requirement-row">
                 <span className="requirement-name">{req.name}</span>
                 <span className="weight">
-                  {req.weight}
-                  <button className="edit-weight" onClick={() => handleSetShowSquare(true, req.weight)}>
+                  {req.esfuerzo}
+                  <button className="edit-weight" onClick={() => handleSetShowSquare(true, req.esfuerzo)}>
                     Modificar peso
                   </button>
                 </span>
-                <span>{req.time}</span>
-                <span className={`priority priority-${req.priority}`}>{req.priority}</span>
+                <span>{req.tiempoMinutos}</span>
+                <span className={`priority priority-${req.prioridad}`}>{req.prioridad}</span>
               </div>
             ))}
           </div>
