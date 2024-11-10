@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom/client';
 import './eliminarCliente.css';
+import InicioAdmin from './inicioAdmin';
 
 function EliminarCliente() {
   const [clientes, setClientes] = useState([]);
   const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
   const [error, setError] = useState('');
 
+
+  
   useEffect(() => {
     console.log('useEffect ejecutado'); 
     fetch('/api/obtenerClientes', {
@@ -27,7 +31,8 @@ function EliminarCliente() {
       });
   }, []);
   
-  
+
+
   const handleSelectCliente = (clienteId) => {
     console.log("Cliente seleccionado:", clienteId);
     setClienteSeleccionado(clienteId);
@@ -60,6 +65,15 @@ function EliminarCliente() {
     }
   };
 
+  const handleVolver = () => {
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      <React.StrictMode>
+        <InicioAdmin />
+      </React.StrictMode>
+    );
+  };
+
   const listaCliente =clientes.map(cliente => (
     <li
       key={cliente.idCliente}
@@ -72,6 +86,7 @@ function EliminarCliente() {
 
   return (
     <div className='fondo-eliminar-cliente'>
+      <button className='boton-volver' onClick={handleVolver}>Volver</button>
       <div className='contenedor-formulario-central'>
         <div className='cuadrado-formulario-central'>
           <h1>Eliminación de un cliente</h1>
