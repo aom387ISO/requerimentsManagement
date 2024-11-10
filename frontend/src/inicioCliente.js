@@ -1,28 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';  // Importa React y los hooks una sola vez
 import './incioCliente.css';
 import ReactDOM from 'react-dom/client';
 import './iniciarSesion';
 import IniciarSesion from './iniciarSesion';
 
-const data = [
-  {
-    projectName: 'Nombre del proyecto 1',
-    requirements: [
-      { name: 'Nombre del requisito 1', weight: 5, time: '4h30m', priority: 1 },
-      { name: 'Nombre del requisito 2', weight: 2, time: '2h30m', priority: 2 },
-      { name: 'Nombre del requisito 3', weight: 3, time: '7h', priority: 3 },
-    ],
-  },
-  {
-    projectName: 'Nombre del proyecto 3',
-    requirements: [],
-  },
-];
-
 function InicioCliente() {
   const [expandedRows, setExpandedRows] = useState({});
   const [showSquare, setShowSquareState] = useState(false);
   const [selectedWeight, setSelectedWeight] = useState(null);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch('/api/verProyectos', {
+      method: 'GET', // Cambiar a GET para obtener los datos
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Datos JSON obtenidos:', data); 
+        if (data.success) {
+          setData(data.proyectos); // Cambié 'setProjects' a 'setData' para usar el estado correcto
+        } else {
+          console.log(data.message);
+        }
+      })
+      .catch((error) => console.error('Error al obtener datos:', error));
+  }, []);
 
   const toggleRow = (index) => {
     setExpandedRows({
@@ -51,7 +54,7 @@ function InicioCliente() {
         <IniciarSesion />
       </React.StrictMode>
     );
-}
+  };
 
   return (
     <div className="main-container">
@@ -73,20 +76,20 @@ function InicioCliente() {
               <button onClick={() => toggleRow(index)}>
                 {expandedRows[index] ? '-' : '+'}
               </button>
-              <span className="project-name">{project.projectName}</span>
+              <span className="project-name">{project.nombreProyecto}</span>
             </div>
 
             {expandedRows[index] && project.requirements.map((req, reqIndex) => (
               <div key={reqIndex} className="requirement-row">
                 <span className="requirement-name">{req.name}</span>
                 <span className="weight">
-                  {req.weight}
-                  <button className="edit-weight" onClick={() => handleSetShowSquare(true, req.weight)}>
+                  {req.esfuerzo}
+                  <button className="edit-weight" onClick={() => handleSetShowSquare(true, req.esfuerzo)}>
                     Modificar peso
                   </button>
                 </span>
-                <span>{req.time}</span>
-                <span className={`priority priority-${req.priority}`}>{req.priority}</span>
+                <span>{req.tiempoMinutos}</span>
+                <span className={`priority priority-${req.prioridad}`}>{req.prioridad}</span>
               </div>
             ))}
           </div>

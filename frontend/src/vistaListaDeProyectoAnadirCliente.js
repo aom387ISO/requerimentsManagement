@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './vistaListaDeProyectoAnadirCliente.css';
+import VistaListaDeClienteEnProyecto from './vistaListaDeClienteEnProyecto';
+import { Link } from 'react-router-dom';
 
 function VistaListaDeProyectoAnadirCliente() {
   const [proyectos, setProyectos] = useState([]);
@@ -35,8 +37,20 @@ function VistaListaDeProyectoAnadirCliente() {
   
   const handleBotonProyecto= async () => {
     if (!proyectoSeleccionado) return;
-
-    //Investigar como pasar proyecto
+    return (
+      <Link
+      to={`/vistaListaDeClienteEnProyecto/${proyectoSeleccionado.id}`}
+      state={{ proyecto: proyectoSeleccionado }}
+      >
+        <button
+          onClick={handleBotonProyecto}
+          disabled={!proyectoSeleccionado}
+          className={proyectoSeleccionado ? 'boton-proyecto-seleccionado' : 'boton-proyecto'}
+        >
+          Añadir Cliente
+        </button>
+      </Link>
+    );
   };
 
   const listaProyecto =proyectos.map(proyecto => (

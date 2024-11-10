@@ -7,17 +7,16 @@ import CrearProyecto from "./crearProyecto"
 import CrearCliente from './crearCliente';
 import EliminarCliente from './eliminarCliente';
 import InicioAdmin from './inicioAdmin';
-import VistaListaDeProyectoAnadirCliente from './vistaListaDeProyectoAnadirCliente';
 import AnadirTarea from './anadirTarea'
 import EditarTarea from './editarTarea'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <AnadirTarea/>
+    <IniciarSesion/>
   </React.StrictMode>
 );
-
+// import VistaListaDeProyectoAnadirCliente from './vistaListaDeProyectoAnadirCliente';
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
