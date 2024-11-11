@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import IniciarSesion from './iniciarSesion';
 import './inicioAdmin.css';
+import CrearProyecto from './crearProyecto';
+import CrearCliente from './crearCliente';
+import EliminarCliente from './eliminarCliente';
 
 function InicioAdmin() {
   const [expandedRows, setExpandedRows] = useState({});
@@ -39,6 +42,38 @@ function InicioAdmin() {
     setShowSquareState(show);
     setSelectedWeight(weight);
   };
+  const handleCrearProyecto = () => {
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      <React.StrictMode>
+        <CrearProyecto/>
+      </React.StrictMode>
+    );
+  };
+  const handleCrearCliente = () => {
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      <React.StrictMode>
+        <CrearCliente/>
+      </React.StrictMode>
+    );
+  };
+  const handleAñadirCliente = () => {
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      <React.StrictMode>
+        <CrearCliente/> //cambiar cuando este hecha
+      </React.StrictMode>
+    );
+  };
+  const handleEliminarCliente = () => {
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      <React.StrictMode>
+        <EliminarCliente/>
+      </React.StrictMode>
+    );
+  };
 
   const handleCerrarSesion = () => {
     const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -52,10 +87,10 @@ function InicioAdmin() {
   return (
     <div className="main-container">
       <div className="header">
-        <button>Crear proyecto</button>
-        <button>Crear cliente</button>
-        <button>Añadir cliente a un proyecto</button>
-        <button className="delete-button">Eliminar un cliente</button>
+        <button className="CrearProyecto-button" onClick={handleCrearProyecto}>Crear Proyecto</button>
+        <button className="CrearCliente-button" onClick={handleCrearCliente}>Crear Cliente</button>
+        <button className="AñadirCliente-button" onClick={handleAñadirCliente}>Añadir Cliente</button>
+        <button className="EliminarCliente-button" onClick={handleEliminarCliente}>Eliminar Cliente</button>
         <button className="logout-button" onClick={handleCerrarSesion}>Cerrar sesión</button>
       </div>
 
