@@ -11,7 +11,7 @@ router.get('/verProyectosCliente/:id', async (req, res) => {
     try {
         // Consulta para obtener los proyectos del cliente específico
         const [proyectos] = await pool.promise().query(
-            `SELECT p.idProyecto, p.nombreProyecto
+            `SELECT *
                 FROM proyecto p
                 JOIN proyectoCliente pc ON p.idProyecto = pc.Proyecto_idProyecto
                 JOIN cliente c ON pc.Cliente_idCliente = c.idCliente
@@ -23,8 +23,10 @@ router.get('/verProyectosCliente/:id', async (req, res) => {
         if (proyectos.length > 0) {
             // Consulta para obtener las tareas asociadas a los proyectos de este cliente
             const [tareas] = await pool.promise().query(
-                `SELECT t.idTarea, t.nombreTarea, t.esfuerzo, t.tiempoMinutos, t.prioridad, t.Proyecto_idProyecto
+                `SELECT *
                 FROM Tarea t
+                JOIN tareacliente tc ON t.idTarea = tc.Tarea_idTarea
+                JOIN cliente c ON tc.Cliente_idCliente = c.idCliente
                 WHERE t.estaEliminado = 0`
             );
 
