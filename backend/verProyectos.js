@@ -11,7 +11,11 @@ router.get('/verProyectos', async (req, res) => {
   
       if (proyectos.length > 0) {
         const [tareas] = await pool.promise().query(
-          'SELECT * FROM Tarea WHERE estaEliminado = 0'
+          `SELECT *
+                FROM Tarea t
+                JOIN tareacliente tc ON t.idTarea = tc.Tarea_idTarea
+                JOIN cliente c ON tc.Cliente_idCliente = c.idCliente
+                WHERE t.estaEliminado = 0`
         );
   
         const proyectosConTareas = proyectos.map((proyecto) => ({
