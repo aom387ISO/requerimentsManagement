@@ -105,12 +105,12 @@ function InicioCliente({idCliente}) {
         ))}
 
         {showSquare && (
-          <div className="square">
-            <div className="big-text">Modificación del peso del requisito actual</div>
-            <div className="weight-label">Peso actual: {selectedWeight}</div>
-            <div className="button-container">
-              <button className="close-button" onClick={closeSquare}>Cancelar</button>
-              <button className="accept-button" onClick={acceptSquare}>Aceptar</button>
+          <div className="square-client">
+            <div className="big-text-client">Modificación del peso del requisito actual</div>
+            <div className="weight-label-client">Peso actual: {selectedWeight}</div>
+            <div className="button-container-client">
+              <button className="close-button-client" onClick={closeSquare}>Cancelar</button>
+              <button className="accept-button-client" onClick={acceptSquare}>Aceptar</button>
             </div>
           </div>
         )}
