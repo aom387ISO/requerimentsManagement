@@ -65,36 +65,43 @@ function InicioCliente({idCliente}) {
       </div>
 
       <div className="table-container">
-        <div className="table-header">
+      <div className="table-header">
           <div className="title">Nombre</div>
           <div className="title">Peso</div>
+          <div className="title">Esfuerzo</div>
           <div className="title">Tiempo</div>
           <div className="title">Prioridad</div>
         </div>
 
         {data.map((project, index) => (
-          <div key={index} className="row">
+          <React.Fragment key={index}>
             <div className="project-row">
               <button onClick={() => toggleRow(index)}>
-                {expandedRows[index] ? '-' : '+'}
+                {expandedRows[index] ? '−' : '+'}
               </button>
               <span className="project-name">{project.nombreProyecto}</span>
+              <span className="weight">{project.peso}</span>
+              <span className="effort">{project.esfuerzo}€</span>
+              <span></span> {/* Empty cell for project time */}
+              <span className={`priority-client priority-${project.prioridad}`}>{project.prioridad}</span>
             </div>
 
             {expandedRows[index] && project.requirements.map((req, reqIndex) => (
               <div key={reqIndex} className="requirement-row">
-                <span className="requirement-name">{req.name}</span>
+                <button className="delete-requirement">X</button>
+                <span className="requirement-name">{req.nombreTarea}</span>
                 <span className="weight">
-                  {req.esfuerzo}
-                  <button className="edit-weight" onClick={() => handleSetShowSquare(true, req.esfuerzo)}>
+                  {req.peso}
+                  <button className="edit-weight" onClick={() => handleSetShowSquare(true, req.peso)}>
                     Modificar peso
                   </button>
                 </span>
-                <span>{req.tiempoMinutos}</span>
-                <span className={`priority priority-${req.prioridad}`}>{req.prioridad}</span>
+                <span className="effort">{req.esfuerzo}€</span>
+                <span>{Math.floor(req.tiempoMinutos / 60)}h{req.tiempoMinutos % 60}m</span>
+                <span className={`priority-client priority-${req.prioridad}`}>{req.prioridad}</span>
               </div>
             ))}
-          </div>
+          </React.Fragment>
         ))}
 
         {showSquare && (
