@@ -97,6 +97,16 @@ function InicioAdmin() {
             ))}
           </React.Fragment>
         ))}
+        {showSquare && (
+          <div className="square">
+            <div className="big-text">Modificación del peso del requisito actual</div>
+            <div className="weight-label">Peso actual: {selectedWeight}</div>
+            <div className="button-container">
+              <button className="close-button" onClick={closeSquare}>Cancelar</button>
+              <button className="accept-button" onClick={acceptSquare}>Aceptar</button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
