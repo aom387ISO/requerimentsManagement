@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import './vistaListaDeProyectoAnadirCliente.css';
 import VistaListaDeClienteEnProyecto from './vistaListaDeClienteEnProyecto';
-import { Link } from 'react-router-dom';
+import ReactDOM from 'react-dom/client';
+import InicioAdmin from './inicioAdmin';
 
 function VistaListaDeProyectoAnadirCliente() {
   const [proyectos, setProyectos] = useState([]);
   const [proyectoSeleccionado, setProyectoSeleccionado] = useState(null);
+  const [clientes, setClientes] = useState([]);
+  const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
   const [error, setError] = useState('');
 
   useEffect(() => {
     console.log('useEffect ejecutado'); 
     fetch('/api/obtenerProyectos', {
-      method: 'POST',
+      method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
       .then(response => response.json())
@@ -33,15 +36,22 @@ function VistaListaDeProyectoAnadirCliente() {
   const handleSelectProyecto = (idProyecto) => {
     console.log("Proyecto seleccionado:", idProyecto);
     setProyectoSeleccionado(idProyecto);
+    setClientes([]);
+    handleVerProyectosCliente(idProyecto);
   };
-  
+
+  const handleVolver = () => {
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      <React.StrictMode>
+        <InicioAdmin />
+      </React.StrictMode>
+    );
+}
+
   const handleBotonProyecto= async () => {
     if (!proyectoSeleccionado) return;
     return (
-      <Link
-      to={`/vistaListaDeClienteEnProyecto/${proyectoSeleccionado.id}`}
-      state={{ proyecto: proyectoSeleccionado }}
-      >
         <button
           onClick={handleBotonProyecto}
           disabled={!proyectoSeleccionado}
@@ -49,8 +59,42 @@ function VistaListaDeProyectoAnadirCliente() {
         >
           Añadir Cliente
         </button>
-      </Link>
     );
+  };
+
+  const handleSelectCliente = (idCliente) => {
+    setClienteSeleccionado(idCliente);
+  };
+
+  const handleVerProyectosCliente = () => {
+    if (!proyectoSeleccionado) return;
+
+    fetch(`/api/verProyectosSinCliente/${proyectoSeleccionado}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          setClientes(data.clientes);
+        } else {
+          setError(data.message || 'Error al cargar clientes');
+        }
+      })
+      .catch(error => {
+        console.error('Error al obtener los clientes sin proyecto:', error);
+        setError('Error al cargar los clientes');
+      });
+  };
+
+  const llamadasFunciones = () => {
+    handleBotonProyecto();
+    relacionClienteProyecto();
+  };
+
+  const relacionClienteProyecto = () => {
+    if (!proyectoSeleccionado || !clienteSeleccionado) return;
+
   };
 
   const listaProyecto =proyectos.map(proyecto => (
@@ -65,6 +109,7 @@ function VistaListaDeProyectoAnadirCliente() {
 
   return (
     <div className='fondo-lista-proyecto'>
+      <button className='boton-volver' onClick={handleVolver}>Volver</button>
       <div className='contenedor-formulario-central'>
         <div className='cuadrado-formulario-central'>
           <h1>Seleccione un proyecto</h1>
@@ -73,7 +118,7 @@ function VistaListaDeProyectoAnadirCliente() {
           {listaProyecto}
           </ul>
           <button 
-            onClick={handleBotonProyecto} 
+            onClick={llamadasFunciones} 
             disabled={!proyectoSeleccionado}
             className={proyectoSeleccionado ? 'boton-proyecto-seleccionado' : 'boton-proyecto'}
           >

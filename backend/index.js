@@ -16,6 +16,7 @@ const listaClientesEnProyecto = require('./listaClientesEnProyecto');
 const listaProyecto = require('./listaProyectos');
 const verProyectosRouter = require('./verProyectos');
 const verProyectosClienteRouter = require('./verProyectosCliente');
+const verProyectosSinClienteRouter = require('./verProyectosSinCliente');
 const anadirTarea = require('./anadirTarea');
 const editarTarea = require('./editarTarea');
 const app = express();
@@ -69,6 +70,8 @@ async function getClientes() {
   app.use('/api', verProyectosRouter); 
   
   app.use('/api', verProyectosClienteRouter); 
+
+  app.use('/api', verProyectosSinClienteRouter); 
 
   app.listen(3001, () => {
     console.log('Servidor iniciado en el puerto 3001');
