@@ -107,6 +107,16 @@ function VistaListaDeProyectoAnadirCliente() {
     </li>
   ))
 
+  const listaClientes = clientes.map(cliente => (
+    <li
+      key={cliente.idCliente}
+      onClick={() => handleSelectCliente(cliente.idCliente)}
+      className={clienteSeleccionado === cliente.idCliente ? 'seleccionado' : ''}
+    >
+      {cliente.nombre} {cliente.apellido}
+    </li>
+  ))
+
   return (
     <div className='fondo-lista-proyecto'>
       <button className='boton-volver' onClick={handleVolver}>Volver</button>
@@ -114,12 +124,12 @@ function VistaListaDeProyectoAnadirCliente() {
         <div className='cuadrado-formulario-central'>
           <h1>Seleccione un proyecto</h1>
           {error && <p style={{ color: 'red' }} className="error">{error}</p>}
-          <ul>
-          {listaProyecto}
-          </ul>
+          <ul>{listaProyecto}</ul>
+          <h1>Seleccione un cliente</h1>
+          <ul>{listaClientes}</ul>
           <button 
             onClick={llamadasFunciones} 
-            disabled={!proyectoSeleccionado}
+            disabled={!proyectoSeleccionado || !clienteSeleccionado}
             className={proyectoSeleccionado ? 'boton-proyecto-seleccionado' : 'boton-proyecto'}
           >
             Añadir Cliente
