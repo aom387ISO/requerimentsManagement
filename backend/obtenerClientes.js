@@ -2,7 +2,7 @@ const express = require('express');
 const pool = require('./db'); 
 const router = express.Router();
 
-router.post('/obtenerClientes', async (req, res) => {
+router.get('/obtenerClientes', async (req, res) => {
   const pool = req.app.get('pool');
   try {
     const [rows] = await pool.promise().query(

@@ -13,7 +13,7 @@ function EliminarCliente() {
   useEffect(() => {
     console.log('useEffect ejecutado'); 
     fetch('/api/obtenerClientes', {
-      method: 'POST',
+      method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
       .then(response => response.json())
