@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './vistaListaDeProyectoAnadirCliente.css';
-import VistaListaDeClienteEnProyecto from './vistaListaDeClienteEnProyecto';
 import ReactDOM from 'react-dom/client';
 import InicioAdmin from './inicioAdmin';
 
@@ -9,35 +8,31 @@ function VistaListaDeProyectoAnadirCliente() {
   const [proyectoSeleccionado, setProyectoSeleccionado] = useState(null);
   const [clientes, setClientes] = useState([]);
   const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
+  const [peso, setPeso] = useState(0);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    console.log('useEffect ejecutado'); 
-    fetch('/api/obtenerProyectos', {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
+    fetch('/api/obtenerProyectos',{
+      method: 'GET'
     })
       .then(response => response.json())
       .then(data => {
-        if (data.success && Array.isArray(data.proyectos)) {
-          console.log('Proyectos cargados:', data.proyectos);
-          setProyectos(data.proyectos);
-        } else {
-          setError(data.message || 'Error al cargar los proyectos');
-        }
+        setProyectos(data.proyectos);
+        setError(data.message || '');
       })
-      .catch(error => {
-        console.error('Error al obtener los proyectos:', error);
-        setError('Error al cargar los proyectos');
-      });
+      .catch(() => setError('Error al cargar los proyectos'));
   }, []);
   
   
-  const handleSelectProyecto = (idProyecto) => {
-    console.log("Proyecto seleccionado:", idProyecto);
-    setProyectoSeleccionado(idProyecto);
+  const handleSelectProyecto = id => {
+    setProyectoSeleccionado(id);
     setClientes([]);
-    handleVerProyectosCliente(idProyecto);
+    fetch(`/api/verProyectosSinCliente/${id}`,{
+      method:'GET'
+    })
+      .then(response => response.json())
+      .then(data => setClientes(data.clientes))
+      .catch(() => setError('Error al cargar clientes'));
   };
 
   const handleVolver = () => {
@@ -66,35 +61,49 @@ function VistaListaDeProyectoAnadirCliente() {
     setClienteSeleccionado(idCliente);
   };
 
-  const handleVerProyectosCliente = () => {
-    if (!proyectoSeleccionado) return;
-
-    fetch(`/api/verProyectosSinCliente/${proyectoSeleccionado}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          setClientes(data.clientes);
-        } else {
-          setError(data.message || 'Error al cargar clientes');
-        }
-      })
-      .catch(error => {
-        console.error('Error al obtener los clientes sin proyecto:', error);
-        setError('Error al cargar los clientes');
-      });
-  };
-
   const llamadasFunciones = () => {
-    handleBotonProyecto();
+    if (!clienteSeleccionado) return;
+
+    if (peso < 0 || peso > 5) {
+      setError('El peso debe ser un número entre 0 y 5');
+      return;
+    }
+
     relacionClienteProyecto();
   };
 
-  const relacionClienteProyecto = () => {
+  const relacionClienteProyecto = async () => {
     if (!proyectoSeleccionado || !clienteSeleccionado) return;
+    
+    try {
+      const response = await fetch('/api/anadirClienteProyecto', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              proyecto: proyectoSeleccionado,
+              cliente: clienteSeleccionado,
+              peso: peso
+          })
+      });
 
+      if (!response.ok) {
+          throw new Error('Error al agregar el cliente al proyecto');
+      }
+      const data = await response.json();
+      console.log('Cliente agregado exitosamente:', data);
+    } catch (error) {
+      console.error('Error:', error);
+      setError('Error al agregar el cliente al proyecto');
+    }
+
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(
+        <React.StrictMode>
+          <VistaListaDeProyectoAnadirCliente />
+        </React.StrictMode>
+      );
   };
 
   const listaProyecto =proyectos.map(proyecto => (
@@ -127,10 +136,16 @@ function VistaListaDeProyectoAnadirCliente() {
           <ul>{listaProyecto}</ul>
           <h1>Seleccione un cliente</h1>
           <ul>{listaClientes}</ul>
+          <div>
+              <p>
+                  Peso del cliente en el proyecto: 
+              </p>
+              <input type="number" min="0" max="5" step="1" placeholder="Introduzque entre 0 y 5" style={{ width: '24%' }} value={peso} onChange={(e) => setPeso(e.target.value)}></input>
+            </div>
           <button 
-            onClick={llamadasFunciones} 
-            disabled={!proyectoSeleccionado || !clienteSeleccionado}
-            className={proyectoSeleccionado ? 'boton-proyecto-seleccionado' : 'boton-proyecto'}
+             onClick={llamadasFunciones} 
+             disabled={!clienteSeleccionado}
+             className={clienteSeleccionado ? 'boton-proyecto-seleccionado' : 'boton-proyecto'}
           >
             Añadir Cliente
           </button>
