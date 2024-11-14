@@ -1,82 +1,56 @@
 import React, { useState } from 'react';
 import './anadirTarea.css';
 
+
 function EditarTarea() {
-  const [tareaId, setTareaId] = useState(''); // ID de la tarea a modificar
   const [nombreTarea, setNombreTarea] = useState('');
   const [esfuerzo, setEsfuerzo] = useState(0);
+  const [tiempoHoras, setTiempoHoras] = useState(0);
   const [tiempoMinutos, setTiempoMinutos] = useState(0);
-  const [prioridad, setPrioridad] = useState(0);
   const [proyectoId, setProyectoId] = useState('');
-  const [dependeDe, setDependeDe] = useState('');
-  const [precedeA, setPrecedeA] = useState('');
-  const [excluye, setExcluye] = useState('');
-  const [interdependeDe, setInterdependeDe] = useState('');
   const [error, setError] = useState('');
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (esfuerzo < 0) {
+      setError('El esfuerzo debe ser positivo');
+      return;
+    }
 
-    if (!tareaId) {
-      setError('Por favor, proporciona el ID de la tarea a modificar.');
+
+    if (tiempoHoras < 0) {
+      setError('El tiempo en horas no puede ser negativo.');
       return;
     }
-    if (esfuerzo < 0 || esfuerzo > 5) {
-      setError('El esfuerzo debe estar entre 0 y 5.');
-      return;
-    }
-    if (prioridad < 0 || prioridad > 5) {
-      setError('La prioridad debe estar entre 0 y 5.');
-      return;
-    }
+
+
     if (tiempoMinutos < 0) {
       setError('El tiempo en minutos no puede ser negativo.');
       return;
     }
-    if (!/^\d+$/.test(proyectoId)) {
-      setError('El ID de proyecto debe ser un número no negativo.');
-      return;
-    }
+
 
     try {
       const response = await fetch('/api/editarTarea', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          tareaId: Number(tareaId),
-          nombreTarea,
-          esfuerzo,
-          tiempoMinutos,
-          prioridad,
-          proyectoId: Number(proyectoId),
-          dependeDe,
-          precedeA,
-          excluye,
-          interdependeDe,
+          nombreTarea: nombreTarea,
+          esfuerzo: esfuerzo,
+          tiempoHoras:tiempoHoras,
+          tiempoMinutos: tiempoMinutos
         }),
       });
 
+
       const data = await response.json();
-      if (data.success) {
-        setTareaId('');
-        setNombreTarea('');
-        setEsfuerzo(0);
-        setTiempoMinutos(0);
-        setPrioridad(0);
-        setProyectoId('');
-        setDependeDe('');
-        setPrecedeA('');
-        setExcluye('');
-        setInterdependeDe('');
-        setError('');
-      } else {
-        setError(data.message);
-      }
     } catch (error) {
       console.error('Error en la solicitud:', error);
       setError('Error de conexión');
     }
   };
+
 
   return (
     <div className="fondo-crear-tarea">
@@ -84,18 +58,6 @@ function EditarTarea() {
         <div className="cuadrado-formulario">
           <h1>Modificar Tarea</h1>
           <form onSubmit={handleSubmit}>
-            <label>ID de la Tarea a Modificar:</label>
-            <input
-              type="text"
-              value={tareaId}
-              onChange={(e) => {
-                if (/^\d*$/.test(e.target.value)) {
-                  setTareaId(e.target.value);
-                }
-              }}
-              required
-            />
-
             <label>Nombre de la Tarea:</label>
             <input
               type="text"
@@ -104,15 +66,25 @@ function EditarTarea() {
               required
             />
 
+
             <label>Esfuerzo:</label>
             <input
               type="number"
-              min="0"
-              max="5"
               value={esfuerzo}
-              onChange={(e) => setEsfuerzo(Number(e.target.value))}
+              onChange={(e) => setEsfuerzo(e.target.value)}
               required
             />
+
+
+            <label>Tiempo en horas:</label>
+            <input
+              type="number"
+              min="0"
+              value={tiempoHoras}
+              onChange={(e) => setTiempoHoras(e.target.value)}
+              required
+            />
+
 
             <label>Tiempo en Minutos:</label>
             <input
@@ -123,47 +95,6 @@ function EditarTarea() {
               required
             />
 
-            <label>Prioridad:</label>
-            <input
-              type="number"
-              min="0"
-              max="5"
-              value={prioridad}
-              onChange={(e) => setPrioridad(Number(e.target.value))}
-              required
-            />
-
-            <label>Proyecto ID:</label>
-            <input
-              type="text"
-              value={proyectoId}
-              onChange={(e) => {
-                if (/^\d*$/.test(e.target.value)) {
-                  setProyectoId(e.target.value);
-                }
-              }}
-              required
-            />
-
-            <label>Depende de:</label>
-            <select value={dependeDe} onChange={(e) => setDependeDe(e.target.value)}>
-              <option value="">Seleccionar</option>
-            </select>
-
-            <label>Precede a:</label>
-            <select value={precedeA} onChange={(e) => setPrecedeA(e.target.value)}>
-              <option value="">Seleccionar</option>
-            </select>
-
-            <label>Excluye:</label>
-            <select value={excluye} onChange={(e) => setExcluye(e.target.value)}>
-              <option value="">Seleccionar</option>
-            </select>
-
-            <label>Interdependiente de:</label>
-            <select value={interdependeDe} onChange={(e) => setInterdependeDe(e.target.value)}>
-              <option value="">Seleccionar</option>
-            </select>
 
             <button type="submit">Modificar Tarea</button>
             {error && <p style={{ color: 'red' }} className="error">{error}</p>}
@@ -173,5 +104,6 @@ function EditarTarea() {
     </div>
   );
 }
+
 
 export default EditarTarea;
