@@ -1,12 +1,16 @@
 /* Ensure the main container and table are full-width */
 .main-container {
+  background-color: #282b30; 
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
+  height: 100vh; 
   padding: 0 10px;
   box-sizing: border-box;
+  
 }
+
 .header {
   display: flex;
   justify-content:space-between;
@@ -23,6 +27,7 @@
 }
 
 .table-container {
+  background-color: #282b30; 
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -106,4 +111,11 @@
   background-color: #4CAF50;
   color: white;
   border: none;
+}
+
+.boton-anadir-tarea{
+  background-color: #484c52;
+  font-size: 20px;
+  color:rgb(234, 232, 232);
+  border-radius: 8px;
 }

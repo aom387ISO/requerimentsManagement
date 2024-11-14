@@ -82,13 +82,12 @@ function InicioCliente({idCliente}) {
               <span className="project-name">{project.nombreProyecto}</span>
               <span className="weight">{project.peso}</span>
               <span className="effort">{project.esfuerzo}€</span>
-              <span></span> {/* Empty cell for project time */}
+              <span></span>
               <span className={`priority-client priority-${project.prioridad}`}>{project.prioridad}</span>
             </div>
 
             {expandedRows[index] && project.requirements.map((req, reqIndex) => (
               <div key={reqIndex} className="requirement-row">
-                <button className="delete-requirement">X</button>
                 <span className="requirement-name">{req.nombreTarea}</span>
                 <span className="weight">
                   {req.peso}

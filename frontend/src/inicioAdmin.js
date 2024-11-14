@@ -11,10 +11,15 @@ function InicioAdmin() {
   const [expandedRows, setExpandedRows] = useState({});
   const [showSquare, setShowSquareState] = useState(false);
   const [selectedWeight, setSelectedWeight] = useState(null);
+  const [nuevoPeso, setNuevoPeso] = useState(null);
+  const [cuadroEliminar, setCuadroEliminar] = useState(false);
+  const [tareaAEliminar, setTareaAEliminar] = useState(null);
+  const [tareaId, setTareaId] = useState(null);
+
   const [data, setData] = useState([]);
   useEffect(() => {
     fetch('/api/verProyectos', {
-      method: 'GET', // Cambiar a GET en lugar de POST
+      method: 'GET', 
       headers: { 'Content-Type': 'application/json' },
     })
       .then((response) => response.json())
@@ -37,12 +42,78 @@ function InicioAdmin() {
   };
 
   const closeSquare = () => setShowSquareState(false);
-  const acceptSquare = () => setShowSquareState(false);
+  const acceptSquare = () => {
+    fetch('/api/modificarPesoTarea', {
+      method: 'POST', 
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({Tarea_idTarea: tareaId,  Cliente_idCliente: 0, peso : nuevoPeso})
 
-  const handleSetShowSquare = (show, weight) => {
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          setData(data.proyectos);
+        } else {
+          console.log(data.message);
+        }
+      })
+      .catch((error) => console.error('Error al cambiar los datos:', error));
+
+
+    setShowSquareState(false);
+  
+  };
+  const cancelarEliminar = () => {
+    setCuadroEliminar(false);
+    setTareaAEliminar(null); 
+    setTareaId(null);
+  };
+
+
+  const handleSetShowSquare = (show, weight, tareaId) => {
     setShowSquareState(show);
     setSelectedWeight(weight);
+    setNuevoPeso(weight);
+    setTareaId(tareaId);
   };
+
+  const handleEliminarTarea = (requisitoId) => {
+    setTareaAEliminar(requisitoId);
+    setCuadroEliminar(true); 
+  };
+
+  const confirmarEliminarTarea = () => {
+    if (tareaAEliminar !== null) {
+      fetch(`/api/eliminarTarea/${tareaAEliminar}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ estaEliminado: true })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          console.log('Tarea eliminada correctamente');
+          setData(prevData => { //Este troncho de código más feo que pegarle a un padre es para que se actualiza en el momento en el frontend. Puedes borrar este comentario cuando lo veas.
+            return prevData.map(project => {
+              const updatedRequirements = project.requirements.filter(req => req.idTarea !== tareaAEliminar);
+              return {
+                ...project,
+                requirements: updatedRequirements
+              };
+            });
+          });
+        }else {
+          console.log('Error al eliminar la tarea:', data.message);
+        }
+      })
+      .catch(error => console.error('Error al eliminar tarea:', error))
+      .finally(() => {
+        setCuadroEliminar(false);
+        setTareaAEliminar(null);
+      });
+    }
+  };
+
   const handleCrearProyecto = () => {
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(
@@ -59,7 +130,7 @@ function InicioAdmin() {
       </React.StrictMode>
     );
   };
-  const handleAñadirCliente = () => {
+  const handleAnadirCliente = () => {
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(
       <React.StrictMode>
@@ -99,7 +170,7 @@ function InicioAdmin() {
       <div className="header">
         <button className="CrearProyecto-button" onClick={handleCrearProyecto}>Crear Proyecto</button>
         <button className="CrearCliente-button" onClick={handleCrearCliente}>Crear Cliente</button>
-        <button className="AñadirCliente-button" onClick={handleAñadirCliente}>Añadir Cliente</button>
+        <button className="AnadirCliente-button" onClick={handleAnadirCliente}>Añadir Cliente</button>
         <button className="EliminarCliente-button" onClick={handleEliminarCliente}>Eliminar Cliente</button>
         <button className="logout-button" onClick={handleCerrarSesion}>Cerrar sesión</button>
       </div>
@@ -116,12 +187,12 @@ function InicioAdmin() {
           <React.Fragment key={index}>
             <div className="project-row">
               <button onClick={() => toggleRow(index)}>
-                {expandedRows[index] ? '−' : '+'}
+              {expandedRows[index] ? '−' : '+'}
               </button>
               <span className="project-name">{project.nombreProyecto}</span>
-              <button className="anadirTarea" onClick={() => handleAnadirTarea(project.idProyecto)}>
-                Añadir tarea
-              </button>
+              <span><button className="boton-anadir-tarea" onClick={() => handleAnadirTarea(project.idProyecto)}>
+              Añadir tarea
+              </button></span>
               <span className="weight">{project.peso}</span>
               <span className="effort">{project.esfuerzo}€</span>
               <span></span>
@@ -131,11 +202,16 @@ function InicioAdmin() {
 
             {expandedRows[index] && project.requirements.map((req, reqIndex) => (
               <div key={reqIndex} className="requirement-row">
-                <button className="delete-requirement">X</button>
+                <button 
+                className="delete-requirement"
+                onClick={() => handleEliminarTarea(req.idTarea)}
+                >
+                X
+                </button>
                 <span className="requirement-name">{req.nombreTarea}</span>
                 <span className="weight">
                   {req.peso}
-                  <button className="edit-weight" onClick={() => handleSetShowSquare(true, req.peso)}>
+                  <button className="edit-weight" onClick={() => handleSetShowSquare(true, req.peso, req.idTarea)}>
                     Modificar peso
                   </button>
                 </span>
@@ -150,9 +226,24 @@ function InicioAdmin() {
           <div className="square">
             <div className="big-text">Modificación del peso del requisito actual</div>
             <div className="weight-label">Peso actual: {selectedWeight}</div>
+            <input
+              type="number"
+              value={nuevoPeso}
+              onChange={(e) => setNuevoPeso(e.target.value)}
+              placeholder="Introduce el nuevo peso"
+            />
             <div className="button-container">
               <button className="close-button" onClick={closeSquare}>Cancelar</button>
               <button className="accept-button" onClick={acceptSquare}>Aceptar</button>
+            </div>
+          </div>
+        )}
+          {cuadroEliminar  && (
+          <div className="square">
+            <div className="big-text">¿De verdad vas a eliminar la tarea?</div>
+            <div className="button-container">
+              <button className="close-button" onClick={cancelarEliminar}>Cancelar</button>
+              <button className="accept-button" onClick={confirmarEliminarTarea}>Aceptar</button>
             </div>
           </div>
         )}

@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import './anadirTarea.css';
+import './editarTarea.css';
 import ReactDOM from 'react-dom/client';
 import InicioAdmin from './inicioAdmin';
 
 function AnadirTarea({proyectoId}) {
   const [nombreTarea, setNombreTarea] = useState('');
   const [esfuerzo, setEsfuerzo] = useState(0);
+  const [tiempoHoras, setTiempoHoras] = useState(0);
   const [tiempoMinutos, setTiempoMinutos] = useState(0);
   const [prioridad, setPrioridad] = useState(0);
   const [error, setError] = useState('');
+  const [mensajeExito, setMensajeExito] = useState(''); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,13 +24,14 @@ function AnadirTarea({proyectoId}) {
       setError('La prioridad no puede ser negativa.');
       return;
     }
+
     if (tiempoMinutos < 0) {
       setError('El tiempo en minutos no puede ser negativo.');
       return;
     }
 
     try {
-      const response = await fetch(`/api/agregarTarea/${proyectoId}`, {
+      const response = await fetch(`/api/anadirTarea/${proyectoId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -45,6 +49,7 @@ function AnadirTarea({proyectoId}) {
         setTiempoMinutos(0);
         setPrioridad(0);
         setError('');
+        handleVolver();
       } else {
         setError(data.message);
       }
@@ -65,12 +70,13 @@ function AnadirTarea({proyectoId}) {
 
   return (
 
-    <div className="fondo-crear-tarea">
+    <div className='fondo-editar-tarea'>
       <button className='boton-volver' onClick={handleVolver}>Volver</button>
-      <div className="contenedor-formulario">
-        <div className="cuadrado-formulario">
+      <div className='contenedor-editar-tarea'>
+        <div className='cuadrado-editar-tarea'>
           <h1>Añadir Tarea</h1>
           <form onSubmit={handleSubmit}>
+          <div>
             <label>Nombre de la Tarea:</label>
             <input
               type="text"
@@ -78,17 +84,20 @@ function AnadirTarea({proyectoId}) {
               onChange={(e) => setNombreTarea(e.target.value)}
               required
             />
+            </div>
 
+            <div>
             <label>Esfuerzo:</label>
             <input
               type="number"
               min="0"
-              max="5"
               value={esfuerzo}
               onChange={(e) => setEsfuerzo(Number(e.target.value))}
               required
             />
-
+            </div>
+            
+            <div>
             <label>Tiempo en Minutos:</label>
             <input
               type="number"
@@ -97,18 +106,19 @@ function AnadirTarea({proyectoId}) {
               onChange={(e) => setTiempoMinutos(Number(e.target.value))}
               required
             />
-
+            </div>
             <label>Prioridad:</label>
             <input
               type="number"
               min="0"
-              max="5"
               value={prioridad}
               onChange={(e) => setPrioridad(Number(e.target.value))}
               required
             />
+            <button type="submit"> Añadir  Tarea</button>
+            {error && <p style={{ color: 'red' }} className="error">{error}</p>}
+            {mensajeExito && <p style={{ color: 'green' }} className="mensaje-exito">{mensajeExito}</p>}
           </form>
-
         </div>
       </div>
     </div>

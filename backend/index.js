@@ -6,6 +6,7 @@ const express = require('express');
 const loginRouter = require('./login');
 const eliminarClienteRouter = require('./eliminarCliente');
 const eliminarProyectoRouter = require('./eliminarProyecto');
+const eliminarTareaRouter = require('./eliminarTarea');
 const crearProyectoRouter = require('./crearProyecto');
 const crearClienteRouter = require('./crearCliente');
 const obtenerClientesRouter = require('./obtenerClientes');
@@ -17,7 +18,7 @@ const listaProyecto = require('./listaProyectos');
 const verProyectosRouter = require('./verProyectos');
 const verProyectosClienteRouter = require('./verProyectosCliente');
 const verProyectosSinClienteRouter = require('./verProyectosSinCliente');
-const anadirTarea = require('./anadirTarea');
+const anadirTareaRouter = require('./anadirTarea');
 const editarTareaRouter = require('./editarTarea');
 const app = express();
 
@@ -51,6 +52,8 @@ async function getClientes() {
 
   app.use('/api', eliminarProyectoRouter);
 
+  app.use('/api', eliminarTareaRouter);
+
   app.use('/api', crearProyectoRouter);
 
   app.use('/api', crearClienteRouter);
@@ -63,6 +66,8 @@ async function getClientes() {
 
   app.use('/api', anadirClienteProyecto);
 
+  app.use('/api', anadirTareaRouter);
+
   app.use('/api', listaClientesEnProyecto);
 
   app.use('/api', listaProyecto);
@@ -74,6 +79,8 @@ async function getClientes() {
   app.use('/api', verProyectosSinClienteRouter); 
 
   app.use('/api', editarTareaRouter);
+
+
 
   app.listen(3001, () => {
     console.log('Servidor iniciado en el puerto 3001');

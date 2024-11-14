@@ -13,7 +13,7 @@ router.post('/modificarPesoTarea', async (req, res) => {
         'UPDATE tareacliente SET peso = ? WHERE Tarea_idTarea = ? AND Cliente_idCliente = ?', [peso, Tarea_idTarea, Cliente_idCliente]     
     );
   
-    if (result.affectedRows > 0) {
+    if (rows.length > 0) {
         res.json({ success: true, message: 'Peso de tarea actualizado correctamente para el cliente' });
       } else {
         res.json({ success: false, message: 'No se encontró la tarea o cliente especificado' });
