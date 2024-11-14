@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import './anadirTarea.css';
-
+import './editarTarea.css';
+import InicioAdmin from './inicioAdmin';
+import ReactDOM from 'react-dom/client';
 
 function EditarTarea() {
   const [nombreTarea, setNombreTarea] = useState('');
@@ -10,73 +11,92 @@ function EditarTarea() {
   const [proyectoId, setProyectoId] = useState('');
   const [error, setError] = useState('');
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (esfuerzo < 0) {
       setError('El esfuerzo debe ser positivo');
       return;
     }
-
 
     if (tiempoHoras < 0) {
       setError('El tiempo en horas no puede ser negativo.');
       return;
     }
 
-
     if (tiempoMinutos < 0) {
       setError('El tiempo en minutos no puede ser negativo.');
       return;
     }
 
-
     try {
+      setProyectoId(0);
+    
       const response = await fetch('/api/editarTarea', {
-        method: 'PUT',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          nombreTarea: nombreTarea,
-          esfuerzo: esfuerzo,
-          tiempoHoras:tiempoHoras,
-          tiempoMinutos: tiempoMinutos
-        }),
+        body: JSON.stringify({ nombreTarea: nombreTarea, esfuerzo: esfuerzo, tiempoHoras: tiempoHoras, tiempoMinutos: tiempoMinutos, proyectoId: proyectoId })
       });
-
-
+           
       const data = await response.json();
+
+      if (data.success) {
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(
+            <React.StrictMode>
+                <InicioAdmin/>
+            </React.StrictMode>
+        );
+      } else {
+        setError(data.message);
+      }
+
     } catch (error) {
       console.error('Error en la solicitud:', error);
       setError('Error de conexión');
     }
-  };
+};
+
+
+const handleVolver = () => {
+  const root = ReactDOM.createRoot(document.getElementById('root'));
+  root.render(
+    <React.StrictMode>
+      <InicioAdmin />
+    </React.StrictMode>
+  );
+}
+
+
 
 
   return (
-    <div className="fondo-crear-tarea">
-      <div className="contenedor-formulario">
-        <div className="cuadrado-formulario">
+    <div className='fondo-editar-tarea'>
+      <button className='boton-volver' onClick={handleVolver}>Volver</button>
+      <div className='contenedor-editar-tarea'>
+        <div className='cuadrado-editar-tarea'>
           <h1>Modificar Tarea</h1>
           <form onSubmit={handleSubmit}>
-            <label>Nombre de la Tarea:</label>
+            <div>
+            <p>Nombre de la Tarea:</p>
             <input
               type="text"
               value={nombreTarea}
               onChange={(e) => setNombreTarea(e.target.value)}
               required
             />
-
-
-            <label>Esfuerzo:</label>
+            </div>
+            <div>
+            <p>Esfuerzo:</p>
             <input
               type="number"
               value={esfuerzo}
               onChange={(e) => setEsfuerzo(e.target.value)}
               required
             />
-
-
-            <label>Tiempo en horas:</label>
+            </div>
+            <div>
+            <p>Tiempo en horas:</p>
             <input
               type="number"
               min="0"
@@ -84,9 +104,9 @@ function EditarTarea() {
               onChange={(e) => setTiempoHoras(e.target.value)}
               required
             />
-
-
-            <label>Tiempo en Minutos:</label>
+            </div>
+            <div>
+            <p>Tiempo en Minutos:</p>
             <input
               type="number"
               min="0"
@@ -94,9 +114,9 @@ function EditarTarea() {
               onChange={(e) => setTiempoMinutos(Number(e.target.value))}
               required
             />
-
-
-            <button type="submit">Modificar Tarea</button>
+            </div>
+            
+            <button type="submit"> Modificar Tarea</button>
             {error && <p style={{ color: 'red' }} className="error">{error}</p>}
           </form>
         </div>

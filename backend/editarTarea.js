@@ -3,56 +3,47 @@ const pool = require('./db');
 const router = express.Router();
 
 
+
+
 router.post('/editarTarea', async (req, res) => {
     console.log('Ruta crear proyecto alcanzada');
-    const { nombre, peso, esfuerzo } = req.body;
+    const { nombreTarea, esfuerzo, tiempoHoras, tiempoMinutos, proyectoId} = req.body;
     const pool = req.app.get('pool');
     try {
       const [rows] = await pool.promise().query(
-        'SELECT * FROM Proyecto WHERE nombreProyecto = ? ',[nombre]
+        'SELECT * FROM Tarea WHERE nombreTarea = ? AND Proyecto_idProyecto = ?',[nombreTarea, proyectoId]
       );
      
-      console.log('Valor de nombre recibido:', nombre);
-      console.log('Valor del peso recibido', peso);
+      console.log('Valor de nombre recibido:', nombreTarea);
       console.log('Valor del esfuerzo recibido', esfuerzo);
+      console.log('Valor del tiempo en horas recibido', tiempoHoras);
+      console.log('Valor del tiempo en minutos recibido', tiempoMinutos);
+      console.log('Valor del esfuerzo recibido', proyectoId);
       console.log('Resultado de la consulta:', rows);
  
+
+
       if (rows.length > 0) {
+        const tareaExistente = rows[0];
 
+        const tiempoTotal = tiempoMinutos + (tiempoHoras*60);
 
-        const proyectoExistente = rows[0];
-
-
-        if(proyectoExistente.estaEliminado){
-            await pool.promise().query(
-                'UPDATE Proyecto SET nombreProyecto = ?, peso = ?, prioridad =?, esfuerzo = ?, estaEliminado = ? WHERE idProyecto = ?',
-                [nombre, peso, -1, esfuerzo, false, proyectoExistente.idProyecto]
-            );
-            res.status(200).json({
-                success: true,
-                message: 'Proyecto restaurado correctamente.'
-            });
-        }else{
-            res.status(401).json({ success: false, message: 'Proyecto existente' });
-        }
-
-
-      } else {
-        const [rows] = await pool.promise().query('SELECT MAX(idProyecto) as maxId FROM Proyecto');
-        const maxId = rows[0].maxId || 0;
-        const id = maxId + 1;
-       
         await pool.promise().query(
-            'INSERT INTO Proyecto (idProyecto, nombreProyecto, peso, prioridad, esfuerzo, estaEliminado) VALUES (?, ?, ?, ?, ?, ?)',
-            [id, nombre, peso, -1, esfuerzo, false]
-        )
-
-
-        res.status(201).json({
-            success: true,
-            message: 'Proyecto creado correctamente.'
+          'UPDATE Tarea SET nombreTarea = ?, esfuerzo = ?, tiempoMinutos = ?, prioridad = ?, Proyecto_idProyecto = ?, estaEliminado = ? WHERE idTarea = ?',
+          [nombreTarea, esfuerzo, tiempoTotal, -1, tareaExistente.idTarea, false]
+        );
+        res.status(200).json({
+          success: true,
+          message: 'Proyecto modificado correctamente.'
         });
+       
+      } else {
 
+
+        res.status(500).json({
+            success: false,
+            message: 'El proyecto no existe.'
+        });
 
       }
     } catch (error) {
