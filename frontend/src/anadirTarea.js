@@ -1,40 +1,33 @@
 import React, { useState } from 'react';
 import './anadirTarea.css';
+import ReactDOM from 'react-dom/client';
+import InicioAdmin from './inicioAdmin';
 
-function AnadirTarea() {
+function AnadirTarea({proyectoId}) {
   const [nombreTarea, setNombreTarea] = useState('');
   const [esfuerzo, setEsfuerzo] = useState(0);
   const [tiempoMinutos, setTiempoMinutos] = useState(0);
   const [prioridad, setPrioridad] = useState(0);
-  const [proyectoId, setProyectoId] = useState('');
-  const [dependeDe, setDependeDe] = useState('');
-  const [precedeA, setPrecedeA] = useState('');
-  const [excluye, setExcluye] = useState('');
-  const [interdependeDe, setInterdependeDe] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (esfuerzo < 0 || esfuerzo > 5) {
-      setError('El esfuerzo debe estar entre 0 y 5.');
+    if (esfuerzo < 0) {
+      setError('El esfuerzo no puede ser negativo.');
       return;
     }
-    if (prioridad < 0 || prioridad > 5) {
-      setError('La prioridad debe estar entre 0 y 5.');
+    if (prioridad < 0) {
+      setError('La prioridad no puede ser negativa.');
       return;
     }
     if (tiempoMinutos < 0) {
       setError('El tiempo en minutos no puede ser negativo.');
       return;
     }
-    if (!/^\d+$/.test(proyectoId)) {
-      setError('El ID de proyecto debe ser un número no negativo.');
-      return;
-    }
 
     try {
-      const response = await fetch('/api/agregarTarea', {
+      const response = await fetch(`/api/agregarTarea/${proyectoId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -42,11 +35,6 @@ function AnadirTarea() {
           esfuerzo,
           tiempoMinutos,
           prioridad,
-          proyectoId: Number(proyectoId),
-          dependeDe,
-          precedeA,
-          excluye,
-          interdependeDe,
         }),
       });
 
@@ -56,11 +44,6 @@ function AnadirTarea() {
         setEsfuerzo(0);
         setTiempoMinutos(0);
         setPrioridad(0);
-        setProyectoId('');
-        setDependeDe('');
-        setPrecedeA('');
-        setExcluye('');
-        setInterdependeDe('');
         setError('');
       } else {
         setError(data.message);
@@ -71,8 +54,19 @@ function AnadirTarea() {
     }
   };
 
+  const handleVolver = () => {
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      <React.StrictMode>
+        <InicioAdmin />
+      </React.StrictMode>
+    );
+  };
+
   return (
+
     <div className="fondo-crear-tarea">
+      <button className='boton-volver' onClick={handleVolver}>Volver</button>
       <div className="contenedor-formulario">
         <div className="cuadrado-formulario">
           <h1>Añadir Tarea</h1>
@@ -113,42 +107,8 @@ function AnadirTarea() {
               onChange={(e) => setPrioridad(Number(e.target.value))}
               required
             />
-
-            <label>Proyecto ID:</label>
-            <input
-              type="text"
-              value={proyectoId}
-              onChange={(e) => {
-                if (/^\d*$/.test(e.target.value)) {
-                  setProyectoId(e.target.value);
-                }
-              }}
-              required
-            />
-
-            <label>Depende de:</label>
-            <select value={dependeDe} onChange={(e) => setDependeDe(e.target.value)}>
-              <option value="">Seleccionar</option>
-            </select>
-
-            <label>Precede a:</label>
-            <select value={precedeA} onChange={(e) => setPrecedeA(e.target.value)}>
-              <option value="">Seleccionar</option>
-            </select>
-
-            <label>Excluye:</label>
-            <select value={excluye} onChange={(e) => setExcluye(e.target.value)}>
-              <option value="">Seleccionar</option>
-            </select>
-
-            <label>Interdependiente de:</label>
-            <select value={interdependeDe} onChange={(e) => setInterdependeDe(e.target.value)}>
-              <option value="">Seleccionar</option>
-            </select>
-
-            <button type="submit">Añadir Tarea</button>
-            {error && <p style={{ color: 'red' }} className="error">{error}</p>}
           </form>
+
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@ import './inicioAdmin.css';
 import CrearProyecto from './crearProyecto';
 import CrearCliente from './crearCliente';
 import EliminarCliente from './eliminarCliente';
+import AnadirTarea from './anadirTarea';
 
 function InicioAdmin() {
   const [expandedRows, setExpandedRows] = useState({});
@@ -75,6 +76,15 @@ function InicioAdmin() {
     );
   };
 
+  const handleAnadirTarea = (proyectoId) => {
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      <React.StrictMode>
+        <AnadirTarea proyectoId={proyectoId} />
+      </React.StrictMode>
+    );
+  };
+
   const handleCerrarSesion = () => {
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(
@@ -109,10 +119,14 @@ function InicioAdmin() {
                 {expandedRows[index] ? '−' : '+'}
               </button>
               <span className="project-name">{project.nombreProyecto}</span>
+              <button className="anadirTarea" onClick={() => handleAnadirTarea(project.idProyecto)}>
+                Añadir tarea
+              </button>
               <span className="weight">{project.peso}</span>
               <span className="effort">{project.esfuerzo}€</span>
-              <span></span> {/* Empty cell for project time */}
+              <span></span>
               <span className={`priority priority-${project.prioridad}`}>{project.prioridad}</span>
+
             </div>
 
             {expandedRows[index] && project.requirements.map((req, reqIndex) => (

@@ -2,67 +2,34 @@ const express = require('express');
 const pool = require('./db'); 
 const router = express.Router();
 
-router.post('/anadirTarea', async (req, res) => {
-  const pool = req.app.get('pool');
+router.post('/anadirTarea/:proyectoId', async (req, res) => {
+    console.log('Ruta de borrado alcanzada');
+    const { proyectoId } = req.params;
+    const { nombreTarea, esfuerzo, tiempoMinutos, prioridad } = req.body;
+    const pool = req.app.get('pool');
+
+    try {
+      const [rows] = await pool.promise().query(
+        'SELECT * FROM Proyecto WHERE idProyecto = ?',[id]
+      );
+      
+      console.log('Resultado de la consulta:', rows);
   
-  const {
-    nombreTarea,
-    esfuerzo,
-    tiempoMinutos,
-    prioridad,
-    proyectoId,
-    dependeDe,
-    precedeA,
-    excluye,
-    interdependeDe
-  } = req.body;
-
-  try {
-    await pool.promise().query('START TRANSACTION');
-
-    const [tareaResult] = await pool.promise().query(
-      'INSERT INTO Tarea (nombreTarea, esfuerzo, tiempoMinutos, prioridad, Proyecto_idProyecto, estaEliminado) VALUES (?, ?, ?, ?, ?, ?)',
-      [nombreTarea, esfuerzo, tiempoMinutos, prioridad, proyectoId, 0]
-    );
-
-    const nuevaTareaId = tareaResult.insertId;
-
-    if (dependeDe) {
-      await pool.promise().query(
-        'INSERT INTO Dependencia (idTareaPrecedente, idTareaSucesiva) VALUES (?, ?)',
-        [dependeDe, nuevaTareaId]
-      );
+      if (rows.length > 0) {
+        await pool.promise().query(
+          'UPDATE Proyecto SET estaEliminado = ? WHERE idProyecto = ?', [estaEliminado, id]
+        );
+  
+          res.json({ success: true, message: 'Proyecto marcado como eliminado' });
+      } else {
+        res.status(401).json({ success: false, message: 'ID incorrecto' });
+      }
+    } catch (error) {
+      console.error('Error al ejecutar la consulta:', error);
+      res.status(500).json({ success: false, message: 'Error del servidor' });
     }
-    if (precedeA) {
-      await pool.promise().query(
-        'INSERT INTO Dependencia (idTareaPrecedente, idTareaSucesiva) VALUES (?, ?)',
-        [nuevaTareaId, precedeA]
-      );
-    }
-
-    if (excluye) {
-      await pool.promise().query(
-        'INSERT INTO Exclusion (idTareaExcluyeA, idTareaEsExcluidaPor) VALUES (?, ?)',
-        [nuevaTareaId, excluye]
-      );
-    }
-
-    if (interdependeDe) {
-      await pool.promise().query(
-        'INSERT INTO Interdependencia (idTareaInterdependeA, idTareaEsInterdependidaPor) VALUES (?, ?)',
-        [nuevaTareaId, interdependeDe]
-      );
-    }
-
-    await pool.promise().query('COMMIT');
-
-    res.json({ success: true, message: 'Tarea agregada exitosamente', tareaId: nuevaTareaId });
-
-  } catch (error) {
-    await pool.promise().query('ROLLBACK');
-    console.error('Error al agregar la tarea:', error);
-    res.status(500).json({ success: false, message: 'Error del servidor' });
-  }
-});
-
-module.exports = router;
+  });
+  
+  
+  module.exports = router;
+  
