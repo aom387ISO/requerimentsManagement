@@ -7,7 +7,6 @@ function EditarProyecto({proyectoId}) {
   const [nombreProyecto, setNombreProyecto] = useState('');
   const [peso, setPeso] = useState(0);
   const [esfuerzo, setEsfuerzo] = useState(0);
-  const [idProyecto, setIdProyecto] = useState(0);
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
@@ -24,12 +23,16 @@ function EditarProyecto({proyectoId}) {
     }
 
     try {
-      setIdProyecto(proyectoId);
-    
+      const almacenVariables = {
+        nombreProyecto: nombreProyecto || undefined,
+        peso: peso || undefined,
+        esfuerzo: esfuerzo || undefined,
+        proyectoId: proyectoId,
+      };
       const response = await fetch('/api/editarProyecto', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombreProyecto: nombreProyecto, peso: peso, esfuerzo: esfuerzo, idProyecto: proyectoId })
+        body: JSON.stringify({ almacenVariables })
       });
            
       const data = await response.json();
@@ -74,7 +77,6 @@ const handleVolver = () => {
               type="text"
               value={nombreProyecto}
               onChange={(e) => setNombreProyecto(e.target.value)}
-              required
             />
             </div>
             <div>
