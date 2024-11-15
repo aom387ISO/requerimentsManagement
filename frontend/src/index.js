@@ -7,8 +7,9 @@ import CrearProyecto from "./crearProyecto"
 import CrearCliente from './crearCliente';
 import EliminarCliente from './eliminarCliente';
 import InicioAdmin from './inicioAdmin';
-import AnadirTarea from './anadirTarea'
-import EditarTarea from './editarTarea'
+import AnadirTarea from './anadirTarea';
+import EditarTarea from './editarTarea';
+import EditarProyecto from './editarProyecto';
 import VistaListaDeProyectoAnadirCliente from './vistaListaDeProyectoAnadirCliente';
 import InicioCliente from './inicioCliente';
 

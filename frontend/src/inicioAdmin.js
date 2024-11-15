@@ -9,6 +9,7 @@ import EliminarProyecto from './eliminarProyecto';
 import AnadirTarea from './anadirTarea';
 import VistaListaDeProyectoAnadirCliente from './vistaListaDeProyectoAnadirCliente';
 import EditarTarea from './editarTarea';
+import EditarProyecto from './editarProyecto';
 
 function InicioAdmin() {
   const [expandedRows, setExpandedRows] = useState({});
@@ -167,6 +168,15 @@ function InicioAdmin() {
       </React.StrictMode>
     );
   };
+  
+  const handleEditarProyecto = (proyectoId) => {
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      <React.StrictMode>
+        <EditarProyecto proyectoId={proyectoId} />
+      </React.StrictMode>
+    );
+  };
 
   const handleEditarTarea = (tareaId) => {
     const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -191,7 +201,7 @@ function InicioAdmin() {
       <div className="header">
         <button onClick={handleCrearProyecto}>Crear Proyecto</button>
         <button onClick={handleCrearCliente}>Crear Cliente</button>
-        <button onClick={handleAnadirCliente}>Añadir Cliente</button>
+        <button onClick={handleAnadirCliente}>Añadir Cliente a un proyecto</button>
         <button onClick={handleEliminarCliente}>Eliminar Cliente</button>
         <button onClick={handleEliminarProyecto}>Eliminar proyecto</button>
         <button className="logout-button" onClick={handleCerrarSesion}>Cerrar sesión</button>
@@ -212,6 +222,9 @@ function InicioAdmin() {
               {expandedRows[index] ? '−' : '+'}
               </button>
               <span className="project-name">{project.nombreProyecto}</span>
+              <span><button className="boton-anadir-tarea" onClick={() => handleEditarProyecto(project.idProyecto)}>
+              Editar proyecto
+              </button></span>
               <span><button className="boton-anadir-tarea" onClick={() => handleAnadirTarea(project.idProyecto)}>
               Añadir tarea
               </button></span>

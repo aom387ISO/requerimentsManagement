@@ -1,0 +1,74 @@
+.fondo-editar-proyecto {
+    background-color: #282b30; 
+    height: 100vh; 
+  }
+  
+  .boton-volver{
+  position:absolute;
+  top:60px;
+  left:60px;
+  background-color: #484c52;
+  width:100px;
+  height: 50px;
+  font-size: 20px;
+  color:rgb(234, 232, 232);
+  border-radius: 8px;
+  }
+  
+  .boton-volver:active{
+  background-color: #383c42;
+  }
+  
+  .contenedor-editar-proyecto{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .cuadrado-editar-proyecto{
+    background-color: #36393e;
+    border: 4px solid #555555;
+    border-radius: 10px;
+    height: 58%;
+    width: 60%;
+    flex-direction: column;
+  }
+  
+  .cuadrado-editar-proyecto h1{
+  color:rgb(234, 232, 232);
+  align-items: center;
+  flex-direction: column;
+  display:flex;
+  font-size: 40px;
+  }
+  
+  .cuadrado-editar-proyecto p{
+  color:rgb(234, 232, 232);
+  font-size: 17px;
+  margin-left: 42px;
+  }
+  
+  .cuadrado-editar-proyecto input{
+    font-size: 17px;
+    margin-left: 42px;
+  }
+  
+  .cuadrado-editar-proyecto button{
+  width:170px;
+  height: 50px;
+  font-size: 20px;
+  border-radius: 5px;
+  background-color: #939393;
+  position:absolute;
+  margin-left:27%;
+  margin-top:40px;
+  }
+  
+  .cuadrado-editar-proyecto button:active{
+    background-color: #676767;
+  }
+  
+  .cuadro-hora{
+    display: flex;
+  }
