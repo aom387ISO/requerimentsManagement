@@ -5,6 +5,7 @@ import './inicioAdmin.css';
 import CrearProyecto from './crearProyecto';
 import CrearCliente from './crearCliente';
 import EliminarCliente from './eliminarCliente';
+import EliminarProyecto from './eliminarProyecto';
 import AnadirTarea from './anadirTarea';
 import VistaListaDeProyectoAnadirCliente from './vistaListaDeProyectoAnadirCliente';
 
@@ -148,6 +149,15 @@ function InicioAdmin() {
     );
   };
 
+  const handleEliminarProyecto = () => {
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      <React.StrictMode>
+        <EliminarProyecto/>
+      </React.StrictMode>
+    );
+  };
+
   const handleAnadirTarea = (proyectoId) => {
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(
@@ -169,10 +179,11 @@ function InicioAdmin() {
   return (
     <div className="main-container">
       <div className="header">
-        <button className="CrearProyecto-button" onClick={handleCrearProyecto}>Crear Proyecto</button>
-        <button className="CrearCliente-button" onClick={handleCrearCliente}>Crear Cliente</button>
-        <button className="AnadirCliente-button" onClick={handleAnadirCliente}>Añadir Cliente</button>
-        <button className="EliminarCliente-button" onClick={handleEliminarCliente}>Eliminar Cliente</button>
+        <button onClick={handleCrearProyecto}>Crear Proyecto</button>
+        <button onClick={handleCrearCliente}>Crear Cliente</button>
+        <button onClick={handleAnadirCliente}>Añadir Cliente</button>
+        <button onClick={handleEliminarCliente}>Eliminar Cliente</button>
+        <button onClick={handleEliminarProyecto}>Eliminar proyecto</button>
         <button className="logout-button" onClick={handleCerrarSesion}>Cerrar sesión</button>
       </div>
 
