@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './anadirTarea.css';
-import './editarTarea.css';
 import ReactDOM from 'react-dom/client';
 import InicioAdmin from './inicioAdmin';
 
@@ -70,14 +69,14 @@ function AnadirTarea({proyectoId}) {
 
   return (
 
-    <div className='fondo-editar-tarea'>
+    <div className='fondo-anadir-tarea'>
       <button className='boton-volver' onClick={handleVolver}>Volver</button>
-      <div className='contenedor-editar-tarea'>
-        <div className='cuadrado-editar-tarea'>
+      <div className='contenedor-anadir-tarea'>
+        <div className='cuadrado-anadir-tarea'>
           <h1>Añadir Tarea</h1>
           <form onSubmit={handleSubmit}>
-          <div>
-            <label>Nombre de la Tarea:</label>
+            <div>
+            <p>Nombre de la Tarea:</p>
             <input
               type="text"
               value={nombreTarea}
@@ -85,20 +84,29 @@ function AnadirTarea({proyectoId}) {
               required
             />
             </div>
-
             <div>
-            <label>Esfuerzo:</label>
+            <p>Esfuerzo:</p>
             <input
               type="number"
-              min="0"
               value={esfuerzo}
-              onChange={(e) => setEsfuerzo(Number(e.target.value))}
+              onChange={(e) => setEsfuerzo(e.target.value)}
               required
             />
             </div>
-            
+
+            <div className='cuadro-hora'>
+              <div>
+                <p>Tiempo en horas:</p>
+                <input
+                  type="number"
+                  min="0"
+                  value={tiempoHoras}
+                  onChange={(e) => setTiempoHoras(e.target.value)}
+                  required
+                />
+              </div>
             <div>
-            <label>Tiempo en Minutos:</label>
+            <p>Tiempo en Minutos:</p>
             <input
               type="number"
               min="0"
@@ -107,17 +115,10 @@ function AnadirTarea({proyectoId}) {
               required
             />
             </div>
-            <label>Prioridad:</label>
-            <input
-              type="number"
-              min="0"
-              value={prioridad}
-              onChange={(e) => setPrioridad(Number(e.target.value))}
-              required
-            />
-            <button type="submit"> Añadir  Tarea</button>
+          </div>
+            
+            <button type="submit"> Añadir Tarea</button>
             {error && <p style={{ color: 'red' }} className="error">{error}</p>}
-            {mensajeExito && <p style={{ color: 'green' }} className="mensaje-exito">{mensajeExito}</p>}
           </form>
         </div>
       </div>

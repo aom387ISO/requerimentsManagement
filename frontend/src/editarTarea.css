@@ -30,7 +30,7 @@ background-color: #383c42;
   background-color: #36393e;
   border: 4px solid #555555;
   border-radius: 10px;
-  height: 72%;
+  height: 58%;
   width: 60%;
   flex-direction: column;
 }
@@ -67,4 +67,8 @@ margin-top:40px;
 
 .cuadrado-editar-tarea button:active{
   background-color: #676767;
+}
+
+.cuadro-hora{
+  display: flex;
 }

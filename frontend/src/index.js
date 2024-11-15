@@ -16,7 +16,7 @@ import InicioCliente from './inicioCliente';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <InicioAdmin/>
+    <AnadirTarea/>
   </React.StrictMode>
 );
 // 

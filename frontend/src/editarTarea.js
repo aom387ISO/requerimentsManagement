@@ -8,7 +8,7 @@ function EditarTarea() {
   const [esfuerzo, setEsfuerzo] = useState(0);
   const [tiempoHoras, setTiempoHoras] = useState(0);
   const [tiempoMinutos, setTiempoMinutos] = useState(0);
-  const [proyectoId, setProyectoId] = useState('');
+  const [tareaId, setTareaId] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
@@ -30,12 +30,12 @@ function EditarTarea() {
     }
 
     try {
-      setProyectoId(0);
+      setTareaId(0);
     
       const response = await fetch('/api/editarTarea', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombreTarea: nombreTarea, esfuerzo: esfuerzo, tiempoHoras: tiempoHoras, tiempoMinutos: tiempoMinutos, proyectoId: proyectoId })
+        body: JSON.stringify({ nombreTarea: nombreTarea, esfuerzo: esfuerzo, tiempoHoras: tiempoHoras, tiempoMinutos: tiempoMinutos, tareaId: tareaId })
       });
            
       const data = await response.json();
@@ -68,8 +68,6 @@ const handleVolver = () => {
 }
 
 
-
-
   return (
     <div className='fondo-editar-tarea'>
       <button className='boton-volver' onClick={handleVolver}>Volver</button>
@@ -95,16 +93,18 @@ const handleVolver = () => {
               required
             />
             </div>
-            <div>
-            <p>Tiempo en horas:</p>
-            <input
-              type="number"
-              min="0"
-              value={tiempoHoras}
-              onChange={(e) => setTiempoHoras(e.target.value)}
-              required
-            />
-            </div>
+
+            <div className='cuadro-hora'>
+              <div>
+                <p>Tiempo en horas:</p>
+                <input
+                  type="number"
+                  min="0"
+                  value={tiempoHoras}
+                  onChange={(e) => setTiempoHoras(e.target.value)}
+                  required
+                />
+              </div>
             <div>
             <p>Tiempo en Minutos:</p>
             <input
@@ -115,6 +115,7 @@ const handleVolver = () => {
               required
             />
             </div>
+          </div>
             
             <button type="submit"> Modificar Tarea</button>
             {error && <p style={{ color: 'red' }} className="error">{error}</p>}

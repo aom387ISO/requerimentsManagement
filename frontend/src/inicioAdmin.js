@@ -6,6 +6,7 @@ import CrearProyecto from './crearProyecto';
 import CrearCliente from './crearCliente';
 import EliminarCliente from './eliminarCliente';
 import AnadirTarea from './anadirTarea';
+import VistaListaDeProyectoAnadirCliente from './vistaListaDeProyectoAnadirCliente';
 
 function InicioAdmin() {
   const [expandedRows, setExpandedRows] = useState({});
@@ -134,7 +135,7 @@ function InicioAdmin() {
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(
       <React.StrictMode>
-        <CrearCliente/> //cambiar cuando este hecha
+        <VistaListaDeProyectoAnadirCliente/>
       </React.StrictMode>
     );
   };

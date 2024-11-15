@@ -13,7 +13,7 @@ router.get('/verProyectosSinCliente/:id', async (req, res) => {
             `SELECT * FROM cliente c
              WHERE c.idCliente NOT IN (
                SELECT Cliente_idCliente FROM proyectoCliente WHERE Proyecto_idProyecto = ?
-             ) AND c.idCliente != 0`,
+             ) AND c.idCliente != 0 AND c.estaEliminado != true`,
             [idProyecto]
           );
 
