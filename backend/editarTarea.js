@@ -2,10 +2,11 @@ const express = require('express');
 const pool = require('./db');
 const router = express.Router();
 
-router.post('/editarTarea', async (req, res) => {
+router.put('/editarTarea', async (req, res) => {
     console.log('Ruta crear proyecto alcanzada');
-    const { nombreTarea, esfuerzo, tiempoHoras, tiempoMinutos, tareaId} = req.body;
+    let { nombreTarea, esfuerzo, tiempoHoras, tiempoMinutos, tareaId} = req.body.almacenVariables;
     const pool = req.app.get('pool');
+    console.log('ID:', tareaId);
     try {
       const [rows] = await pool.promise().query(
         'SELECT * FROM Tarea WHERE  idTarea = ?',[tareaId]
@@ -17,13 +18,17 @@ router.post('/editarTarea', async (req, res) => {
       console.log('Valor del tiempo en minutos recibido', tiempoMinutos);
       console.log('Valor del esfuerzo recibido', tareaId);
       console.log('Resultado de la consulta:', rows);
- 
 
 
       if (rows.length > 0) {
         const tareaExistente = rows[0];
-
-        const tiempoTotal = tiempoMinutos + (tiempoHoras*60);
+        nombreTarea = nombreTarea !== undefined ? nombreTarea : tareaExistente.nombreTarea;
+        esfuerzo = esfuerzo !== undefined ? esfuerzo : tareaExistente.esfuerzo;
+        let horas = tiempoHoras !== undefined ? tiempoHoras : Math.floor(tareaExistente.tiempoMinutos / 60);
+        let minutos = tiempoMinutos !== undefined ? tiempoMinutos : tareaExistente.tiempoMinutos % 60;
+        
+        const tiempoTotal = horas * 60 + minutos;
+        
 
         await pool.promise().query(
           'UPDATE Tarea SET nombreTarea = ?, esfuerzo = ?, tiempoMinutos = ?, prioridad = ?, Proyecto_idProyecto = ?, estaEliminado = ? WHERE idTarea = ?',

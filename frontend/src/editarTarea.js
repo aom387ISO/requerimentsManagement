@@ -3,12 +3,12 @@ import './editarTarea.css';
 import InicioAdmin from './inicioAdmin';
 import ReactDOM from 'react-dom/client';
 
-function EditarTarea({idTarea}) {
+function EditarTarea({tareaId}) {
+  console.log('idTarea en editartarea',tareaId);
   const [nombreTarea, setNombreTarea] = useState('');
   const [esfuerzo, setEsfuerzo] = useState(0);
   const [tiempoHoras, setTiempoHoras] = useState(0);
   const [tiempoMinutos, setTiempoMinutos] = useState(0);
-  const [tareaId, setTareaId] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
@@ -30,12 +30,18 @@ function EditarTarea({idTarea}) {
     }
 
     try {
-      setTareaId(idTarea);
-    
+      console.log('tarea',tareaId);
+      const almacenVariables = {
+        nombreTarea: nombreTarea || undefined,
+        esfuerzo: esfuerzo || undefined,
+        tiempoHoras: tiempoHoras || undefined,
+        tiempoMinutos: tiempoMinutos || undefined,
+        tareaId: tareaId,
+      };
       const response = await fetch('/api/editarTarea', {
-        method: 'POST',
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombreTarea: nombreTarea, esfuerzo: esfuerzo, tiempoHoras: tiempoHoras, tiempoMinutos: tiempoMinutos, tareaId: tareaId })
+        body: JSON.stringify({ almacenVariables })
       });
            
       const data = await response.json();
@@ -81,7 +87,6 @@ const handleVolver = () => {
               type="text"
               value={nombreTarea}
               onChange={(e) => setNombreTarea(e.target.value)}
-              required
             />
             </div>
             <div>
@@ -90,7 +95,6 @@ const handleVolver = () => {
               type="number"
               value={esfuerzo}
               onChange={(e) => setEsfuerzo(e.target.value)}
-              required
             />
             </div>
 
@@ -102,7 +106,6 @@ const handleVolver = () => {
                   min="0"
                   value={tiempoHoras}
                   onChange={(e) => setTiempoHoras(e.target.value)}
-                  required
                 />
               </div>
             <div>
@@ -112,7 +115,6 @@ const handleVolver = () => {
               min="0"
               value={tiempoMinutos}
               onChange={(e) => setTiempoMinutos(Number(e.target.value))}
-              required
             />
             </div>
           </div>
