@@ -3,7 +3,7 @@ import './editarTarea.css';
 import InicioAdmin from './inicioAdmin';
 import ReactDOM from 'react-dom/client';
 
-function EditarTarea() {
+function EditarTarea({idTarea}) {
   const [nombreTarea, setNombreTarea] = useState('');
   const [esfuerzo, setEsfuerzo] = useState(0);
   const [tiempoHoras, setTiempoHoras] = useState(0);
@@ -30,7 +30,7 @@ function EditarTarea() {
     }
 
     try {
-      setTareaId(0);
+      setTareaId(idTarea);
     
       const response = await fetch('/api/editarTarea', {
         method: 'POST',

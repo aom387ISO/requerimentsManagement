@@ -8,6 +8,7 @@ import EliminarCliente from './eliminarCliente';
 import EliminarProyecto from './eliminarProyecto';
 import AnadirTarea from './anadirTarea';
 import VistaListaDeProyectoAnadirCliente from './vistaListaDeProyectoAnadirCliente';
+import EditarTarea from './editarTarea';
 
 function InicioAdmin() {
   const [expandedRows, setExpandedRows] = useState({});
@@ -167,6 +168,15 @@ function InicioAdmin() {
     );
   };
 
+  const handleEditarTarea = (tareaId) => {
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      <React.StrictMode>
+        <EditarTarea tareaId={tareaId} />
+      </React.StrictMode>
+    );
+  };
+
   const handleCerrarSesion = () => {
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(
@@ -221,6 +231,9 @@ function InicioAdmin() {
                 X
                 </button>
                 <span className="requirement-name">{req.nombreTarea}</span>
+                <span><button className="boton-anadir-tarea" onClick={() => handleEditarTarea(req.idTarea)}>
+              Editar tarea
+              </button></span>
                 <span className="weight">
                   {req.peso}
                   <button className="edit-weight" onClick={() => handleSetShowSquare(true, req.peso, req.idTarea)}>
