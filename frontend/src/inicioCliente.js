@@ -16,14 +16,14 @@ function InicioCliente({idCliente}) {
   
   useEffect(() => {
     fetch(`/api/verProyectosCliente/${idCliente}`, {
-      method: 'GET', // Cambiar a GET para obtener los datos
+      method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log('Datos JSON obtenidos:', data); 
+        console.log('Datos JSON obtenidos:', data.proyectos); 
         if (data.success) {
-          setData(data.proyectos); // Cambié 'setProjects' a 'setData' para usar el estado correcto
+          setData(data.proyectos);
         } else {
           console.log(data.message);
         }
@@ -95,7 +95,7 @@ function InicioCliente({idCliente}) {
           <div className="title">Prioridad</div>
         </div>
 
-        {data.map((project, index) => (
+        {Array.isArray(data) && data.map((project, index) => (
           <React.Fragment key={index}>
             <div className="project-row">
               <button onClick={() => toggleRow(index)}>

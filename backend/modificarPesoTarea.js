@@ -10,20 +10,45 @@ router.post('/modificarPesoTarea', async (req, res) => {
     
     try {
       const [rows] = await pool.promise().query(
-        'SELECT * FROM tareacliente WHERE Tarea_idTarea = ?',[Tarea_idTarea]
+        'SELECT * FROM tareacliente WHERE Tarea_idTarea = ?  AND Cliente_idCliente = ?',[Tarea_idTarea, idCliente]
         );
   
     if (rows.length > 0) {
       await pool.promise().query(
-      'UPDATE tareacliente SET peso = ? WHERE Tarea_idTarea = ?', [peso, idCliente]
+        'UPDATE tareacliente SET peso = ? WHERE Tarea_idTarea = ? AND Cliente_idCliente = ?', [peso, Tarea_idTarea, idCliente]
       );
-        res.json({ success: true, message: 'Peso de tarea actualizado correctamente para el cliente' });
       } else {
         await pool.promise().query(
         'INSERT INTO tareacliente (Tarea_idTarea, Cliente_idCliente, peso) VALUES (?, ?, ?)',[Tarea_idTarea, idCliente, peso]
         );
-        res.json({ success: false, message: 'Se ha insertado el nuevo peso' });
       }
+      const [proyectos] = await pool.promise().query(
+        `SELECT *
+        FROM proyecto p
+        JOIN proyectoCliente pc ON p.idProyecto = pc.Proyecto_idProyecto
+        JOIN cliente c ON pc.Cliente_idCliente = c.idCliente
+        WHERE p.estaEliminado = 0
+        AND c.idCliente = ?`,
+        [idCliente]
+    );
+    if (proyectos.length > 0) {
+            const [tareas] = await pool.promise().query(
+                `SELECT *
+                FROM Tarea
+                WHERE estaEliminado = 0`
+            );
+
+            const proyectosConTareas = proyectos.map((proyecto) => ({
+                ...proyecto,
+                requirements: tareas.filter(
+                    (tarea) => tarea.Proyecto_idProyecto === proyecto.idProyecto
+                ),
+            }));
+
+       res.json({ success: true, proyectos: proyectosConTareas });
+    } else {
+       res.json({ success: false, message: 'No se encontraron proyectos activos para el cliente especificado' });
+    }
     } catch (error) {
       console.error('Error al actualizar el peso de tarea:', error);
       res.status(500).json({ success: false, message: 'Error del servidor' });
