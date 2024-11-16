@@ -8,8 +8,10 @@ function InicioCliente({idCliente}) {
   const [expandedRows, setExpandedRows] = useState({});
   const [showSquare, setShowSquareState] = useState(false);
   const [selectedWeight, setSelectedWeight] = useState(null);
+  const [nuevoPeso, setNuevoPeso] = useState(null);
   const [data, setData] = useState([]);
-  
+  const [tareaId, setTareaId] = useState(null);
+
   console.log('idCliente es:', idCliente);
   
   useEffect(() => {
@@ -41,12 +43,32 @@ function InicioCliente({idCliente}) {
   };
 
   const acceptSquare = () => {
-    setShowSquareState(false); 
+    fetch('/api/modificarPesoTarea', {
+      method: 'POST', 
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({Tarea_idTarea: tareaId,  Cliente_idCliente: 0, peso : nuevoPeso})
+
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          setData(data.proyectos);
+        } else {
+          console.log(data.message);
+        }
+      })
+      .catch((error) => console.error('Error al cambiar los datos:', error));
+
+
+    setShowSquareState(false);
+  
   };
 
-  const handleSetShowSquare = (show, weight) => {
+  const handleSetShowSquare = (show, weight, tareaId) => {
     setShowSquareState(show);
     setSelectedWeight(weight);
+    setNuevoPeso(weight);
+    setTareaId(tareaId);
   };
 
   const handleCerrarSesion = () => {
@@ -91,7 +113,7 @@ function InicioCliente({idCliente}) {
                 <span className="requirement-name">{req.nombreTarea}</span>
                 <span className="weight">
                   {req.peso}
-                  <button className="edit-weight" onClick={() => handleSetShowSquare(true, req.peso)}>
+                  <button className="edit-weight" onClick={() => handleSetShowSquare(true, req.peso, req.idTarea)}>
                     Modificar peso
                   </button>
                 </span>
@@ -102,14 +124,19 @@ function InicioCliente({idCliente}) {
             ))}
           </React.Fragment>
         ))}
-
         {showSquare && (
-          <div className="square-client">
-            <div className="big-text-client">Modificación del peso del requisito actual</div>
-            <div className="weight-label-client">Peso actual: {selectedWeight}</div>
-            <div className="button-container-client">
-              <button className="close-button-client" onClick={closeSquare}>Cancelar</button>
-              <button className="accept-button-client" onClick={acceptSquare}>Aceptar</button>
+          <div className="square">
+            <div className="big-text">Modificación del peso del requisito actual</div>
+            <div className="weight-label">Peso actual: {selectedWeight}</div>
+            <input
+              type="number"
+              value={nuevoPeso}
+              onChange={(e) => setNuevoPeso(e.target.value)}
+              placeholder="Introduce el nuevo peso"
+            />
+            <div className="button-container">
+              <button className="close-button" onClick={closeSquare}>Cancelar</button>
+              <button className="accept-button" onClick={acceptSquare}>Aceptar</button>
             </div>
           </div>
         )}
