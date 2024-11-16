@@ -97,7 +97,7 @@ function InicioAdmin() {
       .then(data => {
         if (data.success) {
           console.log('Tarea eliminada correctamente');
-          setData(prevData => { //Este troncho de código más feo que pegarle a un padre es para que se actualiza en el momento en el frontend. Puedes borrar este comentario cuando lo veas.
+          setData(prevData => { 
             return prevData.map(project => {
               const updatedRequirements = project.requirements.filter(req => req.idTarea !== tareaAEliminar);
               return {
@@ -200,35 +200,63 @@ function InicioAdmin() {
   return (
     <div className="main-container">
       <div className="header">
-        <button onClick={handleCrearProyecto}>Crear Proyecto</button>
-        <button onClick={handleCrearCliente}>Crear Cliente</button>
-        <button onClick={handleAnadirCliente}>Añadir Cliente a un proyecto</button>
-        <button onClick={handleEliminarCliente}>Eliminar Cliente</button>
-        <button onClick={handleEliminarProyecto}>Eliminar proyecto</button>
-        <button className="logout-button" onClick={handleCerrarSesion}>Cerrar sesión</button>
+        <div className='contenedor-botones-izquierda'>
+          <button className='boton-cabecera' onClick={handleCrearProyecto}>Crear Proyecto</button>
+          <button className='boton-cabecera' onClick={handleCrearCliente}>Crear Cliente</button>
+          <button className='boton-cabecera' onClick={handleAnadirCliente}>Añadir Cliente a un proyecto</button>
+          <button className='boton-cabecera' onClick={handleEliminarCliente}>Eliminar Cliente</button>
+          <button  className='boton-cabecera' onClick={handleEliminarProyecto}>Eliminar proyecto</button>
+        </div>
+        
+        <div>
+          <button className='boton-cerrar-sesion' onClick={handleCerrarSesion}>Cerrar sesión</button>
+        </div>
+
       </div>
 
       <div className="table-container">
-      <div className="table-header">
-          <div className="title">Nombre</div>
-          <div className="title">Peso</div>
-          <div className="title">Esfuerzo</div>
-          <div className="title">Tiempo</div>
-          <div className="title">Prioridad</div>
+        <div className="table-header">
+          <div className='contenedor-nombre'>
+              <p>Nombre</p>
+          </div>
+
+            <div>
+              <p>Peso</p>
+            </div>
+            <div>
+              <p>Esfuerzo</p>
+            </div>
+            <div>
+              <p>Tiempo</p>
+            </div>
+
+          <div>
+            <p>Prioridad</p>
+          </div>
         </div>
         {data.map((project, index) => (
           <React.Fragment key={index}>
             <div className="project-row">
-              <button onClick={() => toggleRow(index)}>
-              {expandedRows[index] ? '−' : '+'}
-              </button>
-              <span className="project-name">{project.nombreProyecto}</span>
-              <span><button className="boton-anadir-tarea" onClick={() => handleEditarProyecto(project.idProyecto)}>
-              Editar proyecto
-              </button></span>
-              <span><button className="boton-anadir-tarea" onClick={() => handleAnadirTarea(project.idProyecto)}>
-              Añadir tarea
-              </button></span>
+              <div className='contenedor-proyecto-nombre-botones'>
+                <div className='contenedor-proyecto-nombre'>
+                  <button onClick={() => toggleRow(index)}>
+                    {expandedRows[index] ? '−' : '+'}
+                  </button>
+                  <p>{project.nombreProyecto}</p>
+                </div>
+              
+                <span>
+                  <button className="boton-anadir-tarea" onClick={() => handleEditarProyecto(project.idProyecto)}>
+                    Editar proyecto
+                  </button>
+                </span>
+                <span>
+                  <button className="boton-anadir-tarea" onClick={() => handleAnadirTarea(project.idProyecto)}>
+                    Añadir tarea
+                  </button>
+                </span>
+              </div>
+              
               <span className="weight">{project.peso}</span>
               <span className="effort">{project.esfuerzo}€</span>
               <span></span>

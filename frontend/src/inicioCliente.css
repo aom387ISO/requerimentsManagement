@@ -1,14 +1,128 @@
+
 .main-container {
+  background-color: #282b30; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  font-family: Arial, sans-serif;
+  height: 100vh; 
+  
 }
 
-/* Encabezado con botón de "Cerrar sesión" */
+.header {
+  display: flex;
+  justify-content:space-between;
+  background-color: #6a6868;
+  width: 100%;
+  height: 50px; 
+}
+
+ .boton-cabecera {
+  font-size: 18px;
+  background-color: #5a5757;
+  color:white;
+  border: none;
+  margin-right: 1px;
+  border-right: 1px solid #ccc;
+  cursor: pointer; 
+  display: inline-block;
+  text-align: center;
+  height:100%;
+  align-self: stretch;
+}
+
+.contendor-botones-izquierda{
+  height:auto;
+}
+
+.project-row, .requirement-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #ccc;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.project-name, .requirement-name {
+  flex: 2;
+  padding: 0 10px;
+}
+
+.weight, .effort, .priority {
+  flex: 1;
+  text-align: center;
+}
+
+.square-client {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 400px;
+  padding: 20px;
+  background-color:#444;
+  border: 2px solid #ddd;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.big-text-client {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+  color: rgb(255, 255, 255);
+
+}
+
+.weight-label-client {
+  font-size: 1em;
+  margin-bottom: 20px;
+  text-align: center;
+  color: rgb(255, 255, 255);
+}
+
+.button-container-client {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.button-container-client button {
+  flex: 1;
+  padding: 8px;
+  margin: 0 10px;
+  font-size: 0.9em;
+  cursor: pointer;
+}
+
+.close-button-client {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+}
+
+.accept-button-client {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+}
+
+.boton-anadir-tarea{
+  background-color: #484c52;
+  font-size: 20px;
+  color:rgb(234, 232, 232);
+  border-radius: 8px;
+}
 .header {
   display: flex;
   justify-content: flex-end;
   background-color: #6a6868;
-  padding: 10px;
 }
 
 .logout-button {
@@ -18,27 +132,6 @@
   padding: 10px 20px;
   cursor: pointer;
   border-radius: 5px;
-}
-
-/* Contenedor de la tabla */
-.table-container {
-  background-color: #2c2c2c;
-  color: white;
-  width: 100%;
-  padding: 20px;
-}
-
-/* Encabezado de la tabla */
-.table-header {
-  display: grid;
-  grid-template-columns: 94fr 13fr 31fr 19fr 3fr;
-  background-color: #444;
-  padding: 10px;
-  border-bottom: 2px solid #666;
-}
-
-.table-header .title {
-  text-align: center;
 }
 
 /* Filas de la tabla */
