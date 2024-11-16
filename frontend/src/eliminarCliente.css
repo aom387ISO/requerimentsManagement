@@ -1,3 +1,7 @@
+body {
+  color: white;
+}
+
 .fondo-eliminar-cliente {
   background-color: #282b30; 
   height: 100vh; 

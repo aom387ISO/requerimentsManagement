@@ -1,3 +1,7 @@
+body {
+  color: white;
+}
+
 .fondo-lista-proyecto {
     background-color: #282b30; 
     height: 100vh; 
@@ -35,4 +39,5 @@
     color: white;
     cursor: pointer;
   }
+
   
