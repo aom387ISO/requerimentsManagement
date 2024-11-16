@@ -13,9 +13,6 @@ import EditarProyecto from './editarProyecto';
 
 function InicioAdmin() {
   const [expandedRows, setExpandedRows] = useState({});
-  const [showSquare, setShowSquareState] = useState(false);
-  const [selectedWeight, setSelectedWeight] = useState(null);
-  const [nuevoPeso, setNuevoPeso] = useState(null);
   const [cuadroEliminar, setCuadroEliminar] = useState(false);
   const [tareaAEliminar, setTareaAEliminar] = useState(null);
   const [tareaId, setTareaId] = useState(null);
@@ -44,41 +41,10 @@ function InicioAdmin() {
       [index]: !expandedRows[index],
     });
   };
-
-  const closeSquare = () => setShowSquareState(false);
-  const acceptSquare = () => {
-    fetch('/api/modificarPesoTarea', {
-      method: 'POST', 
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({Tarea_idTarea: tareaId,  Cliente_idCliente: 0, peso : nuevoPeso})
-
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          setData(data.proyectos);
-        } else {
-          console.log(data.message);
-        }
-      })
-      .catch((error) => console.error('Error al cambiar los datos:', error));
-
-
-    setShowSquareState(false);
-  
-  };
   const cancelarEliminar = () => {
     setCuadroEliminar(false);
     setTareaAEliminar(null); 
     setTareaId(null);
-  };
-
-
-  const handleSetShowSquare = (show, weight, tareaId) => {
-    setShowSquareState(show);
-    setSelectedWeight(weight);
-    setNuevoPeso(weight);
-    setTareaId(tareaId);
   };
 
   const handleEliminarTarea = (requisitoId) => {
@@ -218,53 +184,78 @@ function InicioAdmin() {
         <div className="table-header">
           <div className='contenedor-nombre'>
               <p>Nombre</p>
+              
+            <div className='header-linea'></div>
           </div>
 
-            <div>
+          <div className='header-datos-derecha'>
+
+            <div className='header-linea'></div>
+
+            <div className='header-dato-peso-proyecto'>
               <p>Peso</p>
             </div>
-            <div>
+
+            <div className='header-linea'></div>
+
+            <div className='header-dato-esfuerzo-proyecto'>
               <p>Esfuerzo</p>
             </div>
-            <div>
+
+            <div className='header-linea'></div>
+
+            <div className='header-dato-tiempo-proyecto'>
               <p>Tiempo</p>
             </div>
 
-          <div>
-            <p>Prioridad</p>
-          </div>
+            <div className='header-linea'></div>
+
+            <div className='header-dato-prioridad-proyecto'>
+              <p>Prioridad</p>
+            </div>
+          </div>     
         </div>
         {data.map((project, index) => (
           <React.Fragment key={index}>
             <div className="project-row">
               <div className='contenedor-proyecto-nombre-botones'>
                 <div className='contenedor-proyecto-nombre'>
-                  <button onClick={() => toggleRow(index)}>
+                  <button className='simbolo-nombre-proyecto-boton' onClick={() => toggleRow(index)}>
                     {expandedRows[index] ? '-' : '+'}
                   </button>
-                  
                   <button className='nombre-proyecto-boton' onClick={() => toggleRow(index)}>
                     {project.nombreProyecto}
                   </button>
                 </div>
-              
-                <span>
-                  <button className="boton-anadir-tarea" onClick={() => handleEditarProyecto(project.idProyecto)}>
+                <div className='contenedor-proyecto-botones'>  
+                  <button className="boton-proyecto-nombre" onClick={() => handleEditarProyecto(project.idProyecto)}>
                     Editar proyecto
                   </button>
-                </span>
-                <span>
-                  <button className="boton-anadir-tarea" onClick={() => handleAnadirTarea(project.idProyecto)}>
+                  <div className='linea-boton'></div>
+                  <button className="boton-proyecto-nombre" onClick={() => handleAnadirTarea(project.idProyecto)}>
                     Añadir tarea
                   </button>
-                </span>
+                </div>
+                <div className='linea'></div>
               </div>
               
-              <span className="weight">{project.peso}</span>
-              <span className="effort">{project.esfuerzo}€</span>
-              <span></span>
-              <span className={`priority priority-${project.prioridad}`}>{project.prioridad}</span>
 
+              <div className='datos-derecha'>
+                <div className='dato-peso-proyecto'>
+                  <p>{project.peso}</p>
+                </div>
+
+                <div className='dato-esfuerzo-proyecto'>
+                  <p>{project.esfuerzo}€</p>
+                </div>
+
+                <div className='dato-tiempo-proyecto'></div>
+
+                <div className='dato-prioridad-proyecto'>
+                  <p>{project.prioridad}</p>
+                </div>
+
+              </div>
             </div>
 
             {expandedRows[index] && project.requirements.map((req, reqIndex) => (
@@ -281,9 +272,6 @@ function InicioAdmin() {
               </button></span>
                 <span className="weight">
                   {req.peso}
-                  <button className="edit-weight" onClick={() => handleSetShowSquare(true, req.peso, req.idTarea)}>
-                    Modificar peso
-                  </button>
                 </span>
                 <span className="effort">{req.esfuerzo}€</span>
                 <span>{Math.floor(req.tiempoMinutos / 60)}h{req.tiempoMinutos % 60}m</span>
@@ -292,22 +280,6 @@ function InicioAdmin() {
             ))}
           </React.Fragment>
         ))}
-        {showSquare && (
-          <div className="square">
-            <div className="big-text">Modificación del peso del requisito actual</div>
-            <div className="weight-label">Peso actual: {selectedWeight}</div>
-            <input
-              type="number"
-              value={nuevoPeso}
-              onChange={(e) => setNuevoPeso(e.target.value)}
-              placeholder="Introduce el nuevo peso"
-            />
-            <div className="button-container">
-              <button className="close-button" onClick={closeSquare}>Cancelar</button>
-              <button className="accept-button" onClick={acceptSquare}>Aceptar</button>
-            </div>
-          </div>
-        )}
           {cuadroEliminar  && (
           <div className="square">
             <div className="big-text">¿De verdad vas a eliminar la tarea?</div>
