@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';  // Importa React y los hooks una sola vez
-import './incioCliente.css';
+import './inicioCliente.css';
 import ReactDOM from 'react-dom/client';
 import './iniciarSesion';
 import IniciarSesion from './iniciarSesion';
@@ -61,7 +61,7 @@ function InicioCliente({idCliente}) {
   return (
     <div className="main-container">
       <div className="header">
-        <button className="logout-button" onClick={handleCerrarSesion}>Cerrar sesión</button>
+        <button onClick={handleCerrarSesion}>Cerrar sesión</button>
       </div>
 
       <div className="table-container">
