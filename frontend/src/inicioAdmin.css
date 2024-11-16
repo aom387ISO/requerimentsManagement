@@ -91,33 +91,48 @@
   text-align: center;
 }
 
-.project-row, .requirement-row {
+.project-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid #ccc;
+  box-sizing: border-box;
+  height: 60px;
+  background-color: #444;
+  border-radius: 8px;
+}
+
+.requirement-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 8px;
   box-sizing: border-box;
+  height: 60px;
 }
 
 .contenedor-proyecto-nombre{
   display:flex;
   width:50%;
-  border: 1px solid black;
+  height: 80%;
   border-right: 1px solid #ccc;
+  margin-left:5px;
+  margin-top: 6px;
+}
+
+.nombre-proyecto-boton{
+  width:100%;
+  text-align: left;
 }
 
 .contenedor-proyecto-nombre-botones{
   display:flex;
   width:37%;
   border: 1px solid black;
+  height:100%;
   gap: 20px;
 }
 
-.project-name, .requirement-name {
-  flex: 2;
-  padding: 0 10px;
-}
+
 
 .weight, .effort, .priority {
   flex: 1;

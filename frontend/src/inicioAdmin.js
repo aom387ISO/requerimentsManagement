@@ -240,9 +240,12 @@ function InicioAdmin() {
               <div className='contenedor-proyecto-nombre-botones'>
                 <div className='contenedor-proyecto-nombre'>
                   <button onClick={() => toggleRow(index)}>
-                    {expandedRows[index] ? '−' : '+'}
+                    {expandedRows[index] ? '-' : '+'}
                   </button>
-                  <p>{project.nombreProyecto}</p>
+                  
+                  <button className='nombre-proyecto-boton' onClick={() => toggleRow(index)}>
+                    {project.nombreProyecto}
+                  </button>
                 </div>
               
                 <span>
