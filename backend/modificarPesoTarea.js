@@ -4,19 +4,25 @@ const router = express.Router();
 
 
 router.post('/modificarPesoTarea', async (req, res) => {
-    const { Tarea_idTarea, Cliente_idCliente, peso } = req.body;
+    const { Tarea_idTarea, idCliente, peso } = req.body;
 
     const pool = req.app.get('pool');
     
     try {
       const [rows] = await pool.promise().query(
-        'UPDATE tareacliente SET peso = ? WHERE Tarea_idTarea = ? AND Cliente_idCliente = ?', [peso, Tarea_idTarea, Cliente_idCliente]     
-    );
+        'SELECT * FROM tareacliente WHERE Tarea_idTarea = ?',[Tarea_idTarea]
+        );
   
     if (rows.length > 0) {
+      await pool.promise().query(
+      'UPDATE tareacliente SET peso = ? WHERE Tarea_idTarea = ?', [peso, idCliente]
+      );
         res.json({ success: true, message: 'Peso de tarea actualizado correctamente para el cliente' });
       } else {
-        res.json({ success: false, message: 'No se encontró la tarea o cliente especificado' });
+        await pool.promise().query(
+        'INSERT INTO tareacliente (Tarea_idTarea, Cliente_idCliente, peso) VALUES (?, ?, ?)',[Tarea_idTarea, idCliente, peso]
+        );
+        res.json({ success: false, message: 'Se ha insertado el nuevo peso' });
       }
     } catch (error) {
       console.error('Error al actualizar el peso de tarea:', error);

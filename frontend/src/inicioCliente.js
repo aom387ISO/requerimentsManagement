@@ -46,7 +46,7 @@ function InicioCliente({idCliente}) {
     fetch('/api/modificarPesoTarea', {
       method: 'POST', 
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({Tarea_idTarea: tareaId,  Cliente_idCliente: 0, peso : nuevoPeso})
+      body: JSON.stringify({Tarea_idTarea: tareaId, idCliente, peso : nuevoPeso})
 
     })
       .then((response) => response.json())
