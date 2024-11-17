@@ -11,11 +11,9 @@ router.get('/verProyectos', async (req, res) => {
   
       if (proyectos.length > 0) {
         const [tareas] = await pool.promise().query(
-          `SELECT t.*, 
-          IFNULL(tc.peso, 0) AS pesoCliente
-          FROM Tarea t
-          LEFT JOIN tareacliente tc ON t.idTarea = tc.Tarea_idTarea
-          WHERE t.estaEliminado = 0`
+          `SELECT *
+          FROM Tarea
+          WHERE estaEliminado = 0`
         );
   
         const proyectosConTareas = proyectos.map((proyecto) => ({
