@@ -1,57 +1,4 @@
 
-.main-container {
-  background-color: #282b30; 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  height: 100vh; 
-  
-}
-
-.header {
-  display: flex;
-  justify-content:space-between;
-  background-color: #6a6868;
-  width: 100%;
-  height: 50px; 
-}
-
- .boton-cabecera {
-  font-size: 18px;
-  background-color: #5a5757;
-  color:white;
-  border: none;
-  margin-right: 1px;
-  border-right: 1px solid #ccc;
-  cursor: pointer; 
-  display: inline-block;
-  text-align: center;
-  height:100%;
-  align-self: stretch;
-}
-
-.contendor-botones-izquierda{
-  height:auto;
-}
-
-.project-row, .requirement-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-sizing: border-box;
-}
-
-.project-name, .requirement-name {
-  flex: 2;
-  padding: 0 10px;
-}
-
-.weight, .effort, .priority {
-  flex: 1;
-  text-align: center;
-}
-
 .square-client {
   position: fixed;
   top: 50%;
@@ -123,36 +70,6 @@
   background-color: #6a6868;
 }
 
-.logout-button {
-  background-color: #f79c9c;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-/* Filas de la tabla */
-.row {
-  margin-bottom: 5px;
-}
-
-
-.project-name {
-  padding-left: 5px;
-}
-
-/* Fila de requisitos */
-.requirement-row {
-  display: grid;
-  grid-template-columns: 20fr 6fr 5fr 3fr 1fr;
-  align-items: center;
-  background-color: #555;
-  padding: 10px;
-  margin: 5px 0;
-  margin-left: 20px; /* Ajuste de margen para alineación */
-}
-
 .requirement-name {
   text-align: left;
   padding-left: 20px;
@@ -170,7 +87,7 @@
   cursor: pointer;
 }
 
-/* Estilos de prioridad */
+
 .priority-client {
   padding: 13px;
   border-radius: 5px;
@@ -189,7 +106,7 @@
   background-color: #8b8b8b;
 }
 
-/* Cuadro emergente (popup) */
+
 .square {
   position: fixed;
   top: 50%;
@@ -201,7 +118,7 @@
   background-color:#444;
   border: 2px solid #ddd;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  z-index: 1000; /* Asegura que el popup esté encima de otros elementos */
+  z-index: 1000;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -223,7 +140,7 @@
   color: rgb(255, 255, 255);
 }
 
-/* Botones del cuadro emergente */
+
 .button-container {
   display: flex;
   justify-content: space-between;

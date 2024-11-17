@@ -185,24 +185,25 @@ function InicioAdmin() {
           <div className='contenedor-nombre'>
               <p>Nombre</p>
               
-            <div className='header-linea'></div>
+
+              <div className='header-linea'></div>
           </div>
 
           <div className='header-datos-derecha'>
 
-            <div className='header-linea'></div>
+            <div className='header-linea' style={{ marginRight: '10px' }}></div>
 
             <div className='header-dato-peso-proyecto'>
               <p>Peso</p>
             </div>
 
-            <div className='header-linea'></div>
+            <div className='header-linea' style={{ marginRight: '16px' }}></div>
 
             <div className='header-dato-esfuerzo-proyecto'>
               <p>Esfuerzo</p>
             </div>
 
-            <div className='header-linea'></div>
+            <div className='header-linea' style={{ marginRight: '8px' }}></div>
 
             <div className='header-dato-tiempo-proyecto'>
               <p>Tiempo</p>
@@ -215,6 +216,7 @@ function InicioAdmin() {
             </div>
           </div>     
         </div>
+  
         {data.map((project, index) => (
           <React.Fragment key={index}>
             <div className="project-row">
@@ -240,7 +242,7 @@ function InicioAdmin() {
               </div>
               
 
-              <div className='datos-derecha'>
+              <div className='datos-derecha-proyecto'>
                 <div className='dato-peso-proyecto'>
                   <p>{project.peso}</p>
                 </div>
@@ -259,24 +261,40 @@ function InicioAdmin() {
             </div>
 
             {expandedRows[index] && project.requirements.map((req, reqIndex) => (
-              <div key={reqIndex} className="requirement-row">
-                <button 
-                className="delete-requirement"
-                onClick={() => handleEliminarTarea(req.idTarea)}
-                >
-                X
-                </button>
-                <span className="requirement-name">{req.nombreTarea}</span>
-                <span><button className="boton-anadir-tarea" onClick={() => handleEditarTarea(req.idTarea)}>
-              Editar tarea
-              </button></span>
-                <span className="weight">
-                  {req.peso}
-                </span>
-                <span className="effort">{req.esfuerzo}€</span>
-                <span>{Math.floor(req.tiempoMinutos / 60)}h{req.tiempoMinutos % 60}m</span>
-                <span className={`priority priority-${req.prioridad}`}>{req.prioridad}</span>
+              <div key={reqIndex} className="tarea-fila">
+                <div className='contenedor-tarea-nombre-botones'>
+                  <div className='contenedor-tarea-nombre'>
+                    <button className="eliminar-tarea" onClick={() => handleEliminarTarea(req.idTarea)}>
+                      X
+                    </button>
+                    <p>{req.nombreTarea}</p>
+                  </div>
+
+                  <div className='contenedor-tarea-botones'>                                   
+                    <button className="boton-tarea-nombre" onClick={() => handleEditarTarea(req.idTarea)}>
+                      Editar tarea
+                    </button>
+                    <div className='linea' style={{ marginRight: '8px' }}></div>
+                  </div>
+                </div>
+
+                
+                <div className='datos-derecha-tarea'>
+                  <div className='dato-peso-tarea'></div>
+                <div className='dato-esfuerzo-tarea'>
+                  <p>{req.esfuerzo}€</p>
+                </div>
+
+                <div className='dato-tiempo-tarea'>
+                  <p>{Math.floor(req.tiempoMinutos / 60)}h{req.tiempoMinutos % 60}m</p>
+                </div>
+
+                <div className='dato-prioridad-tarea'>
+                  <p>{req.prioridad}</p>
+                </div>
+
               </div>
+            </div>
             ))}
           </React.Fragment>
         ))}
