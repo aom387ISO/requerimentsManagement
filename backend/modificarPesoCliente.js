@@ -2,13 +2,13 @@ const express = require('express');
 const pool = require('./db'); 
 const router = express.Router();
 
-router.put('/anadirClienteProyecto', async (req, res) => {
-  console.log('Ruta de login alcanzada');
+router.put('/modificarPesoCliente', async (req, res) => {
+  console.log('Ruta de modificar alcanzada');
   const { proyecto, cliente, peso } = req.body;
   const pool = req.app.get('pool');
   try {
     const [rows] = await pool.promise().query(
-        'UPDATE Proyectocliente SET peso = ? WHERE Proyecto_idProyecto = ? AND Cliente_idCliente = ?', [proyecto, cliente, peso]
+        'UPDATE proyectocliente SET peso = ? WHERE Proyecto_idProyecto = ? AND Cliente_idCliente = ?', [peso, proyecto, cliente]
     );
     
     console.log('Valor de usuario recibido:', proyecto);

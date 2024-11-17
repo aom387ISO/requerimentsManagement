@@ -73,7 +73,7 @@ function VistaCambiarPesoCliente() {
   };
 
   const relacionClienteProyecto = async () => {
-    if (!proyectoSeleccionado || !clienteSeleccionado) return;
+    if (proyectoSeleccionado == null || !clienteSeleccionado) return;
     
     try {
       const response = await fetch('/api/modificarPesoCliente', {
