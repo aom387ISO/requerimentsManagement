@@ -12,12 +12,14 @@ const crearClienteRouter = require('./crearCliente');
 const obtenerClientesRouter = require('./obtenerClientes');
 const obtenerProyectosRouter = require('./obtenerProyectos');
 const modificarPesoTareaRouter = require('./modificarPesoTarea');
+const modificarPesoClienteRouter = require('./modificarPesoCliente');
 const anadirClienteProyecto = require('./anadirClienteProyecto');
 const listaClientesEnProyecto = require('./listaClientesEnProyecto');
 const listaProyecto = require('./listaProyectos');
 const verProyectosRouter = require('./verProyectos');
 const verProyectosClienteRouter = require('./verProyectosCliente');
 const verProyectosSinClienteRouter = require('./verProyectosSinCliente');
+const verProyectosConClienteRouter = require('./verProyectosConCliente');
 const anadirTareaRouter = require('./anadirTarea');
 const editarTareaRouter = require('./editarTarea');
 const editarProyectoRouter = require('./editarProyecto');
@@ -65,6 +67,8 @@ async function getClientes() {
 
   app.use('/api', modificarPesoTareaRouter);
 
+  app.use('/api', modificarPesoClienteRouter);
+
   app.use('/api', anadirClienteProyecto);
 
   app.use('/api', anadirTareaRouter);
@@ -78,6 +82,8 @@ async function getClientes() {
   app.use('/api', verProyectosClienteRouter); 
 
   app.use('/api', verProyectosSinClienteRouter); 
+
+  app.use('/api', verProyectosConClienteRouter); 
 
   app.use('/api', editarTareaRouter);
 

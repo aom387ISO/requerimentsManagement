@@ -11,13 +11,14 @@ import AnadirTarea from './anadirTarea';
 import EditarTarea from './editarTarea';
 import EditarProyecto from './editarProyecto';
 import VistaListaDeProyectoAnadirCliente from './vistaListaDeProyectoAnadirCliente';
+import VistaCambiarPesoCliente from './vistaCambiarPesoCliente';
 import InicioCliente from './inicioCliente';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <InicioAdmin/>
+    <VistaCambiarPesoCliente/>
   </React.StrictMode>
 );
 // 
