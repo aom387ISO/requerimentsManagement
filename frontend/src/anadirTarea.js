@@ -28,6 +28,8 @@ function AnadirTarea({proyectoId}) {
       setError('El tiempo en minutos no puede ser negativo.');
       return;
     }
+    console.log("Tiempo horas", tiempoHoras);
+    const tiempoTotal = (tiempoHoras * 60) + tiempoMinutos;
 
     try {
       const response = await fetch(`/api/anadirTarea/${proyectoId}`, {
@@ -36,7 +38,7 @@ function AnadirTarea({proyectoId}) {
         body: JSON.stringify({
           nombreTarea,
           esfuerzo,
-          tiempoMinutos,
+          tiempoTotal,
           prioridad,
         }),
       });

@@ -5,7 +5,7 @@ const router = express.Router();
 router.post('/anadirTarea/:proyectoId', async (req, res) => {
     console.log('Ruta de añadido alcanzada');
     const { proyectoId } = req.params;
-    const { nombreTarea, esfuerzo, tiempoMinutos, prioridad } = req.body;
+    const { nombreTarea, esfuerzo, tiempoTotal, prioridad } = req.body;
     const pool = req.app.get('pool');
 
     try {
@@ -15,7 +15,7 @@ router.post('/anadirTarea/:proyectoId', async (req, res) => {
 
       await pool.promise().query(
         'INSERT INTO Tarea (idTarea, nombreTarea, esfuerzo, tiempoMinutos, prioridad, proyecto_idProyecto, estaEliminado) VALUES (?, ?, ?, ?, ?, ?, ?)',
-        [id, nombreTarea, esfuerzo, tiempoMinutos, prioridad, proyectoId, false]
+        [id, nombreTarea, esfuerzo, tiempoTotal, prioridad, proyectoId, false]
     );
   
     res.json({ success: true, message: 'Tarea añadida' });    
