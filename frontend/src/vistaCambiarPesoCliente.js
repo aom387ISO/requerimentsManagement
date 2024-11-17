@@ -31,7 +31,7 @@ function VistaCambiarPesoCliente() {
       method:'GET'
     })
       .then(response => response.json())
-      .then(data => setClientes(data.clientes))
+      .then(data =>   setClientes(data?.clientes || []))
       .catch(() => setError('Error al cargar clientes'));
   };
 

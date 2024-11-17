@@ -292,6 +292,7 @@ function InicioAdmin() {
                 
                 <div className='datos-derecha-tarea'>
                   <div className='dato-peso-tarea'></div>
+                  <p>{req.pesoCliente}</p>
                 <div className='dato-esfuerzo-tarea'>
                   <p>{req.esfuerzo}€</p>
                 </div>
