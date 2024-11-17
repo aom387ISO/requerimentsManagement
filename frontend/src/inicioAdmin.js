@@ -10,6 +10,7 @@ import AnadirTarea from './anadirTarea';
 import VistaListaDeProyectoAnadirCliente from './vistaListaDeProyectoAnadirCliente';
 import EditarTarea from './editarTarea';
 import EditarProyecto from './editarProyecto';
+import VistaCambiarPesoCliente from './vistaCambiarPesoCliente';
 
 function InicioAdmin() {
   const [expandedRows, setExpandedRows] = useState({});
@@ -126,6 +127,15 @@ function InicioAdmin() {
     );
   };
 
+  const handlePesoClienteProyecto = () => {
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      <React.StrictMode>
+        <VistaCambiarPesoCliente/>
+      </React.StrictMode>
+    );
+  };
+
   const handleAnadirTarea = (proyectoId) => {
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(
@@ -172,6 +182,7 @@ function InicioAdmin() {
           <button className='boton-cabecera' onClick={handleAnadirCliente}>Añadir Cliente a un proyecto</button>
           <button className='boton-cabecera' onClick={handleEliminarCliente}>Eliminar Cliente</button>
           <button  className='boton-cabecera' onClick={handleEliminarProyecto}>Eliminar proyecto</button>
+          <button  className='boton-cabecera' onClick={handlePesoClienteProyecto}>Modificar peso de un cliente</button>
         </div>
         
         <div>
@@ -288,6 +299,8 @@ function InicioAdmin() {
                 <div className='dato-tiempo-tarea'>
                   <p>{Math.floor(req.tiempoMinutos / 60)}h{req.tiempoMinutos % 60}m</p>
                 </div>
+
+
 
                 <div className='dato-prioridad-tarea'>
                   <p>{req.prioridad}</p>

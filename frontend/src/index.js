@@ -18,7 +18,7 @@ import InicioCliente from './inicioCliente';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <VistaCambiarPesoCliente/>
+    <IniciarSesion/>
   </React.StrictMode>
 );
 // 

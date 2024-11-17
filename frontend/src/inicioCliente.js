@@ -83,44 +83,106 @@ function InicioCliente({idCliente}) {
   return (
     <div className="main-container">
       <div className="header">
-        <button onClick={handleCerrarSesion}>Cerrar sesión</button>
+        <div></div>
+        <div>
+          <button className='boton-cerrar-sesion' onClick={handleCerrarSesion}>Cerrar sesión</button>
+        </div>
       </div>
 
       <div className="table-container">
-      <div className="table-header">
-          <div className="title">Nombre</div>
-          <div className="title">Peso</div>
-          <div className="title">Esfuerzo</div>
-          <div className="title">Tiempo</div>
-          <div className="title">Prioridad</div>
+        <div className="table-header">
+          <div className='contenedor-nombre'>
+              <p>Nombre</p>
+              <div className='header-linea'></div>
+          </div>
+
+          <div className='header-datos-derecha'>
+            <div className='header-linea' style={{ marginRight: '10px' }}></div>
+            <div className='header-dato-peso-proyecto'>
+              <p>Peso</p>
+            </div>
+
+            <div className='header-linea' style={{ marginRight: '16px' }}></div>
+            <div className='header-dato-esfuerzo-proyecto'>
+              <p>Esfuerzo</p>
+            </div>
+
+            <div className='header-linea' style={{ marginRight: '8px' }}></div>
+            <div className='header-dato-tiempo-proyecto'>
+              <p>Tiempo</p>
+            </div>
+
+            <div className='header-linea'></div>
+            <div className='header-dato-prioridad-proyecto'>
+              <p>Prioridad</p>
+            </div>
+          </div>     
         </div>
 
         {Array.isArray(data) && data.map((project, index) => (
           <React.Fragment key={index}>
-            <div className="project-row">
-              <button onClick={() => toggleRow(index)}>
-                {expandedRows[index] ? '−' : '+'}
-              </button>
-              <span className="project-name">{project.nombreProyecto}</span>
-              <span className="weight">{project.peso}</span>
-              <span className="effort">{project.esfuerzo}€</span>
-              <span></span>
-              <span className={`priority-client priority-${project.prioridad}`}>{project.prioridad}</span>
+             <div className="project-row">
+              <div className='contenedor-proyecto-nombre-botones'>
+                <div className='contenedor-proyecto-nombre-cliente'>
+                  <button className='simbolo-nombre-proyecto-boton' onClick={() => toggleRow(index)}>
+                    {expandedRows[index] ? '-' : '+'}
+                  </button>
+                  <button className='nombre-proyecto-boton' onClick={() => toggleRow(index)}>
+                    {project.nombreProyecto}
+                  </button>
+                </div>
+              </div>
+              
+
+              <div className='datos-derecha-proyecto'>
+                <div className='dato-peso-proyecto'>
+                  <p>{project.peso}</p>
+                </div>
+
+                <div className='dato-esfuerzo-proyecto'>
+                  <p>{project.esfuerzo}€</p>
+                </div>
+
+                <div className='dato-tiempo-proyecto'></div>
+
+                <div className='dato-prioridad-proyecto'>
+                  <p>{project.prioridad}</p>
+                </div>
+
+              </div>
             </div>
 
             {expandedRows[index] && project.requirements.map((req, reqIndex) => (
-              <div key={reqIndex} className="requirement-row">
-                <span className="requirement-name">{req.nombreTarea}</span>
-                <span className="weight">
-                  {req.peso}
-                  <button className="edit-weight" onClick={() => handleSetShowSquare(true, req.peso, req.idTarea)}>
-                    Modificar peso
-                  </button>
-                </span>
-                <span className="effort">{req.esfuerzo}€</span>
-                <span>{Math.floor(req.tiempoMinutos / 60)}h{req.tiempoMinutos % 60}m</span>
-                <span className={`priority-client priority-${req.prioridad}`}>{req.prioridad}</span>
+              <div key={reqIndex} className="tarea-fila">
+                <div className='contenedor-tarea-nombre-botones'>
+                  <div className='contenedor-tarea-nombre'>
+                    <p>{req.nombreTarea}</p>
+                  </div>
+
+                  <div className='contenedor-tarea-botones'>                                   
+                    <button className="boton-tarea-nombre" onClick={() => handleSetShowSquare(true, req.peso, req.idTarea)}>
+                      Modificar peso
+                    </button>
+                    <div className='linea' style={{ marginRight: '8px' }}></div>
+                  </div>
+                </div>
+
+                <div className='datos-derecha-tarea'>
+                  <div className='dato-peso-tarea'></div>
+                <div className='dato-esfuerzo-tarea'>
+                  <p>{req.esfuerzo}€</p>
+                </div>
+
+                <div className='dato-tiempo-tarea'>
+                  <p>{Math.floor(req.tiempoMinutos / 60)}h{req.tiempoMinutos % 60}m</p>
+                </div>
+
+                <div className='dato-prioridad-tarea'>
+                  <p>{req.prioridad}</p>
+                </div>
+
               </div>
+            </div>
             ))}
           </React.Fragment>
         ))}
