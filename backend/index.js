@@ -14,8 +14,6 @@ const obtenerProyectosRouter = require('./obtenerProyectos');
 const modificarPesoTareaRouter = require('./modificarPesoTarea');
 const modificarPesoClienteRouter = require('./modificarPesoCliente');
 const anadirClienteProyecto = require('./anadirClienteProyecto');
-const listaClientesEnProyecto = require('./listaClientesEnProyecto');
-const listaProyecto = require('./listaProyectos');
 const verProyectosRouter = require('./verProyectos');
 const verProyectosClienteRouter = require('./verProyectosCliente');
 const verProyectosSinClienteRouter = require('./verProyectosSinCliente');
@@ -70,10 +68,6 @@ async function getClientes() {
   app.use('/api', anadirClienteProyecto);
 
   app.use('/api', anadirTareaRouter);
-
-  app.use('/api', listaClientesEnProyecto);
-
-  app.use('/api', listaProyecto);
 
   app.use('/api', verProyectosRouter); 
   
