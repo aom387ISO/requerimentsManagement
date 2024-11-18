@@ -45,10 +45,8 @@ async function getClientes() {
   
   getClientes();
 
-  // Añadir el pool al objeto `app` para que esté disponible en otras partes de la aplicación
   app.set('pool', pool);
 
-  // Ruta principal para la lógica de login
   app.use('/api', loginRouter);
 
   app.use('/api', eliminarClienteRouter);

@@ -2,9 +2,8 @@ const express = require('express');
 const pool = require('./db');
 const router = express.Router();
 
-// Ruta para obtener proyectos y tareas de un cliente específico usando parámetro de ruta
 router.get('/verProyectosConCliente/:id', async (req, res) => {
-    const idProyecto = req.params.id; // Obtener el idCliente desde el parámetro de ruta
+    const idProyecto = req.params.id;
     console.log('idProyecto backend es:', idProyecto);
     const pool = req.app.get('pool');
 
