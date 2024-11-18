@@ -143,7 +143,9 @@ function InicioCliente({idCliente}) {
                   <p>{project.esfuerzo}€</p>
                 </div>
 
-                <div className='dato-tiempo-proyecto'></div>
+                <div className='dato-tiempo-proyecto'>
+                 {/* <p>{Math.floor(project.tiempoTotal / 60)}h {project.tiempoTotal % 60}m</p> */}
+                </div>
 
                 <div className='dato-prioridad-proyecto'>
                   <p>{project.prioridad}</p>
