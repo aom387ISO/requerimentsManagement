@@ -3,7 +3,7 @@ const pool = require('./db');
 const router = express.Router();
 
 router.put('/actualizarPrioridadTarea', async (req, res) => {
-    const { tareaId, idCliente } = req.body;
+    const { tareaId } = req.body;
 
     const pool = req.app.get('pool');
     console.log("hola, mi tarea id es:", tareaId)
