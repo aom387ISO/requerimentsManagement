@@ -59,6 +59,36 @@ function InicioCliente({idCliente}) {
       })
       .catch((error) => console.error('Error al cambiar los datos:', error));
 
+      fetch('/api/actualizarPrioridadTarea', {
+        method: 'PUT', 
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({tareaId: tareaId, idCliente})
+  
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            setData(data.proyectos);
+          } else {
+            console.log(data.message);
+          }
+        })
+        .catch((error) => console.error('Error al actualizar la prioridad de la tarea:', error));
+
+        fetch(`/api/verProyectosCliente/${idCliente}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },    
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              setData(data.proyectos);
+            } else {
+              console.log(data.message);
+            }
+          })
+          .catch((error) => console.error('Error al actualizar la prioridad de la tarea:', error));
+
 
     setShowSquareState(false);
   
