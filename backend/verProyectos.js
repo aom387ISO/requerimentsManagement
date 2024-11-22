@@ -13,7 +13,9 @@ router.get('/verProyectos', async (req, res) => {
         const [tareas] = await pool.promise().query(
           `SELECT *
           FROM Tarea
-          WHERE estaEliminado = 0`
+          WHERE estaEliminado = 0
+          ORDER BY Tarea.prioridad DESC`
+
         );
   
         const proyectosConTareas = proyectos.map((proyecto) => ({

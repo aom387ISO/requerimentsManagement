@@ -24,7 +24,9 @@ router.get('/verProyectosCliente/:id', async (req, res) => {
                  IFNULL(tc.peso, 0) AS pesoCliente
                  FROM Tarea t
                  LEFT JOIN tareacliente tc ON t.idTarea = tc.Tarea_idTarea AND tc.Cliente_idCliente = ?
-                 WHERE t.estaEliminado = 0`,
+                 WHERE t.estaEliminado = 0
+                 ORDER BY t.prioridad DESC`
+                 ,
                 [idCliente]
             );
 
