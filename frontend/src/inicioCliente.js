@@ -62,7 +62,7 @@ function InicioCliente({idCliente}) {
       fetch('/api/actualizarPrioridadTarea', {
         method: 'PUT', 
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({tareaId: tareaId, idCliente})
+        body: JSON.stringify({tareaId: tareaId})
   
       })
         .then((response) => response.json())
