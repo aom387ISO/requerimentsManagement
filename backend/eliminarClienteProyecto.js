@@ -2,10 +2,10 @@ const express = require('express');
 const pool = require('./db'); 
 const router = express.Router();
 
-router.put('/eliminarClienteProyecto', async (req, res) => {
+router.delete('/eliminarClienteProyecto', async (req, res) => {
     console.log('Ruta de borrado alcanzada');
-    const { idProyecto } = req.params;
-    const { idCliente } = req.params;
+    const {idProyecto, idCliente} = req.body;
+
     const pool = req.app.get('pool');
     try {
 

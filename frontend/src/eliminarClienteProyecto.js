@@ -71,7 +71,7 @@ function EliminarClienteProyecto() {
     
     try {
       const response = await fetch('/api/eliminarClienteProyecto', {
-          method: 'put',
+          method: 'delete',
           headers: {
               'Content-Type': 'application/json'
           },
