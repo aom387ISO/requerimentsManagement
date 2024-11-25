@@ -11,6 +11,7 @@ import VistaListaDeProyectoAnadirCliente from './vistaListaDeProyectoAnadirClien
 import EditarTarea from './editarTarea';
 import EditarProyecto from './editarProyecto';
 import VistaCambiarPesoCliente from './vistaCambiarPesoCliente';
+import EliminarClienteProyecto from './eliminarClienteProyecto';
 
 function InicioAdmin() {
   const [expandedRows, setExpandedRows] = useState({});
@@ -136,6 +137,15 @@ function InicioAdmin() {
     );
   };
 
+  const handleEliminarClienteProyecto = () => {
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      <React.StrictMode>
+        <EliminarClienteProyecto/>
+      </React.StrictMode>
+    );
+  };
+
   const handleAnadirTarea = (proyectoId) => {
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(
@@ -183,6 +193,7 @@ function InicioAdmin() {
           <button className='boton-cabecera' onClick={handleEliminarCliente}>Eliminar Cliente</button>
           <button  className='boton-cabecera' onClick={handleEliminarProyecto}>Eliminar proyecto</button>
           <button  className='boton-cabecera' onClick={handlePesoClienteProyecto}>Modificar peso de un cliente</button>
+          <button  className='boton-cabecera' onClick={handleEliminarClienteProyecto}>Elimina un cliente de un proyecto</button>
         </div>
         
         <div>

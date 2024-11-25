@@ -13,6 +13,7 @@
   font-size: 20px;
   color:rgb(234, 232, 232);
   border-radius: 8px;
+  cursor: pointer;
   }
   
   .boton-volver:active{
