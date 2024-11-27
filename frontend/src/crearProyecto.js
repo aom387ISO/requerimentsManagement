@@ -12,7 +12,7 @@ function CrearProyecto() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!nombre || !peso || !esfuerzo) {
+        if (!nombre || !esfuerzo) {
             setError('Todos los campos son obligatorios.');
             return;
           }
@@ -21,7 +21,7 @@ function CrearProyecto() {
           const response = await fetch('/api/crearProyecto', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nombre: nombre, peso: peso, esfuerzo: esfuerzo })
+            body: JSON.stringify({ nombre: nombre, esfuerzo: esfuerzo })
           });
                 
           const data = await response.json();
@@ -66,12 +66,7 @@ function CrearProyecto() {
                             </p>
                             <input type="text" placeholder="Introduzca el nombre del proyecto" style={{ width: '90%' }} value={nombre} onChange={(e) => setNombre(e.target.value)}></input>
                         </div>
-                        <div>
-                            <p>
-                                Peso del proyecto: 
-                            </p>
-                            <input type="number" min="0" max="5" step="1" placeholder="Introduzque entre 0 y 5" style={{ width: '24%' }} value={peso} onChange={(e) => setPeso(e.target.value)}></input>
-                        </div>
+
                         <div>
                             <p>
                                 Esfuerzo del proyecto: 

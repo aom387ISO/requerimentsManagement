@@ -4,11 +4,10 @@ const router = express.Router();
 
 router.post('/crearProyecto', async (req, res) => {
     console.log('Ruta crear proyecto alcanzada');
-    const { nombre, peso, esfuerzo } = req.body;
+    const { nombre, esfuerzo } = req.body;
     const pool = req.app.get('pool');
     try {
       console.log('Valor de nombre recibido:', nombre);
-      console.log('Valor del peso recibido', peso);
       console.log('Valor del esfuerzo recibido', esfuerzo);
   
 
@@ -18,7 +17,7 @@ router.post('/crearProyecto', async (req, res) => {
         
         await pool.promise().query(
             'INSERT INTO Proyecto (idProyecto, nombreProyecto, peso, prioridad, esfuerzo, estaEliminado) VALUES (?, ?, ?, ?, ?, ?)',
-            [id, nombre, peso, -1, esfuerzo, false]
+            [id, nombre, -1, -1, esfuerzo, false]
         )
 
         res.status(201).json({

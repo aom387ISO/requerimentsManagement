@@ -31,7 +31,13 @@ function VistaListaDeProyectoAnadirCliente() {
       method:'GET'
     })
       .then(response => response.json())
-      .then(data => setClientes(data.clientes))
+      .then(data => {
+        if(data.success){
+        setClientes(data.clientes)
+        }else{
+          setClientes([])
+        }
+      })
       .catch(() => setError('Error al cargar clientes'));
   };
 

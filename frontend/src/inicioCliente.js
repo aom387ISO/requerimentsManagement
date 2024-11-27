@@ -7,6 +7,8 @@ import IniciarSesion from './iniciarSesion';
 function InicioCliente({idCliente}) {
   const [expandedRows, setExpandedRows] = useState({});
   const [showSquare, setShowSquareState] = useState(false);
+  const [limiteSquare, setlimiteSquare] = useState(false);
+  const [limite, setLimite] = useState('');
   const [selectedWeight, setSelectedWeight] = useState(null);
   const [nuevoPeso, setNuevoPeso] = useState(null);
   const [data, setData] = useState([]);
@@ -40,6 +42,7 @@ function InicioCliente({idCliente}) {
 
   const closeSquare = () => {
     setShowSquareState(false);
+    setlimiteSquare(false);
   };
 
   const acceptSquare = () => {
@@ -165,9 +168,6 @@ function InicioCliente({idCliente}) {
               
 
               <div className='datos-derecha-proyecto'>
-                <div className='dato-peso-proyecto'>
-                  <p>{project.peso}</p>
-                </div>
 
                 <div className='dato-esfuerzo-proyecto'>
                   <p>{project.esfuerzo}€</p>
@@ -235,6 +235,23 @@ function InicioCliente({idCliente}) {
             </div>
           </div>
         )}
+        {limiteSquare && (
+          <div className="square">
+          <div className="big-text">Filtrar tareas por esfuerzo máximo: </div>
+          <div className="weight-label">Esfuerzo máximo: {limite}</div>
+          <input
+            type="number"
+            value={limite}
+            onChange={(e) => setLimite(e.target.value)}
+            placeholder="Introduce un límite de esfuerzo"
+          />
+          <div className="button-container">
+            <button className="close-button" onClick={closeSquare}>Cancelar</button>
+            <button className="accept-button" onClick={acceptSquare}>Aceptar</button>
+          </div>
+        </div>
+        )
+        }
       </div>
     </div>
   );

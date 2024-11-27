@@ -5,7 +5,6 @@ import ReactDOM from 'react-dom/client';
 
 function EditarProyecto({proyectoId}) {
   const [nombreProyecto, setNombreProyecto] = useState('');
-  const [peso, setPeso] = useState(0);
   const [esfuerzo, setEsfuerzo] = useState(0);
   const [error, setError] = useState('');
 
@@ -17,15 +16,9 @@ function EditarProyecto({proyectoId}) {
       return;
     }
 
-    if (peso < 0 || peso > 5) {
-      setError('El peso no puede ser negativo o mayor que 5.');
-      return;
-    }
-
     try {
       const almacenVariables = {
         nombreProyecto: nombreProyecto || undefined,
-        peso: peso || undefined,
         esfuerzo: esfuerzo || undefined,
         proyectoId: proyectoId,
       };
@@ -79,13 +72,6 @@ const handleVolver = () => {
               onChange={(e) => setNombreProyecto(e.target.value)}
             />
             </div>
-            <div>
-                <p>
-                    Peso del proyecto: 
-                </p>
-                <input type="number" min="0" max="5" step="1" placeholder="Introduzque entre 0 y 5" style={{ width: '24%' }} value={peso} onChange={(e) => setPeso(e.target.value)}></input>
-            </div>
-
             <div>
                 <p>
                     Esfuerzo del proyecto: 

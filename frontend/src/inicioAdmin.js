@@ -213,12 +213,6 @@ function InicioAdmin() {
 
           <div className='header-datos-derecha'>
 
-            <div className='header-linea' style={{ marginRight: '10px' }}></div>
-
-            <div className='header-dato-peso-proyecto'>
-              <p>Peso</p>
-            </div>
-
             <div className='header-linea' style={{ marginRight: '16px' }}></div>
 
             <div className='header-dato-esfuerzo-proyecto'>
@@ -265,9 +259,6 @@ function InicioAdmin() {
               
 
               <div className='datos-derecha-proyecto'>
-                <div className='dato-peso-proyecto'>
-                  <p>{project.peso}</p>
-                </div>
 
                 <div className='dato-esfuerzo-proyecto'>
                   <p>{project.esfuerzo}€</p>
@@ -302,8 +293,6 @@ function InicioAdmin() {
 
                 
                 <div className='datos-derecha-tarea'>
-                  <div className='dato-peso-tarea'></div>
-                  <p>{req.pesoCliente}</p>
                 <div className='dato-esfuerzo-tarea'>
                   <p>{req.esfuerzo}€</p>
                 </div>
