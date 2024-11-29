@@ -24,6 +24,10 @@ const editarProyectoRouter = require('./editarProyecto');
 const actualizarPrioridadTareaRouter = require('./actualizarPrioridadTarea');
 const eliminarClienteProyectoRouter = require('./eliminarClienteProyecto');
 const cortarPorEsfuerzoRouter = require('./cortarPorEsfuerzo');
+const calculoProductividadRouter = require('./calculoProductividad');
+//const calculoContribucionRouter = require('./calculoContribucion');
+//const calculoCoberturaRouter = require('./calculoCobertura');
+
 const app = express();
 
 app.use(express.json());

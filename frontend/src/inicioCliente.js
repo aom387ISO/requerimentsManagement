@@ -3,6 +3,7 @@ import './inicioCliente.css';
 import ReactDOM from 'react-dom/client';
 import './iniciarSesion';
 import IniciarSesion from './iniciarSesion';
+import DefinirLimite from './definirLimite'; 
 
 function InicioCliente({idCliente}) {
   const [expandedRows, setExpandedRows] = useState({});
@@ -104,6 +105,15 @@ function InicioCliente({idCliente}) {
     setTareaId(tareaId);
   };
 
+  const handleDefinirLimite = (idCliente) => {
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      <React.StrictMode>
+        <DefinirLimite idCliente={idCliente}/>
+      </React.StrictMode>
+    );
+  };
+
   const handleCerrarSesion = () => {
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(
@@ -164,6 +174,11 @@ function InicioCliente({idCliente}) {
                     {project.nombreProyecto}
                   </button>
                 </div>
+                <div className='linea-boton'></div>
+                  <button className="boton-proyecto-nombre"onClick={() => handleDefinirLimite(idCliente)}>
+                    Definir límite de esfuerzo
+                  </button>
+                  <div className='linea-boton'></div>
               </div>
               
 

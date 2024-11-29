@@ -2,46 +2,19 @@ const express = require('express');
 const pool = require('./db'); 
 const router = express.Router();
 
-router.post('/cortarPorEsfuerzo', async (req, res) => {
+router.put('/cortarPorEsfuerzo', async (req, res) => {
   console.log('Ruta de esfuerzo alcanzada');
-  const idCliente = req.params.id;
-  const { limite } = req.body;
+  const { idProyecto, limite } = req.body;
+
   const pool = req.app.get('pool');
 
-  try {
-    const [proyectos] = await pool.promise().query(
-        `SELECT *
-            FROM proyecto p
-            JOIN proyectoCliente pc ON p.idProyecto = pc.Proyecto_idProyecto
-            JOIN cliente c ON pc.Cliente_idCliente = c.idCliente
-            WHERE p.estaEliminado = 0
-            AND c.idCliente = ?`,
-        [idCliente]
+  try{
+    await pool.promise().query(
+        'UPDATE proyecto SET limite = ? WHERE idProyecto = ?',
+        [limite, idProyecto]
     );
 
-    if (proyectos.length > 0) {
-        const [tareas] = await pool.promise().query(
-            `SELECT t.*, 
-             IFNULL(tc.peso, 0) AS pesoCliente
-             FROM Tarea t
-             LEFT JOIN tareacliente tc ON t.idTarea = tc.Tarea_idTarea AND tc.Cliente_idCliente = ?
-             WHERE t.estaEliminado = 0
-             ORDER BY t.prioridad DESC`
-             ,
-            [idCliente]
-        );
-
-        const proyectosConTareas = proyectos.map((proyecto) => ({
-            ...proyecto,
-            requirements: tareas.filter(
-                (tarea) => tarea.Proyecto_idProyecto === proyecto.idProyecto && tarea.esfuerzo <= limite
-            ),
-        }));
-
-        res.json({ success: true, proyectos: proyectosConTareas });
-    } else {
-        res.json({ success: false, message: 'No se encontraron proyectos activos para el cliente especificado' });
-    }
+    res.json({ success: true, message: 'Límite de esfuerzo actualizado correctamente' }); 
 } catch (error) {
     console.error('Error al ejecutar la consulta:', error);
     res.status(500).json({ success: false, message: 'Error del servidor' });
