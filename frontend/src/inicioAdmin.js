@@ -164,12 +164,14 @@ function InicioAdmin() {
     );
   };
 
-  const handleEditarTarea = (tareaId) => {
+  const handleEditarTarea = (tareaId, idProyecto) => {
     console.log('tarea en inicioAdmin ',);
+    console.log('handleEditarTarea llamada');
+  console.log('idTarea:', tareaId, 'idProyecto:', idProyecto);
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(
       <React.StrictMode>
-        <EditarTarea tareaId={tareaId} />
+        <EditarTarea tareaId={tareaId} idProyecto={idProyecto}/>
       </React.StrictMode>
     );
   };
@@ -284,7 +286,7 @@ function InicioAdmin() {
                   </div>
 
                   <div className='contenedor-tarea-botones'>                                   
-                    <button className="boton-tarea-nombre" onClick={() => handleEditarTarea(req.idTarea)}>
+                    <button className="boton-tarea-nombre" onClick={() => handleEditarTarea(req.idTarea, project.idProyecto)}>
                       Editar tarea
                     </button>
                     <div className='linea' style={{ marginRight: '8px' }}></div>

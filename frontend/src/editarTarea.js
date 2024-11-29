@@ -3,8 +3,10 @@ import './editarTarea.css';
 import InicioAdmin from './inicioAdmin';
 import ReactDOM from 'react-dom/client';
 
-function EditarTarea({tareaId}) {
+function EditarTarea({tareaId, idProyecto}) {
   console.log('idTarea en editartarea',tareaId);
+  console.log('idProyecto en editartarea',idProyecto);
+
   const [nombreTarea, setNombreTarea] = useState('');
   const [esfuerzo, setEsfuerzo] = useState(0);
   const [tiempoHoras, setTiempoHoras] = useState(0);
@@ -31,12 +33,15 @@ function EditarTarea({tareaId}) {
 
     try {
       console.log('tarea',tareaId);
+      console.log('proyecto',idProyecto);
+
       const almacenVariables = {
         nombreTarea: nombreTarea || undefined,
         esfuerzo: esfuerzo || undefined,
         tiempoHoras: tiempoHoras || undefined,
         tiempoMinutos: tiempoMinutos || undefined,
         tareaId: tareaId,
+        idProyecto : idProyecto,
       };
       const response = await fetch('/api/editarTarea', {
         method: 'PUT',

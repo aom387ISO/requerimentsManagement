@@ -13,6 +13,28 @@ router.post('/anadirTarea/:proyectoId', async (req, res) => {
       const maxId = rows[0].maxId || 0;
       const id = maxId + 1;
 
+      const [proyectoRows] = await pool.promise().query(
+        'SELECT esfuerzo FROM Proyecto WHERE idProyecto = ?',
+        [proyectoId]
+      );
+  
+      const proyecto = proyectoRows[0];
+  
+      const [esfuerzoTareas] = await pool.promise().query(
+        'SELECT esfuerzo FROM Tarea WHERE Proyecto_idProyecto = ?',
+        [proyectoId]
+      );
+
+
+      let totalEsfuerzoTareas = esfuerzoTareas.reduce((acc, tarea) => acc + tarea.esfuerzo, 0);
+    
+      if (totalEsfuerzoTareas + esfuerzo > proyecto.esfuerzo) {
+        return res.status(400).json({
+          success: false,
+          message: 'La suma de los esfuerzos de las tareas excede el esfuerzo máximo del proyecto.'
+        });
+      }
+      
       await pool.promise().query(
         'INSERT INTO Tarea (idTarea, nombreTarea, esfuerzo, tiempoMinutos, prioridad, proyecto_idProyecto, estaEliminado) VALUES (?, ?, ?, ?, ?, ?, ?)',
         [id, nombreTarea, esfuerzo, tiempoTotal, prioridad, proyectoId, false]
