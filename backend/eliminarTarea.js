@@ -16,7 +16,7 @@ router.put('/eliminarTarea/:id', async (req, res) => {
   
       if (rows.length > 0) {
         await pool.promise().query(
-          'UPDATE Tarea SET estaEliminado = ? WHERE idTarea = ?', [estaEliminado, id]
+          'UPDATE Tarea SET estaEliminado = ?, esfuerzo = 0 WHERE idTarea = ?', [estaEliminado, id]
         );
   
           res.json({ success: true, message: 'Tarea marcado como eliminada' });

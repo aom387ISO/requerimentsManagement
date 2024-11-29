@@ -18,10 +18,21 @@ router.get('/calculoProductividad', async (req, res) => {
     if (tareas.length > 0) {
         let sj = 0;
         let ej = 0;
-        let prorj = 0;
 
-        res.json({ success: true, message : 'Cálculado con éxito' });
-    } else {
+        tareas.forEach((tarea) => {
+        const { prioridad, esfuerzo, seleccionado } = tarea;
+
+        ej += prioridad * esfuerzo;
+
+        if (seleccionado === 1) {
+          sj += prioridad * esfuerzo;
+        }
+        });
+
+      const prorj = ej > 0 ? (sj / ej) * 100 : 0;
+
+      res.json({success: true, sj, ej, prorj: prorj.toFixed(2)});
+      } else {
         res.json({ success: false, message: 'No se encontraron tareas activas para el proyecto especificado' });
     }
 } catch (error) {
