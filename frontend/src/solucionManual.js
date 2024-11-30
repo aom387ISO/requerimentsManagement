@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
-import './solucionAutomatica.css';
+import './solucionManual.css';
 import InicioAdmin from './inicioAdmin';
-import SolucionManual from './solucionManual';
+import SolucionAutomatica from './solucionAutomatica';
 
-function SolucionAutomatica({proyectoId}) {
+function SolucionManual({proyectoId}) {
   const [tareas, setTareas] = useState([]);
   const [error, setError] = useState('');
   console.log("Id del proyecto en solucion automatica:",proyectoId);
@@ -13,7 +13,7 @@ function SolucionAutomatica({proyectoId}) {
     console.log('useEffect ejecutado'); 
     console.log("Id del proyecto cuando el useeffect:",proyectoId);
 
-    fetch(`/api/obtenerTareasLimiteEsfuerzo/${proyectoId}`, {
+    fetch(`/api/obtenerTareasManual/${proyectoId}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -90,7 +90,7 @@ function SolucionAutomatica({proyectoId}) {
           </div>
           
           <div className='cuadro-formulario-central-lista'>
-            <h1>Solución automatica de tareas</h1>
+            <h1>Solución manual de tareas</h1>
             {error && <p style={{ color: 'red' }} className="error">{error}</p>}
             <ul>
                 {listaTareas}
@@ -103,4 +103,4 @@ function SolucionAutomatica({proyectoId}) {
   );
 }
 
-export default SolucionAutomatica;
+export default SolucionManual;

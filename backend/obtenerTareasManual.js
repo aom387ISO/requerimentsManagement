@@ -2,13 +2,13 @@ const express = require('express');
 const pool = require('./db'); 
 const router = express.Router();
 
-router.get('/obtenerTareasLimiteEsfuerzo/:proyectoId', async (req, res) => {
+router.get('/obtenerTareasManual/:proyectoId', async (req, res) => {
   const { proyectoId } = req.params;
   const pool = req.app.get('pool');
 
   try {
     const [rows] = await pool.promise().query(
-      'SELECT * FROM Tarea WHERE Proyecto_idProyecto = ? AND estaEliminado = ?', [proyectoId, false]
+      'SELECT * FROM Tarea WHERE Proyecto_idProyecto = ? AND estaEliminado = ? AND seleccionado = ?', [proyectoId, false, true]
     );
 
     const [proyectos] = await pool.promise().query(
@@ -29,23 +29,11 @@ router.get('/obtenerTareasLimiteEsfuerzo/:proyectoId', async (req, res) => {
             await Promise.all(updatePromises);
 
             const [rows2] = await pool.promise().query(
-                'SELECT * FROM Tarea WHERE Proyecto_idProyecto = ? AND estaEliminado = ? ORDER BY productividad DESC', [proyectoId, false]
+                'SELECT * FROM Tarea WHERE Proyecto_idProyecto = ? AND estaEliminado = ? AND seleccionado = ? ORDER BY productividad DESC', [proyectoId, false, true]
             );
 
-            const tareasFiltradas = [];
-            let esfuerzoAcumulado = 0;
 
-            rows2.forEach(tarea => {
-                esfuerzoAcumulado += tarea.esfuerzo;
-                if (esfuerzoAcumulado <= proyectos[0].esfuerzo) {
-                    tareasFiltradas.push(tarea);
-                } else {
- 
-                    return;
-                }
-            });
-
-            res.json({ success: true, tareas: tareasFiltradas });
+            res.json({ success: true, tareas: rows2 });
           } catch (error) {
             console.error('Error al actualizar las tareas:', error);
             res.status(500).json({ success: false, message: 'Error del servidor' });
