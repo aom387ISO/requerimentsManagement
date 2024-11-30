@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './solucionManual.css';
 import InicioAdmin from './inicioAdmin';
 import SolucionAutomatica from './solucionAutomatica';
+import SolucionEditarManual from './solucionEditarManual';
 
 function SolucionManual({proyectoId}) {
   const [tareas, setTareas] = useState([]);
@@ -64,7 +65,7 @@ function SolucionManual({proyectoId}) {
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(
         <React.StrictMode>
-        <SolucionAutomatica proyectoId={proyectoId} />
+        <SolucionEditarManual proyectoId={proyectoId} />
       </React.StrictMode>
     );
   };

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
-import './solucionAutomatica.css';
+import './solucionManual.css';
 import InicioAdmin from './inicioAdmin';
+import SolucionAutomatica from './solucionAutomatica';
 import SolucionManual from './solucionManual';
-import SolucionEditarManual from './solucionEditarManual';
 
-function SolucionAutomatica({proyectoId}) {
+function SolucionEditarManual({proyectoId}) {
   const [tareas, setTareas] = useState([]);
+  const [tareasSeleccionadas, setTareasSeleccionadas] = useState([])
   const [error, setError] = useState('');
   console.log("Id del proyecto en solucion automatica:",proyectoId);
 
@@ -14,7 +15,7 @@ function SolucionAutomatica({proyectoId}) {
     console.log('useEffect ejecutado'); 
     console.log("Id del proyecto cuando el useeffect:",proyectoId);
 
-    fetch(`/api/obtenerTareasLimiteEsfuerzo/${proyectoId}`, {
+    fetch(`/api/obtenerTareas/${proyectoId}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -70,10 +71,44 @@ function SolucionAutomatica({proyectoId}) {
     );
   };
 
+  const handleGuardarSolucion = async () => {
+    if (!tareasSeleccionadas) return;
+
+    try {
+      const response = await fetch(`/api/editarSolucion/${tareasSeleccionadas}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ estaEliminado: true })
+      });
+
+      const data = await response.json();
+      console.log(data);
+
+      if (data.success) {
+        
+        <React.StrictMode>
+            <SolucionManual proyectoId={proyectoId} />
+        </React.StrictMode>
+
+      } else {
+        setError(data.message || 'Error al crear la solucion');
+      }
+    } catch (error) {
+      console.error('Error en la solicitud:', error);
+      setError('Error de conexión al eliminar el cliente');
+    }
+  };
+
+  const handleSelectTarea = (tareaId) => {
+    tareasSeleccionadas.push(tareaId)
+    setTareasSeleccionadas(tareasSeleccionadas);
+  };
+
   const listaTareas =tareas.map(tarea => (
     <li
       key={tarea.idTarea}
       className={''}
+      onClick={() => handleSelectTarea(tareas.idTarea)}
     >
       {tarea.nombreTarea + "‎ ‎ ‎ Satisfacción:‎ "+ tarea.prioridad + "‎ ‎ ‎ Productividad:‎ " + tarea.productividad + "‎ ‎ ‎ Esfuerzo:‎ "+tarea.esfuerzo} 
     </li>
@@ -91,17 +126,24 @@ function SolucionAutomatica({proyectoId}) {
           </div>
           
           <div className='cuadro-formulario-central-lista'>
-            <h1>Solución automatica de tareas</h1>
+            <h1>Editar solucion manual de tareas</h1>
             {error && <p style={{ color: 'red' }} className="error">{error}</p>}
             <ul>
                 {listaTareas}
             </ul>
           </div>
           
+          <button 
+            onClick={handleGuardarSolucion} 
+            disabled={!tareasSeleccionadas}
+            className={tareasSeleccionadas ? 'boton-eliminar-seleccionado' : 'boton-eliminar'}
+          >
+            Guardar solución
+          </button>
         </div>
       </div>
     </div>
   );
 }
 
-export default SolucionAutomatica;
+export default SolucionEditarManual;
