@@ -30,26 +30,7 @@ router.put('/editarTarea', async (req, res) => {
         let minutos = tiempoMinutos !== undefined ? tiempoMinutos : tareaExistente.tiempoMinutos % 60;
         
         const tiempoTotal = horas * 60 + minutos;
-        const [proyectoRows] = await pool.promise().query(
-          'SELECT esfuerzo FROM Proyecto WHERE idProyecto = ?',
-          [idProyecto]
-        );
-    
-        const proyecto = proyectoRows[0];
-    
-        const [esfuerzoTareas] = await pool.promise().query(
-          'SELECT esfuerzo FROM Tarea WHERE Proyecto_idProyecto = ? AND idTarea != ?',
-          [idProyecto, tareaId]
-        );
-    
-        let totalEsfuerzoTareas = esfuerzoTareas.reduce((acc, tarea) => acc + tarea.esfuerzo, 0);
-    
-        if (totalEsfuerzoTareas + esfuerzo > proyecto.esfuerzo) {
-          return res.status(400).json({
-            success: false,
-            message: 'La suma de los esfuerzos de las tareas excede el esfuerzo máximo del proyecto.'
-          });
-        }    
+        
         await pool.promise().query(
           'UPDATE Tarea SET nombreTarea = ?, esfuerzo = ?, tiempoMinutos = ?, prioridad = ?, Proyecto_idProyecto = ?, estaEliminado = ? WHERE idTarea = ?',
           [nombreTarea, esfuerzo, tiempoTotal, -1, tareaExistente.Proyecto_idProyecto, false, tareaId]
