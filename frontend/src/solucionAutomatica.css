@@ -1,0 +1,47 @@
+body {
+    color: white;
+  }
+  
+  .fondo-solucion-automatica {
+      background-color: #282b30; 
+      height: 100vh; 
+    }
+    
+    .contenedor-central-solucion{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    
+    .cuadrado-central-solucion{
+      background-color: #36393e;
+      border: 4px solid #555555;
+      border-radius: 10px;
+      height: 72%;
+      width: 60%;
+      flex-direction: column;
+    }
+    .botones-superiores{
+        background-color: #444;
+        color: white;
+        cursor: pointer;
+      }
+
+    .contenedor-botones{
+        height:10%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .cuadrado-formulario-central-lista{
+        flex-direction: column;
+      }
+    
+    .seleccionado {
+      background-color: #444;
+      color: white; 
+    }
+
+    

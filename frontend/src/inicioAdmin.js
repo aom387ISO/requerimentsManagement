@@ -12,6 +12,7 @@ import EditarTarea from './editarTarea';
 import EditarProyecto from './editarProyecto';
 import VistaCambiarPesoCliente from './vistaCambiarPesoCliente';
 import EliminarClienteProyecto from './eliminarClienteProyecto';
+import SolucionAutomatica from './solucionAutomatica';
 
 function InicioAdmin() {
   const [expandedRows, setExpandedRows] = useState({});
@@ -164,6 +165,15 @@ function InicioAdmin() {
     );
   };
 
+  const handleSolucion = (proyectoId) => {
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      <React.StrictMode>
+        <SolucionAutomatica proyectoId={proyectoId} />
+      </React.StrictMode>
+    );
+  };
+
   const handleEditarTarea = (tareaId, idProyecto) => {
     console.log('tarea en inicioAdmin ',);
     console.log('handleEditarTarea llamada');
@@ -254,6 +264,10 @@ function InicioAdmin() {
                   <div className='linea-boton'></div>
                   <button className="boton-proyecto-nombre" onClick={() => handleAnadirTarea(project.idProyecto)}>
                     Añadir tarea
+                  </button>
+                  <div className='linea-boton'></div>
+                  <button className="boton-proyecto-nombre" onClick={() => handleSolucion(project.idProyecto)}>
+                    Solucion
                   </button>
                 </div>
                 <div className='linea'></div>

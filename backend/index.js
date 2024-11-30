@@ -25,6 +25,7 @@ const actualizarPrioridadTareaRouter = require('./actualizarPrioridadTarea');
 const eliminarClienteProyectoRouter = require('./eliminarClienteProyecto');
 const cortarPorEsfuerzoRouter = require('./cortarPorEsfuerzo');
 const calculoProductividadRouter = require('./calculoProductividad');
+const obtenerTareasLimiteEsfuerzo = require('./obtenerTareasLimiteEsfuerzo');
 //const calculoContribucionRouter = require('./calculoContribucion');
 //const calculoCoberturaRouter = require('./calculoCobertura');
 
@@ -93,6 +94,8 @@ async function getClientes() {
   app.use('/api', eliminarClienteProyectoRouter);
 
   app.use('/api', cortarPorEsfuerzoRouter);
+
+  app.use('/api', obtenerTareasLimiteEsfuerzo);
 
   app.listen(3001, () => {
     console.log('Servidor iniciado en el puerto 3001');
