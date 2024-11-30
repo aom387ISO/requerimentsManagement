@@ -167,6 +167,7 @@ function InicioAdmin() {
 
   const handleSolucion = (proyectoId) => {
     const root = ReactDOM.createRoot(document.getElementById('root'));
+    console.log("Id del proyecto cuando hago el handle:",proyectoId);
     root.render(
       <React.StrictMode>
         <SolucionAutomatica proyectoId={proyectoId} />

@@ -6,9 +6,12 @@ import InicioAdmin from './inicioAdmin';
 function SolucionAutomatica({proyectoId}) {
   const [tareas, setTareas] = useState([]);
   const [error, setError] = useState('');
-  
+  console.log("Id del proyecto en solucion automatica:",proyectoId);
+
   useEffect(() => {
     console.log('useEffect ejecutado'); 
+    console.log("Id del proyecto cuando el useeffect:",proyectoId);
+
     fetch(`/api/obtenerTareasLimiteEsfuerzo/${proyectoId}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },

@@ -2,11 +2,11 @@ const express = require('express');
 const pool = require('./db'); 
 const router = express.Router();
 
-router.get('/obtenerTareasLimiteEsfuerzo', async (req, res) => {
+router.get('/obtenerTareasLimiteEsfuerzo/:proyectoId', async (req, res) => {
   const { proyectoId } = req.params;
   const pool = req.app.get('pool');
 
-  console.log('Valor de usuario recibido:', proyectoId);
+  console.log('Valor de proyecto en obtenerTareasLimiteEsfuerzo recibido:', proyectoId);
   try {
     const [rows] = await pool.promise().query(
       'SELECT * FROM Tarea WHERE Proyecto_idProyecto AND estaEliminado = ?', [proyectoId, false]
