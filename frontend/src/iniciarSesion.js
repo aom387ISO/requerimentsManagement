@@ -57,9 +57,9 @@ function IniciarSesion() {
       <div className="cuadrado-central">
         <h1>Iniciar Sesión</h1>
         <form className="formulario-central" onSubmit={handleSubmit}>
-          <label>Usuario:</label>
+          <label htmlFor="usuario">Usuario:</label> <input id="usuario" type="text" value=""/>
           <input type="text" value={correo} onChange={(e) => setCorreo(e.target.value)} />
-          <label>Contraseña:</label>
+          <label htmlFor="contraseña">Contraseña:</label> <input id="contraseña" type="text" value=""/>
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
           <button type="submit">Iniciar Sesión</button>
           {error && <p style={{ color: 'red' }}  className="error">{error}</p>}
