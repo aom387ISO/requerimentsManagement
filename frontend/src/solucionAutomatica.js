@@ -73,7 +73,7 @@ function SolucionAutomatica({proyectoId}) {
       key={tarea.idTarea}
       className={''}
     >
-      {tarea.nombreTarea}
+      {tarea.nombreTarea + "     Satisfacción:"+ tarea.prioridad + "    Productividad:" + tarea.productividad} 
     </li>
   ))
 

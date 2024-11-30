@@ -174,11 +174,6 @@ function InicioCliente({idCliente}) {
                     {project.nombreProyecto}
                   </button>
                 </div>
-                <div className='linea-boton'></div>
-                  <button className="boton-proyecto-nombre"onClick={() => handleDefinirLimite(idCliente)}>
-                    Definir límite de esfuerzo
-                  </button>
-                  <div className='linea-boton'></div>
               </div>
               
 
