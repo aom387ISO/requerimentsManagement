@@ -78,7 +78,7 @@ function SolucionEditarManual({proyectoId}) {
       const response = await fetch(`/api/editarSolucion`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({tareasSeleccionadas})
+        body: JSON.stringify({tareasSeleccionadas, proyectoId})
       });
 
       const data = await response.json();
