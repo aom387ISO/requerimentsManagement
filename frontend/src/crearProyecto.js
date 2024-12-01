@@ -12,6 +12,11 @@ function CrearProyecto() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (esfuerzo < 0) {
+          setError('El esfuerzo debe ser positivo');
+          return;
+        }    
+
         if (!nombre || !esfuerzo) {
             setError('Todos los campos son obligatorios.');
             return;

@@ -14,6 +14,7 @@ function InicioCliente({idCliente}) {
   const [nuevoPeso, setNuevoPeso] = useState(null);
   const [data, setData] = useState([]);
   const [tareaId, setTareaId] = useState(null);
+  const [error, setError] = useState('');
 
   console.log('idCliente es:', idCliente);
   
@@ -47,6 +48,17 @@ function InicioCliente({idCliente}) {
   };
 
   const acceptSquare = () => {
+    if (nuevoPeso < 0) {
+      setError('El esfuerzo debe ser positivo');
+      setShowSquareState(false);
+      return;
+    }
+    if (nuevoPeso > 5) {
+      setError('El esfuerzo debe ser menor que 5');
+      setShowSquareState(false);
+      return;
+    } 
+
     fetch('/api/modificarPesoTarea', {
       method: 'POST', 
       headers: { 'Content-Type': 'application/json' },
