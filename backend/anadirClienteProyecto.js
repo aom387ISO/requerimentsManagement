@@ -14,6 +14,18 @@ router.post('/anadirClienteProyecto', async (req, res) => {
     console.log('Valor de usuario recibido:', proyecto);
     console.log('Valor de la contrasena recibida', cliente)
 
+    const [result] = await pool.promise().query(
+      'SELECT SUM(peso) AS nuevaPrioridad FROM Proyectocliente WHERE Proyecto_idProyecto = ?',
+      [proyecto]
+    );
+
+    const nuevaPrioridad = result[0]?.nuevaPrioridad || 0;
+
+    await pool.promise().query(
+      'UPDATE Proyecto SET prioridad = ? WHERE idProyecto = ?',
+      [nuevaPrioridad, proyecto]
+    );
+
     res.status(201).json({ success: true, message: 'Cliente agregado al proyecto exitosamente' });
 
   } catch (error) {
