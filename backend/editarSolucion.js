@@ -8,7 +8,8 @@ router.put('/editarSolucion', async (req, res) => {
     console.log(tareasSeleccionadas);
     console.log(Array.isArray(tareasSeleccionadas));
     const pool = req.app.get('pool');
-    try{
+
+    try {
         if (!Array.isArray(tareasSeleccionadas) || tareasSeleccionadas.length === 0) {
             return res.status(400).json({ success: false, message: 'No se han seleccionado tareas' });
         }
@@ -21,56 +22,47 @@ router.put('/editarSolucion', async (req, res) => {
             'SELECT idTarea, esfuerzo, seleccionado FROM Tarea WHERE Proyecto_idProyecto = ? AND estaEliminado = false', [proyectoId]
         );
 
-        //Ya en la bd
-        const esfuerzoSeleccionado = tareas.reduce((acc, tarea) => {
-            console.log(tarea)
-            if (tarea.seleccionado === 1) {
-                return acc + tarea.esfuerzo;  
-            }
-            return acc;
-        }, 0);
-        
-        //Las que acabo de seleccionar.
-        const esfuerzoNuevo = tareas.reduce((acc, tareaId) => {
+        let cambioEsfuerzo = 0;
+
+        tareasSeleccionadas.forEach((tareaId) => {
             const tarea = tareas.find(t => t.idTarea === tareaId);
-            if (!tarea) return acc;
+            if (!tarea) return;
 
             if (tarea.seleccionado === 0) {
-                return acc + tarea.esfuerzo;
+                cambioEsfuerzo += tarea.esfuerzo;
+            } 
+            else if (tarea.seleccionado === 1) {
+                cambioEsfuerzo -= tarea.esfuerzo;
             }
-        
-            if (tarea.seleccionado === 1) {
-                return acc - tarea.esfuerzo;
-            }
-        
-            return acc;
-        }, 0);
+        });
 
+        const esfuerzoTotal = tareas.reduce((acc, tarea) => {
+            return tarea.seleccionado === 1 ? acc + tarea.esfuerzo : acc;
+        }, 0) + cambioEsfuerzo;
 
-        const esfuerzoTotal = esfuerzoSeleccionado + esfuerzoNuevo;
-        
-        console.log("Esfuerzo guardado:"+ esfuerzoSeleccionado);
-        console.log("Esfuerzo de las tareas que he seleccionado a añadir:"+ esfuerzoNuevo);
-        console.log("Esfuerzo proyecto:"+ proyectos[0].esfuerzo);
-        console.log("Esfuerzo total:"+ esfuerzoTotal);
+        console.log("Cambio de esfuerzo calculado:", cambioEsfuerzo);
+        console.log("Esfuerzo total después del cambio:", esfuerzoTotal);
+        console.log("Esfuerzo permitido del proyecto:", proyectos[0].esfuerzo);
 
         if (esfuerzoTotal > proyectos[0].esfuerzo) {
             return res.status(400).json({ success: false, message: 'El esfuerzo de las tareas supera al del proyecto' });
         }
 
         await pool.promise().query(
-            `UPDATE tarea SET seleccionado = CASE
-                WHEN seleccionado = true THEN false
-                WHEN seleccionado = false OR seleccionado IS NULL THEN true
+            `UPDATE Tarea SET seleccionado = CASE
+                WHEN idTarea IN (?) THEN NOT seleccionado
                 ELSE seleccionado
                 END
-            WHERE idTarea IN (?);`,[tareasSeleccionadas]);
+            WHERE Proyecto_idProyecto = ?;`,
+            [tareasSeleccionadas, proyectoId]
+        );
 
         res.status(200).json({ success: true, message: 'Solución editada correctamente' });
     } catch (error) {
-    console.error('Error al ejecutar la consulta:', error);
-    res.status(500).json({ success: false, message: 'Error del servidor' });
+        console.error('Error al ejecutar la consulta:', error);
+        res.status(500).json({ success: false, message: 'Error del servidor' });
     }
 });
+
 
 module.exports = router;
