@@ -21,6 +21,7 @@ const verProyectosConClienteRouter = require('./verProyectosConCliente');
 const anadirTareaRouter = require('./anadirTarea');
 const editarTareaRouter = require('./editarTarea');
 const editarProyectoRouter = require('./editarProyecto');
+const editarSolucionRouter = require('./editarSolucion');
 const actualizarPrioridadTareaRouter = require('./actualizarPrioridadTarea');
 const eliminarClienteProyectoRouter = require('./eliminarClienteProyecto');
 const cortarPorEsfuerzoRouter = require('./cortarPorEsfuerzo');
@@ -90,6 +91,8 @@ async function getClientes() {
   app.use('/api', editarTareaRouter);
 
   app.use('/api', editarProyectoRouter);
+
+  app.use('/api', editarSolucionRouter);
 
   app.use('/api', actualizarPrioridadTareaRouter);
 

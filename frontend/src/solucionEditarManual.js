@@ -75,10 +75,10 @@ function SolucionEditarManual({proyectoId}) {
     if (!tareasSeleccionadas) return;
 
     try {
-      const response = await fetch(`/api/editarSolucion/${tareasSeleccionadas}`, {
+      const response = await fetch(`/api/editarSolucion`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ estaEliminado: true })
+        body: JSON.stringify({tareasSeleccionadas})
       });
 
       const data = await response.json();
@@ -95,20 +95,23 @@ function SolucionEditarManual({proyectoId}) {
       }
     } catch (error) {
       console.error('Error en la solicitud:', error);
-      setError('Error de conexión al eliminar el cliente');
+      setError('Error de conexión al editar la solución');
     }
   };
 
   const handleSelectTarea = (tareaId) => {
-    tareasSeleccionadas.push(tareaId)
-    setTareasSeleccionadas(tareasSeleccionadas);
+    if (tareasSeleccionadas.includes(tareaId)) {
+      setTareasSeleccionadas(tareasSeleccionadas.filter(id => id !== tareaId));
+    } else {
+      setTareasSeleccionadas([...tareasSeleccionadas, tareaId]);
+    }
   };
 
   const listaTareas =tareas.map(tarea => (
     <li
       key={tarea.idTarea}
-      className={''}
-      onClick={() => handleSelectTarea(tareas.idTarea)}
+      className={tareasSeleccionadas.includes(tarea.idTarea) ? 'seleccionado' : ''}
+      onClick={() => handleSelectTarea(tarea.idTarea)}
     >
       {tarea.nombreTarea + "‎ ‎ ‎ Satisfacción:‎ "+ tarea.prioridad + "‎ ‎ ‎ Productividad:‎ " + tarea.productividad + "‎ ‎ ‎ Esfuerzo:‎ "+tarea.esfuerzo} 
     </li>
@@ -120,7 +123,7 @@ function SolucionEditarManual({proyectoId}) {
       <div className='contenedor-central-solucion'>
         <div className='cuadrado-central-solucion'>
           <div className='contenedor-botones'>
-            <button className='botones-superiores'onClick={handleSolucionAutomatica}>Solucion Manual</button>
+            <button className='botones-superiores'onClick={handleSolucionAutomatica}>Solucion Automática</button>
             <button className='botones-superiores'onClick={handleSolucionManual}>Solucion Manual</button>
             <button className='botones-superiores'onClick={handleEditarSolucionManual}>Editar solucion Manual</button>
           </div>
@@ -135,7 +138,7 @@ function SolucionEditarManual({proyectoId}) {
           
           <button 
             onClick={handleGuardarSolucion} 
-            disabled={!tareasSeleccionadas}
+            disabled={tareasSeleccionadas == null}
             className={tareasSeleccionadas ? 'boton-eliminar-seleccionado' : 'boton-eliminar'}
           >
             Guardar solución

@@ -85,7 +85,7 @@ function SolucionManual({proyectoId}) {
       <div className='contenedor-central-solucion'>
         <div className='cuadrado-central-solucion'>
           <div className='contenedor-botones'>
-            <button className='botones-superiores'onClick={handleSolucionAutomatica}>Solucion Manual</button>
+            <button className='botones-superiores'onClick={handleSolucionAutomatica}>Solucion Automática</button>
             <button className='botones-superiores'onClick={handleSolucionManual}>Solucion Manual</button>
             <button className='botones-superiores'onClick={handleEditarSolucionManual}>Editar solucion Manual</button>
           </div>
