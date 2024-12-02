@@ -4,14 +4,48 @@ const router = express.Router();
 
 router.post('/calculoCobertura', async (req, res) => {
     const pool = req.app.get('pool');
+    const {idCliente, idProyecto} = req.params.id;
 
-    try{
+    const [tareas] = await pool.promise().query(
+        `SELECT *
+         FROM Tarea
+         WHERE Proyecto_idProyecto = ? AND estaEliminado = 0`,
+        [idProyecto]
+      );
 
-    } catch (error) {
-    console.error('Error al ejecutar la consulta:', error);
-    res.status(500).json({ success: false, message: 'Error del servidor' });
-    }
+      const[tareasClientes] = await pool.promise.query(
+        'SELECT * FROM Tareacliente WHERE Cliente_idCliente = ?'[idCliente]
+      )
 
+
+      pesoTareas = 0;
+
+      pesoClientes = 0;
+      
+      for (const tarea of tareas) {
+
+        const[pesoTareas] = await pool.promise.query(
+            'SELECT * FROM Tareacliente WHERE Tarea_idTarea = ?'[tarea.idTarea]
+          )
+
+          for(const tareaPeso of pesoTareas){
+
+            pesoTareas += tareaPeso.peso;
+
+          }
+
+      }
+
+
+      for(const cliente of tareasClientes){
+
+        pesoClientes += cliente.peso;
+      }
+
+      
+      cobertura = pesoClientes/pesoTareas;
+
+      res.json({success: true, cobertura});
 });
 
 module.exports = router;
