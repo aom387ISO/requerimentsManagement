@@ -4,9 +4,12 @@ import './solucionAutomatica.css';
 import InicioAdmin from './inicioAdmin';
 import SolucionManual from './solucionManual';
 import SolucionEditarManual from './solucionEditarManual';
+import Cobertura from './cobertura';
 
 function SolucionAutomatica({proyectoId}) {
   const [tareas, setTareas] = useState([]);
+  const [contribucion, setContribucion] = useState([]);
+  const [cobertura, setCobertura] = useState([]);
   const [error, setError] = useState('');
   console.log("Id del proyecto en solucion automatica:",proyectoId);
 
@@ -70,6 +73,15 @@ function SolucionAutomatica({proyectoId}) {
     );
   };
 
+  const handleCobertura = () => {
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+        <React.StrictMode>
+        <Cobertura/>
+      </React.StrictMode>
+    );
+  };
+
   const listaTareas =tareas.map(tarea => (
     <li
       key={tarea.idTarea}
@@ -88,6 +100,10 @@ function SolucionAutomatica({proyectoId}) {
             <button className='botones-superiores'onClick={handleSolucionAutomatica}>Solucion Automática</button>
             <button className='botones-superiores'onClick={handleSolucionManual}>Solucion Manual</button>
             <button className='botones-superiores'onClick={handleEditarSolucionManual}>Editar solucion Manual</button>
+          </div>
+
+          <div className='contenedor-botones'>
+            <button className='botones-superiores'onClick={handleCobertura}>Cobertura</button>
           </div>
           
           <div className='cuadro-formulario-central-lista'>

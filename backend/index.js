@@ -30,7 +30,7 @@ const obtenerTareasLimiteEsfuerzo = require('./obtenerTareasLimiteEsfuerzo');
 const obtenerTareasManual = require('./obtenerTareasManual')
 const obtenerTareas = require('./obtenerTareas')
 //const calculoContribucionRouter = require('./calculoContribucion');
-//const calculoCoberturaRouter = require('./calculoCobertura');
+const calculoCoberturaRouter = require('./calculoCobertura');
 
 const app = express();
 
@@ -105,6 +105,8 @@ async function getClientes() {
   app.use('/api', obtenerTareasManual)
 
   app.use('/api', obtenerTareas)
+
+  app.use('/api', calculoCoberturaRouter)
 
   app.listen(3001, () => {
     console.log('Servidor iniciado en el puerto 3001');

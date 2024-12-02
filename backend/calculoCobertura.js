@@ -1,51 +1,36 @@
 const express = require('express');
-const pool = require('./db'); 
+const pool = require('./db');
 const router = express.Router();
 
-router.post('/calculoCobertura', async (req, res) => {
-    const pool = req.app.get('pool');
-    const {idCliente, idProyecto} = req.params.id;
+router.get('/calculoCobertura', async (req, res) => {
+  const { idCliente, idProyecto } = req.body;
 
-    const [tareas] = await pool.promise().query(
-        `SELECT *
-         FROM Tarea
-         WHERE Proyecto_idProyecto = ? AND estaEliminado = 0`,
-        [idProyecto]
-      );
+  try {
+    // Obtener el peso total de las tareas del proyecto
+    const [resultPesoTareas] = await pool.promise().query(
+      'SELECT SUM(peso) as pesoTotal FROM Tareacliente WHERE Tarea_idTarea IN (SELECT idTarea FROM Tarea WHERE Proyecto_idProyecto = ? AND estaEliminado = 0)',
+      [idProyecto]
+    );
+    const pesoTareas = resultPesoTareas[0].pesoTotal || 0;
 
-      const[tareasClientes] = await pool.promise.query(
-        'SELECT * FROM Tareacliente WHERE Cliente_idCliente = ?'[idCliente]
-      )
+    // Obtener el peso total de las tareas asignadas al cliente en el proyecto
+    const [resultPesoClientes] = await pool.promise().query(
+      'SELECT SUM(peso) as pesoTotal FROM Tareacliente WHERE Cliente_idCliente = ? AND Tarea_idTarea IN (SELECT idTarea FROM Tarea WHERE Proyecto_idProyecto = ? AND estaEliminado = 0)',
+      [idCliente, idProyecto]
+    );
+    const pesoClientes = resultPesoClientes[0].pesoTotal || 0;
 
+    if (pesoTareas === 0) {
+        pesoTareas = 1;
+    }
+    // Calcular la cobertura
+    const cobertura = pesoClientes / pesoTareas;
 
-      pesoTareas = 0;
-
-      pesoClientes = 0;
-      
-      for (const tarea of tareas) {
-
-        const[pesoTareas] = await pool.promise.query(
-            'SELECT * FROM Tareacliente WHERE Tarea_idTarea = ?'[tarea.idTarea]
-          )
-
-          for(const tareaPeso of pesoTareas){
-
-            pesoTareas += tareaPeso.peso;
-
-          }
-
-      }
-
-
-      for(const cliente of tareasClientes){
-
-        pesoClientes += cliente.peso;
-      }
-
-      
-      cobertura = pesoClientes/pesoTareas;
-
-      res.json({success: true, cobertura});
+    res.json({ success: true, cobertura });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Error al calcular la cobertura' });
+  }
 });
 
 module.exports = router;
