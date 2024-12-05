@@ -8,6 +8,8 @@ import Cobertura from './cobertura';
 
 function SolucionAutomatica({proyectoId}) {
   const [tareas, setTareas] = useState([]);
+  const [clientes, setClientes] = useState([]);
+  const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
   const [contribucion, setContribucion] = useState([]);
   const [cobertura, setCobertura] = useState([]);
   const [error, setError] = useState('');
@@ -34,6 +36,29 @@ function SolucionAutomatica({proyectoId}) {
         console.error('Error al obtener las tareas:', error);
         setError('Error al cargar las tareas');
       });
+
+
+
+      fetch(`/api/obtenerClientes`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success && Array.isArray(data.clientes)) {
+            console.log('tareas cargados:', data.clientes);
+            setClientes(data.clientes);
+          } else {
+            setError(data.message || 'Error al cargar los clientes');
+          }
+        })
+        .catch(error => {
+          console.error('Error al obtener los clientes:', error);
+          setError('Error al cargar los clientes');
+        });
+
+
+
   }, []);
   
 
@@ -73,14 +98,40 @@ function SolucionAutomatica({proyectoId}) {
     );
   };
 
-  const handleCobertura = () => {
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(
-        <React.StrictMode>
-        <Cobertura/>
-      </React.StrictMode>
-    );
+  const handleSelectCliente = (clienteId) => {
+    console.log("Cliente seleccionado:", clienteId);
+    setClienteSeleccionado(clienteId);
   };
+
+  const handleCobertura = async () => {
+    if (!clienteSeleccionado) return;
+
+    try {
+      const response = await fetch(`/api/calculoCobertura`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            clienteSeleccionado,
+            tareas
+         })
+      });
+
+      const data = await response.json();
+      console.log(data);
+
+      if (data.success) {
+        console.log(clientes); 
+        setClienteSeleccionado(null);
+
+      } else {
+        setError(data.message || 'Error al calcular la cobertura');
+      }
+    } catch (error) {
+      console.error('Error en la solicitud:', error);
+      setError('Error de conexión al calcular la cobertura del cliente');
+    }
+  };
+
 
   const listaTareas =tareas.map(tarea => (
     <li
@@ -88,6 +139,16 @@ function SolucionAutomatica({proyectoId}) {
       className={''}
     >
       {tarea.nombreTarea + "‎ ‎ ‎ Satisfacción:‎ "+ tarea.prioridad + "‎ ‎ ‎ Productividad:‎ " + tarea.productividad + "‎ ‎ ‎ Esfuerzo:‎ "+tarea.esfuerzo} 
+    </li>
+  ))
+
+  const listaCliente =clientes.map(cliente => (
+    <li
+      key={cliente.idCliente}
+      onClick={() => handleSelectCliente(cliente.idCliente)}
+      className={clienteSeleccionado === cliente.idCliente ? 'seleccionado' : ''}
+    >
+      {cliente.correo}
     </li>
   ))
 
@@ -101,10 +162,6 @@ function SolucionAutomatica({proyectoId}) {
             <button className='botones-superiores'onClick={handleSolucionManual}>Solucion Manual</button>
             <button className='botones-superiores'onClick={handleEditarSolucionManual}>Editar solucion Manual</button>
           </div>
-
-          <div className='contenedor-botones'>
-            <button className='botones-superiores'onClick={handleCobertura}>Cobertura</button>
-          </div>
           
           <div className='cuadro-formulario-central-lista'>
             <h1>Solución automática de tareas</h1>
@@ -114,6 +171,26 @@ function SolucionAutomatica({proyectoId}) {
             </ul>
           </div>
           
+
+          <div className='cuadro-formulario-central-lista'>
+            <h1>
+              Lista de clientes
+            </h1>
+
+            <ul>
+                {listaCliente}
+            </ul>
+
+            <button 
+             onClick={handleCobertura} 
+             disabled={!clienteSeleccionado}
+             className={clienteSeleccionado ? 'boton-proyecto-seleccionado' : 'boton-proyecto'}
+          >
+            Calcular cobertura
+          </button>
+
+          </div>
+
         </div>
       </div>
     </div>

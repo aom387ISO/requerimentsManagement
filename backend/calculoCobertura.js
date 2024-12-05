@@ -2,34 +2,45 @@ const express = require('express');
 const pool = require('./db');
 const router = express.Router();
 
-router.get('/calculoCobertura', async (req, res) => {
-  const { idCliente, idProyecto } = req.body;
+router.post('/calculoCobertura', async (req, res) => {
+  const {
+    clienteSeleccionado,
+    tareas 
+  } = req.body;
 
-  try {
-    // Obtener el peso total de las tareas del proyecto
-    const [resultPesoTareas] = await pool.promise().query(
-      'SELECT SUM(peso) as pesoTotal FROM Tareacliente WHERE Tarea_idTarea IN (SELECT idTarea FROM Tarea WHERE Proyecto_idProyecto = ? AND estaEliminado = 0)',
-      [idProyecto]
-    );
-    const pesoTareas = resultPesoTareas[0].pesoTotal || 0;
 
-    // Obtener el peso total de las tareas asignadas al cliente en el proyecto
-    const [resultPesoClientes] = await pool.promise().query(
-      'SELECT SUM(peso) as pesoTotal FROM Tareacliente WHERE Cliente_idCliente = ? AND Tarea_idTarea IN (SELECT idTarea FROM Tarea WHERE Proyecto_idProyecto = ? AND estaEliminado = 0)',
-      [idCliente, idProyecto]
-    );
-    const pesoClientes = resultPesoClientes[0].pesoTotal || 0;
+  pesoTarea = 0;
+  pesoCliente = 1;
+  cobertura = 0;
 
-    if (pesoTareas === 0) {
-        pesoTareas = 1;
+  if(tareas.lenght > 0 || Array.isArray(tareas)){
+
+    try {
+
+      const sumatoriaPesoTareas = tareas.map(async tarea => {
+        const [rows] = await pool.promise().query(
+          'SELECT * FROM Tareacliente WHERE Tarea_idTarea = ? AND Cliente_idCliente = ?',
+          [tarea.idTarea, clienteSeleccionado]
+        );
+
+        if(rows.lenght>0){
+          pesoTarea += rows[0].peso;
+        }
+
+      });
+        
+      await Promise.all(sumatoriaPesoTareas);
+
+      cobertura = pesoTarea/pesoCliente;
+
+      res.json({ success: true, data: cobertura });
+      
+    } catch (error) {
+      res.json({ success: false, message: 'Error al recorrer las tareas' });
     }
-    // Calcular la cobertura
-    const cobertura = pesoClientes / pesoTareas;
-
-    res.json({ success: true, cobertura });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Error al calcular la cobertura' });
+    
+  }else{
+    res.json({ success: false, message: 'No hay una solución' });
   }
 });
 
