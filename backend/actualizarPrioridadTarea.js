@@ -31,6 +31,9 @@ router.put('/actualizarPrioridadTarea', async (req, res) => {
             `UPDATE tarea SET prioridad = ? WHERE idTarea = ?`, 
             [prioridad, tareaId]
         );
+
+        
+        res.status(200).json({success: true,message: 'Tarea modificada correctamente.'});
     } catch (error) {
         console.error('Error al actualizar la prioridad de la tarea:', error);
         res.status(500).json({ success: false, message: 'Error del servidor' });
