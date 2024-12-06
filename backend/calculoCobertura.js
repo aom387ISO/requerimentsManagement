@@ -4,7 +4,6 @@ const router = express.Router();
 
 router.post('/calculoCobertura', async (req, res) => {
   const {
-    clienteSeleccionado,
     tareas 
   } = req.body;
 
@@ -17,19 +16,17 @@ router.post('/calculoCobertura', async (req, res) => {
 
     try {
 
-      const sumatoriaPesoTareas = tareas.map(async tarea => {
+      for (const tarea of tareas) {
         const [rows] = await pool.promise().query(
-          'SELECT * FROM Tareacliente WHERE Tarea_idTarea = ? AND Cliente_idCliente = ?',
-          [tarea.idTarea, clienteSeleccionado]
+            'SELECT * FROM Tareacliente WHERE Tarea_idTarea = ? AND Cliente_idCliente = ?',
+            [tarea.idTarea, clienteSeleccionado]
         );
 
-        if(rows.lenght>0){
-          pesoTarea += rows[0].peso;
+        if (rows.length > 0) {
+            pesoTarea += rows[0].peso;
         }
-
-      });
+    }
         
-      await Promise.all(sumatoriaPesoTareas);
 
       cobertura = pesoTarea/pesoCliente;
 

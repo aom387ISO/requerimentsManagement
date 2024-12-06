@@ -11,55 +11,52 @@ function SolucionAutomatica({proyectoId}) {
   const [clientes, setClientes] = useState([]);
   const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
   const [contribucion, setContribucion] = useState([]);
-  const [cobertura, setCobertura] = useState([]);
+  const [coberturas, setCoberturas] = useState([]);
   const [error, setError] = useState('');
   console.log("Id del proyecto en solucion automatica:",proyectoId);
 
   useEffect(() => {
-    console.log('useEffect ejecutado'); 
-    console.log("Id del proyecto cuando el useeffect:",proyectoId);
+    const fetchData = async () => {
+      console.log('useEffect ejecutado')
+      console.log("Id del proyecto cuando el useEffect:", proyectoId)
 
-    fetch(`/api/obtenerTareasLimiteEsfuerzo/${proyectoId}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success && Array.isArray(data.tareas)) {
-          console.log('tareas cargados:', data.tareas);
-          setTareas(data.tareas);
-        } else {
-          setError(data.message || 'Error al cargar las tareas');
-        }
-      })
-      .catch(error => {
-        console.error('Error al obtener las tareas:', error);
-        setError('Error al cargar las tareas');
-      });
-
-
-
-      fetch(`/api/obtenerClientes`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success && Array.isArray(data.clientes)) {
-            console.log('tareas cargados:', data.clientes);
-            setClientes(data.clientes);
-          } else {
-            setError(data.message || 'Error al cargar los clientes');
-          }
+      try {
+        // Primer fetch
+        const responseTareas = await fetch(`/api/obtenerTareasLimiteEsfuerzo/${proyectoId}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
         })
-        .catch(error => {
-          console.error('Error al obtener los clientes:', error);
-          setError('Error al cargar los clientes');
-        });
+        const dataTareas = await responseTareas.json()
 
+        if (dataTareas.success && Array.isArray(dataTareas.tareas)) {
+          console.log('tareas cargadas:', dataTareas.tareas)
+          setTareas(dataTareas.tareas)
 
+          // Segundo fetch (solo se ejecuta si el primero fue exitoso)
+          const responseClientes = await fetch(`/api/obtenerClientesCobertura`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tareas: dataTareas.tareas })
+          })
+          const dataClientes = await responseClientes.json()
 
-  }, []);
+          if (dataClientes.success && Array.isArray(dataClientes.clientes)) {
+            console.log('clientes cargados:', dataClientes.clientes)
+            setClientes(dataClientes.clientes)
+          } else {
+            setError(dataClientes.message || 'Error al cargar los clientes')
+          }
+        } else {
+          setError(dataTareas.message || 'Error al cargar las tareas')
+        }
+      } catch (error) {
+        console.error('Error en las peticiones:', error)
+        setError('Error al cargar los datos')
+      }
+    }
+
+    fetchData()
+  }, [proyectoId])
   
 
   const handleVolver = () => {
@@ -111,7 +108,6 @@ function SolucionAutomatica({proyectoId}) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-            clienteSeleccionado,
             tareas
          })
       });
@@ -145,8 +141,6 @@ function SolucionAutomatica({proyectoId}) {
   const listaCliente =clientes.map(cliente => (
     <li
       key={cliente.idCliente}
-      onClick={() => handleSelectCliente(cliente.idCliente)}
-      className={clienteSeleccionado === cliente.idCliente ? 'seleccionado' : ''}
     >
       {cliente.correo}
     </li>
@@ -180,14 +174,6 @@ function SolucionAutomatica({proyectoId}) {
             <ul>
                 {listaCliente}
             </ul>
-
-            <button 
-             onClick={handleCobertura} 
-             disabled={!clienteSeleccionado}
-             className={clienteSeleccionado ? 'boton-proyecto-seleccionado' : 'boton-proyecto'}
-          >
-            Calcular cobertura
-          </button>
 
           </div>
 
