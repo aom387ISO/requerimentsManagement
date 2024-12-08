@@ -7,31 +7,69 @@ import SolucionEditarManual from './solucionEditarManual';
 
 function SolucionManual({proyectoId}) {
   const [tareas, setTareas] = useState([]);
+  const [clientes, setClientes] = useState([]);
+  const [coberturas, setCoberturas] = useState([]);
   const [error, setError] = useState('');
   console.log("Id del proyecto en solucion automatica:",proyectoId);
 
   useEffect(() => {
-    console.log('useEffect ejecutado'); 
-    console.log("Id del proyecto cuando el useeffect:",proyectoId);
+    const fetchData = async () => {
+      console.log('useEffect ejecutado')
+      console.log("Id del proyecto cuando el useEffect:", proyectoId)
 
-    fetch(`/api/obtenerTareasManual/${proyectoId}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success && Array.isArray(data.tareas)) {
-          console.log('tareas cargados:', data.tareas);
-          setTareas(data.tareas);
+      try {
+        const responseTareas = await fetch(`/api/obtenerTareasManual/${proyectoId}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        })
+        const dataTareas = await responseTareas.json()
+
+        if (dataTareas.success && Array.isArray(dataTareas.tareas)) {
+          console.log('tareas cargadas:', dataTareas.tareas)
+          setTareas(dataTareas.tareas)
+
+          const responseClientes = await fetch(`/api/obtenerClientesCobertura`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tareas: dataTareas.tareas })
+          })
+          const dataClientes = await responseClientes.json()
+
+          if (dataClientes.success && Array.isArray(dataClientes.clientes)) {
+            console.log('clientes cargados:', dataClientes.clientes)
+            setClientes(dataClientes.clientes)
+
+
+            const responseCobertura = await fetch(`/api/calculoCobertura`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ tareas: dataTareas.tareas, clientes:dataClientes.clientes })
+            })
+            const dataCobertura = await responseCobertura.json()
+
+            if (dataCobertura.success && Array.isArray(dataCobertura.coberturas)) {
+              console.log('coberturas cargadas:', dataCobertura.coberturas)
+              setCoberturas(dataCobertura.coberturas)
+
+
+            } else {
+              setError(dataCobertura.message || 'Error al cargar las coberturas')
+            }
+
+          } else {
+            setError(dataClientes.message || 'Error al cargar los clientes')
+          }
         } else {
-          setError(data.message || 'Error al cargar las tareas');
+          setError(dataTareas.message || 'Error al cargar las tareas')
         }
-      })
-      .catch(error => {
-        console.error('Error al obtener las tareas:', error);
-        setError('Error al cargar las tareas');
-      });
-  }, []);
+      } catch (error) {
+        console.error('Error en las peticiones:', error)
+        setError('Error al cargar los datos')
+      }
+    }
+
+    fetchData()
+  }, [proyectoId])
   
 
   const handleVolver = () => {
@@ -77,7 +115,16 @@ function SolucionManual({proyectoId}) {
     >
       {tarea.nombreTarea + "‎ ‎ ‎ Satisfacción:‎ "+ tarea.prioridad + "‎ ‎ ‎ Productividad:‎ " + tarea.productividad + "‎ ‎ ‎ Esfuerzo:‎ "+tarea.esfuerzo} 
     </li>
-  ))
+  ));
+
+  const listaCliente = clientes.map((cliente, index) => {
+    const coberturaValor = coberturas[index] !== undefined ? coberturas[index].toFixed(2) : 'N/A';
+    return (
+      <li key={cliente.idCliente}>
+        {cliente.correo + " - Cobertura: " + coberturaValor}
+      </li>
+    );
+  });
 
   return (
     <div className='fondo-solucion-automatica'>
@@ -96,6 +143,17 @@ function SolucionManual({proyectoId}) {
             <ul>
                 {listaTareas}
             </ul>
+          </div>
+
+          <div className='cuadro-formulario-central-lista'>
+            <h1>
+              Lista de clientes
+            </h1>
+
+            <ul>
+                {listaCliente}
+            </ul>
+
           </div>
           
         </div>

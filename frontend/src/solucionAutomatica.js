@@ -111,40 +111,6 @@ function SolucionAutomatica({proyectoId}) {
     );
   };
 
-  const handleSelectCliente = (clienteId) => {
-    console.log("Cliente seleccionado:", clienteId);
-    setClienteSeleccionado(clienteId);
-  };
-
-  const handleCobertura = async () => {
-    if (!clienteSeleccionado) return;
-
-    try {
-      const response = await fetch(`/api/calculoCobertura`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-            tareas
-         })
-      });
-
-      const data = await response.json();
-      console.log(data);
-
-      if (data.success) {
-        console.log(clientes); 
-        setClienteSeleccionado(null);
-
-      } else {
-        setError(data.message || 'Error al calcular la cobertura');
-      }
-    } catch (error) {
-      console.error('Error en la solicitud:', error);
-      setError('Error de conexión al calcular la cobertura del cliente');
-    }
-  };
-
-
   const listaTareas =tareas.map(tarea => (
     <li
       key={tarea.idTarea}
@@ -154,13 +120,14 @@ function SolucionAutomatica({proyectoId}) {
     </li>
   ))
 
-  const listaCliente =clientes.map(cliente => (
-    <li
-      key={cliente.idCliente}
-    >
-      {cliente.correo}
-    </li>
-  ))
+  const listaCliente = clientes.map((cliente, index) => {
+    const coberturaValor = coberturas[index] !== undefined ? coberturas[index].toFixed(2) : 'N/A';
+    return (
+      <li key={cliente.idCliente}>
+        {cliente.correo + " - Cobertura: " + coberturaValor}
+      </li>
+    );
+  });
 
   return (
     <div className='fondo-solucion-automatica'>
