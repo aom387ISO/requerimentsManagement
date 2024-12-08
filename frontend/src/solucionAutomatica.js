@@ -21,7 +21,6 @@ function SolucionAutomatica({proyectoId}) {
       console.log("Id del proyecto cuando el useEffect:", proyectoId)
 
       try {
-        // Primer fetch
         const responseTareas = await fetch(`/api/obtenerTareasLimiteEsfuerzo/${proyectoId}`, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
@@ -32,7 +31,6 @@ function SolucionAutomatica({proyectoId}) {
           console.log('tareas cargadas:', dataTareas.tareas)
           setTareas(dataTareas.tareas)
 
-          // Segundo fetch (solo se ejecuta si el primero fue exitoso)
           const responseClientes = await fetch(`/api/obtenerClientesCobertura`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -43,6 +41,24 @@ function SolucionAutomatica({proyectoId}) {
           if (dataClientes.success && Array.isArray(dataClientes.clientes)) {
             console.log('clientes cargados:', dataClientes.clientes)
             setClientes(dataClientes.clientes)
+
+
+            const responseCobertura = await fetch(`/api/calculoCobertura`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ tareas: dataTareas.tareas, clientes:dataClientes.clientes })
+            })
+            const dataCobertura = await responseCobertura.json()
+
+            if (dataCobertura.success && Array.isArray(dataCobertura.coberturas)) {
+              console.log('coberturas cargadas:', dataCobertura.coberturas)
+              setCoberturas(dataCobertura.coberturas)
+
+
+            } else {
+              setError(dataCobertura.message || 'Error al cargar las coberturas')
+            }
+
           } else {
             setError(dataClientes.message || 'Error al cargar los clientes')
           }
