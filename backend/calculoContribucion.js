@@ -1,41 +1,58 @@
 const express = require('express');
-const pool = require('./db'); 
+const pool = require('./db');
 const router = express.Router();
 
+
 router.post('/calculoContribucion', async (req, res) => {
-    const { tareaId } = req.body;
+    const { tareas, clientes } = req.body;
+    const pool = req.app.get('pool');
 
-    if (!tareaId) {
-        return res.status(400).json({ success: false, message: 'El campo tareaId es obligatorio' });
+    if (!Array.isArray(tareas) || tareas.length === 0 || !Array.isArray(clientes) || clientes.length === 0) {
+        return res.status(400).json({ success: false, message: 'Los campos tareas y clientes son obligatorios y deben ser arrays no vacíos.' });
     }
-
+    console.log("Paso el if inicial en contribución");
     try {
-        const [pesos] = await pool.promise().query(
-            `SELECT ProyectoCliente.peso AS wi, TareaCliente.peso AS vij 
-            FROM TareaCliente
-            JOIN Tarea ON TareaCliente.Tarea_idTarea = Tarea.idTarea
-            JOIN Cliente ON TareaCliente.Cliente_idCliente = Cliente.idCliente
-            JOIN ProyectoCliente ON ProyectoCliente.Cliente_idCliente = Cliente.idCliente
-            WHERE TareaCliente.Tarea_idTarea = ? 
-            AND ProyectoCliente.Proyecto_idProyecto = Tarea.Proyecto_idProyecto`,
-            [tareaId]
-        );
+        console.log("Estoy calculando contribuciones...");
+        const contribucion = [];
 
-        if (pesos.length === 0) {
-            return res.status(404).json({ success: false, message: 'No se encontraron datos para la tarea.' });
+        for (const cliente of clientes) {
+            let contribucionTotal = 0;
+            let satisfaccionTotal = 0;
+
+            for (const tarea of tareas) {
+                try {
+                    const [rows] = await pool.promise().query(
+                        `SELECT ProyectoCliente.peso AS wi, TareaCliente.peso AS vij 
+                        FROM TareaCliente
+                        JOIN Cliente ON TareaCliente.Cliente_idCliente = Cliente.idCliente
+                        JOIN ProyectoCliente ON ProyectoCliente.Cliente_idCliente = Cliente.idCliente
+                        WHERE TareaCliente.Tarea_idTarea = ? 
+                        AND Cliente.idCliente = ?
+                        AND ProyectoCliente.Proyecto_idProyecto = ?`,
+                        [tarea.idTarea, cliente.idCliente, tarea.Proyecto_idProyecto]
+                    );
+
+                    if (rows.length > 0) {
+                        const { wi, vij } = rows[0];
+                        contribucionTotal += wi * vij;
+                        satisfaccionTotal += wi * vij;
+                    }
+                } catch (error) {
+                    console.error(`Error al procesar tarea ${tarea.idTarea} para cliente ${cliente.idCliente}:`, error);
+                    return res.status(500).json({ success: false, message: 'Error al calcular contribuciones.' });
+                }
+            }
+
+            contribucion.push(satisfaccionTotal === 0 ? 0 : contribucionTotal / satisfaccionTotal);
         }
 
-        const satisfaccionTotal = pesos.reduce((total, { wi, vij }) => total + wi * vij, 0);
-
-        const contribuciones = pesos.map(({ wi, vij }) => ({
-            contribucion: (wi * vij) / satisfaccionTotal,
-            wi,
-            vij
-        }));
-
-        res.status(200).json({ success: true, contribuciones });
+        console.log("Contribuciones calculadas:", contribucion);
+        res.status(200).json({ success: true, contribucion });
     } catch (error) {
         console.error('Error al calcular la contribución:', error);
         res.status(500).json({ success: false, message: 'Error del servidor' });
     }
 });
+
+
+module.exports = router;

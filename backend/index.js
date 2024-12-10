@@ -29,7 +29,7 @@ const calculoProductividadRouter = require('./calculoProductividad');
 const obtenerTareasLimiteEsfuerzo = require('./obtenerTareasLimiteEsfuerzo');
 const obtenerTareasManual = require('./obtenerTareasManual')
 const obtenerTareas = require('./obtenerTareas')
-//const calculoContribucionRouter = require('./calculoContribucion');
+const calculoContribucionRouter = require('./calculoContribucion');
 const calculoCoberturaRouter = require('./calculoCobertura');
 const obtenerClientesCobertura = require('./obtenerClientesCobertura');
 
@@ -108,6 +108,8 @@ async function getClientes() {
   app.use('/api', obtenerTareas);
 
   app.use('/api', calculoCoberturaRouter);
+
+  app.use('/api', calculoContribucionRouter);
 
   app.use('/api', obtenerClientesCobertura);
 

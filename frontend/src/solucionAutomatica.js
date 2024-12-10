@@ -59,9 +59,27 @@ function SolucionAutomatica({proyectoId}) {
               setError(dataCobertura.message || 'Error al cargar las coberturas')
             }
 
+
+
+            const responseContribucion = await fetch(`/api/calculoContribucion`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ tareas: dataTareas.tareas, clientes:dataClientes.clientes })
+            })
+            const dataContribucion = await responseContribucion.json()
+            if (dataContribucion.success && Array.isArray(dataContribucion.contribucion)) {
+              console.log('contribuciones cargadas:', dataContribucion.contribucion)
+              setContribucion(dataContribucion.contribucion)
+            } else {
+              setError(dataContribucion.message || 'Error al cargar las contribuciones')
+            }
+
           } else {
             setError(dataClientes.message || 'Error al cargar los clientes')
           }
+
+
+
         } else {
           setError(dataTareas.message || 'Error al cargar las tareas')
         }
@@ -122,9 +140,12 @@ function SolucionAutomatica({proyectoId}) {
 
   const listaCliente = clientes.map((cliente, index) => {
     const coberturaValor = coberturas[index] !== undefined ? coberturas[index].toFixed(2) : 'N/A';
+    const contribucionCliente = contribucion[index] !== undefined ? contribucion[index].toFixed(2) : 'N/A';
+    console.log(contribucion);
+    console.log("contribución en index "+contribucion[index]);
     return (
       <li key={cliente.idCliente}>
-        {cliente.correo + " - Cobertura: " + coberturaValor}
+        {cliente.correo + " - Cobertura: " + coberturaValor+ " - Contribución: " + contribucionCliente}
       </li>
     );
   });
