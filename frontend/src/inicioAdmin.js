@@ -13,6 +13,7 @@ import EditarProyecto from './editarProyecto';
 import VistaCambiarPesoCliente from './vistaCambiarPesoCliente';
 import EliminarClienteProyecto from './eliminarClienteProyecto';
 import SolucionAutomatica from './solucionAutomatica';
+import Dependencia from './dependencia';
 
 function InicioAdmin() {
   const [expandedRows, setExpandedRows] = useState({});
@@ -187,6 +188,18 @@ function InicioAdmin() {
     );
   };
 
+  const handleDependencia = (tareaId, idProyecto) => {
+    console.log('tarea en inicioAdmin ',);
+    console.log('handleEditarTarea llamada');
+  console.log('idTarea:', tareaId, 'idProyecto:', idProyecto);
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      <React.StrictMode>
+        <Dependencia tareaId={tareaId} idProyecto={idProyecto}/>
+      </React.StrictMode>
+    );
+  };
+
   const handleCerrarSesion = () => {
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(
@@ -301,12 +314,20 @@ function InicioAdmin() {
                   </div>
 
                   <div className='contenedor-tarea-botones'>                                   
-                    <button className="boton-tarea-nombre" onClick={() => handleEditarTarea(req.idTarea, project.idProyecto)}>
+                    <button className="boton-tarea-nombre"  onClick={() => handleEditarTarea(req.idTarea, project.idProyecto)}>
                       Editar tarea
+                    </button>
+                    <div className='linea'></div>
+                  </div>
+
+                  <div className='contenedor-tarea-botones'>                                   
+                    <button className="boton-tarea-nombre" onClick={() => handleDependencia(req.idTarea, project.idProyecto)}>
+                      Relacionar Tarea
                     </button>
                     <div className='linea' style={{ marginRight: '8px' }}></div>
                   </div>
                 </div>
+                
 
                 
                 <div className='datos-derecha-tarea'>
