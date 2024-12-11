@@ -7,15 +7,24 @@ router.post('/insertarDependencia', async (req, res) => {
     const { tareaPrecedente, tareaSucesiva } = req.body;
     const pool = req.app.get('pool');
     try {
-        
+        const [rows] = await pool.promise().query(
+            'SELECT * FROM Dependencia WHERE  idTareaPrecedente = ? AND idTareaSucesiva = ?',[tareaPrecedente, tareaSucesiva]
+          );
+
+        if(rows.length === 0 ){
         await pool.promise().query(
             'INSERT INTO Dependencia (idTareaPrecedente, idTareaSucesiva) VALUES (?, ?)',
             [tareaPrecedente, tareaSucesiva]
         )
-
+    }else{
+        await pool.promise().query(
+          'DELETE FROM Dependencia WHERE idTareaPrecedente = ? AND idTareaSucesiva = ?',
+          [tareaPrecedente, tareaSucesiva]
+      );
+    }
         res.status(201).json({
             success: true,
-            message: 'Proyecto creado correctamente.'
+            message: 'Relación modificada correctamente.'
         });
 
       

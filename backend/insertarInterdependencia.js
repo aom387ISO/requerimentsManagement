@@ -7,12 +7,21 @@ router.post('/insertarInterdependencia', async (req, res) => {
     const { tareaInterdependeA, tareaEsInterdependidaPor } = req.body;
     const pool = req.app.get('pool');
     try {
-        
-        await pool.promise().query(
-            'INSERT INTO Interdependencia (idTareaInterdependeA, idTareaEsInterdependidaPor) VALUES (?, ?)',
-            [tareaInterdependeA, tareaEsInterdependidaPor]
-        )
+        const [rows] = await pool.promise().query(
+            'SELECT * FROM Interdependencia WHERE  idTareaInterdependeA = ? AND idTareaEsInterdependidaPor = ?',[tareaInterdependeA, tareaEsInterdependidaPor]
+          );
 
+        if(rows.length === 0 ){
+                await pool.promise().query(
+                'INSERT INTO Interdependencia (idTareaInterdependeA, idTareaEsInterdependidaPor) VALUES (?, ?)',
+                [tareaInterdependeA, tareaEsInterdependidaPor]
+        )
+        }else{
+            await pool.promise().query(
+                'DELETE FROM Interdependencia WHERE idTareaInterdependeA = ? AND idTareaEsInterdependidaPor = ?',
+                [tareaInterdependeA, tareaEsInterdependidaPor]
+            );
+        }
         res.status(201).json({
             success: true,
             message: 'Relación creada correctamente.'
