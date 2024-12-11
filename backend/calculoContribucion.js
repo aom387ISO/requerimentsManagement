@@ -42,7 +42,8 @@ router.post('/calculoContribucion', async (req, res) => {
                     return res.status(500).json({ success: false, message: 'Error al calcular contribuciones.' });
                 }
             }
-
+            console.log("Satisfacción: ", satisfaccionTotal);
+            console.log("contribucionTotal: ", contribucionTotal);
             contribucion.push(satisfaccionTotal === 0 ? 0 : contribucionTotal / satisfaccionTotal);
         }
 

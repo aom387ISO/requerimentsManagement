@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import './solucionManual.css';
 import InicioAdmin from './inicioAdmin';
+import Dependencia from './dependencia';
 import Exclusion from './exclusion';
-import Interdependencia from './interdependencia';
 
-function Dependencia({idProyecto}) {
+function Interdependencia({idProyecto}) {
 
   const [tareas, setTareas] = useState([]);
   const [tareaSeleccionada, setTareaSeleccionada] = useState(null);
@@ -76,12 +76,12 @@ const handleDependencia = () => {
       setError('No se pueden seleccionar tareas iguales');
       return;
     } 
-    
+
     try {
-      const response = await fetch('/api/insertarDependencia', {
+      const response = await fetch('/api/insertarInterdependencia', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tareaPrecedente: tareaSeleccionada, tareaSucesiva: tareaSeleccionada2 })
+        body: JSON.stringify({ tareaInterdependeA: tareaSeleccionada, tareaEsInterdependidaPor: tareaSeleccionada2 })
       });
             
       const data = await response.json();
@@ -108,7 +108,7 @@ const handleDependencia = () => {
     console.log("tarea seleccionada:", tareaId);
     setTareaSeleccionada(tareaId);
   };
-
+  
   const handleSelectTarea2 = (tareaId) => {
     console.log("tarea seleccionada:", tareaId);
     settareaSeleccionada2(tareaId);
@@ -146,15 +146,14 @@ const handleDependencia = () => {
           </div>
           
           <div className='cuadro-formulario-central-lista'>
-            <h1>Añadir dependencias entre tareas</h1>
+            <h1>Añadir interdependencias entre tareas</h1>
             {error && <p style={{ color: 'red' }} className="error">{error}</p>}
-            
             <ul>
             <h2>La tarea:</h2>
                 {listaTareas}
             </ul>
             <ul>
-            <h2>Dependiente de:</h2>
+            <h2>Interdependiente de:</h2>
                 {listaTareas2}
             </ul>
           </div>
@@ -173,4 +172,4 @@ const handleDependencia = () => {
 }
 
 
-export default Dependencia;
+export default Interdependencia;

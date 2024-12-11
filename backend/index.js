@@ -32,6 +32,9 @@ const obtenerTareas = require('./obtenerTareas')
 const calculoContribucionRouter = require('./calculoContribucion');
 const calculoCoberturaRouter = require('./calculoCobertura');
 const obtenerClientesCobertura = require('./obtenerClientesCobertura');
+const insertarDependenciaRouter = require('./insertarDependencia');
+const insertarExclusionaRouter = require('./insertarExclusion');
+const insertarInterdependenciaRouter = require('./insertarInterdependencia');
 
 const app = express();
 
@@ -113,6 +116,12 @@ async function getClientes() {
 
   app.use('/api', obtenerClientesCobertura);
 
+  app.use('/api', insertarDependenciaRouter);
+
+  app.use('/api', insertarExclusionaRouter);
+
+  app.use('/api', insertarInterdependenciaRouter);
+  
   app.listen(3001, () => {
     console.log('Servidor iniciado en el puerto 3001');
   });
