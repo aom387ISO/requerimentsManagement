@@ -8,18 +8,28 @@ router.post('/insertarExclusion', async (req, res) => {
     const pool = req.app.get('pool');
     try {
         const [rows] = await pool.promise().query(
-            'SELECT * FROM Exclusion WHERE  idTareaExluyeA = ? AND idTareaEsExcluidaPor = ?',[tareaExcluyeA, tareaEsExcluidaPor]
+            'SELECT * FROM Dependencias WHERE  idTareaPrimaria = ? AND idTareaSecundaria = ?',[tareaExcluyeA, tareaEsExcluidaPor]
           );
+
+          if (rows.length > 0) {
+            const { dependencia, interdependencia } = rows[0];
+            if (dependencia === 1 || interdependencia === 1) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Ya existe otra dependencia para esta relación de tareas.'
+                });
+            }
+        }
 
         if(rows.length === 0 ){
             await pool.promise().query(
-                'INSERT INTO Exclusion (idTareaExluyeA, idTareaEsExcluidaPor) VALUES (?, ?)',
-                [tareaExcluyeA, tareaEsExcluidaPor]
+                'INSERT INTO Dependencias (idTareaPrimaria, idTareaSecundaria, dependencia, exclusion, interdependencia) VALUES (?, ?, ?, ?, ?)',
+                [tareaExcluyeA, tareaEsExcluidaPor, 0, 1, 0]
             )
         }
         else{
             await pool.promise().query(
-                'DELETE FROM Exclusion WHERE idTareaExluyeA = ? AND idTareaEsExcluidaPor = ?',
+                'DELETE FROM Dependencias WHERE idTareaPrimaria = ? AND idTareaSecundaria = ?',
                 [tareaExcluyeA, tareaEsExcluidaPor]
             );
         }

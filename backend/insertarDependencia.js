@@ -8,20 +8,30 @@ router.post('/insertarDependencia', async (req, res) => {
     const pool = req.app.get('pool');
     try {
         const [rows] = await pool.promise().query(
-            'SELECT * FROM Dependencia WHERE  idTareaPrecedente = ? AND idTareaSucesiva = ?',[tareaPrecedente, tareaSucesiva]
+            'SELECT * FROM Dependencias WHERE  idTareaPrimaria = ? AND idTareaSecundaria = ?',[tareaPrecedente, tareaSucesiva]
           );
+
+        if (rows.length > 0) {
+            const { exclusion, interdependencia } = rows[0];
+            if (exclusion === 1 || interdependencia === 1) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Ya existe otra dependencia para esta relación de tareas.'
+                });
+            }
+        }
 
         if(rows.length === 0 ){
         await pool.promise().query(
-            'INSERT INTO Dependencia (idTareaPrecedente, idTareaSucesiva) VALUES (?, ?)',
-            [tareaPrecedente, tareaSucesiva]
+            'INSERT INTO Dependencias (idTareaPrimaria, idTareaSecundaria, dependencia, exclusion, interdependencia) VALUES (?, ?, ?, ?, ?)',
+            [tareaPrecedente, tareaSucesiva, 1, 0, 0]
         )
-    }else{
-        await pool.promise().query(
-          'DELETE FROM Dependencia WHERE idTareaPrecedente = ? AND idTareaSucesiva = ?',
-          [tareaPrecedente, tareaSucesiva]
-      );
-    }
+        }else{
+            await pool.promise().query(
+              'DELETE FROM Dependencias WHERE idTareaPrimaria = ? AND idTareaSecundaria = ?',
+              [tareaPrecedente, tareaSucesiva]
+          );
+        }
         res.status(201).json({
             success: true,
             message: 'Relación modificada correctamente.'

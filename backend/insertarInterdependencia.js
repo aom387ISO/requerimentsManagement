@@ -8,17 +8,27 @@ router.post('/insertarInterdependencia', async (req, res) => {
     const pool = req.app.get('pool');
     try {
         const [rows] = await pool.promise().query(
-            'SELECT * FROM Interdependencia WHERE  idTareaInterdependeA = ? AND idTareaEsInterdependidaPor = ?',[tareaInterdependeA, tareaEsInterdependidaPor]
+            'SELECT * FROM Dependencias WHERE  idTareaPrimaria = ? AND idTareaSecundaria = ?',[tareaInterdependeA, tareaEsInterdependidaPor]
           );
+
+        if (rows.length > 0) {
+            const { dependencia, exclusion } = rows[0];
+            if (dependencia === 1 || exclusion === 1) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Ya existe otra dependencia para esta relación de tareas.'
+                });
+            }
+        }
 
         if(rows.length === 0 ){
                 await pool.promise().query(
-                'INSERT INTO Interdependencia (idTareaInterdependeA, idTareaEsInterdependidaPor) VALUES (?, ?)',
-                [tareaInterdependeA, tareaEsInterdependidaPor]
+                'INSERT INTO Dependencias (idTareaPrimaria, idTareaSecundaria, dependencia, exclusion, interdependencia) VALUES (?, ?, ?, ?, ?)',
+                [tareaInterdependeA, tareaEsInterdependidaPor, 0, 0, 1]
         )
         }else{
             await pool.promise().query(
-                'DELETE FROM Interdependencia WHERE idTareaInterdependeA = ? AND idTareaEsInterdependidaPor = ?',
+                'DELETE FROM Dependencias WHERE idTareaPrimaria = ? AND idTareaSecundaria = ?',
                 [tareaInterdependeA, tareaEsInterdependidaPor]
             );
         }
