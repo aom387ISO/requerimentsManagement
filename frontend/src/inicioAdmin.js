@@ -19,7 +19,6 @@ function InicioAdmin() {
   const [expandedRows, setExpandedRows] = useState({});
   const [cuadroEliminar, setCuadroEliminar] = useState(false);
   const [tareaAEliminar, setTareaAEliminar] = useState(null);
-  const [tareaId, setTareaId] = useState(null);
 
   const [data, setData] = useState([]);
   useEffect(() => {
@@ -48,7 +47,6 @@ function InicioAdmin() {
   const cancelarEliminar = () => {
     setCuadroEliminar(false);
     setTareaAEliminar(null); 
-    setTareaId(null);
   };
 
   const handleEliminarTarea = (requisitoId) => {
