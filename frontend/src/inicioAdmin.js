@@ -188,7 +188,7 @@ function InicioAdmin() {
     );
   };
 
-  const handleDependencia = (tareaId, idProyecto) => {
+  const handleDependencia = (idProyecto) => {
     console.log('tarea en inicioAdmin ',);
     console.log('handleEditarTarea llamada');
   console.log('idTarea:', tareaId, 'idProyecto:', idProyecto);
@@ -283,6 +283,10 @@ function InicioAdmin() {
                   <button className="boton-proyecto-nombre" onClick={() => handleSolucion(project.idProyecto)}>
                     Solucion
                   </button>
+                  <div className='linea-boton'></div>
+                  <button className="boton-proyecto-nombre" onClick={() => handleDependencia(project.idProyecto)}>
+                      Relacionar Tareas
+                  </button>
                 </div>
                 <div className='linea'></div>
               </div>
@@ -319,16 +323,7 @@ function InicioAdmin() {
                     </button>
                     <div className='linea'></div>
                   </div>
-
-                  <div className='contenedor-tarea-botones'>                                   
-                    <button className="boton-tarea-nombre" onClick={() => handleDependencia(req.idTarea, project.idProyecto)}>
-                      Relacionar Tarea
-                    </button>
-                    <div className='linea' style={{ marginRight: '8px' }}></div>
-                  </div>
                 </div>
-                
-
                 
                 <div className='datos-derecha-tarea'>
                 <div className='dato-esfuerzo-tarea'>
