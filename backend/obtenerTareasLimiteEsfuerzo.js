@@ -16,7 +16,7 @@ router.get('/obtenerTareasLimiteEsfuerzo/:proyectoId', async (req, res) => {
       );
 
     const [dependencias] = await pool.promise().query(
-      'SELECT * FROM Dependencias'
+      'SELECT * FROM Dependencias WHERE dependencia = ?', [true]
     );
 
     if (rows.length > 0) {
