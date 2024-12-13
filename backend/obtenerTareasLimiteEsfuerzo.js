@@ -15,6 +15,10 @@ router.get('/obtenerTareasLimiteEsfuerzo/:proyectoId', async (req, res) => {
         'SELECT * FROM Proyecto WHERE idProyecto = ? AND estaEliminado = ?', [proyectoId, false]
       );
 
+    const [dependencias] = await pool.promise().query(
+      'SELECT * FROM Dependencias'
+    );
+
     if (rows.length > 0) {
 
         const updatePromises = rows.map(tarea => {
@@ -34,8 +38,15 @@ router.get('/obtenerTareasLimiteEsfuerzo/:proyectoId', async (req, res) => {
 
             const tareasFiltradas = [];
             let esfuerzoAcumulado = 0;
+            const tareasDependientes = [];
 
             rows2.forEach(tarea => {
+
+              const dependenciaEncontrada = dependencias.find(dep => dep.idTareaSecundaria === tarea.idTarea);
+
+              if(dependenciaEncontrada){
+                tareasDependientes.push(tarea);
+              }else{
                 esfuerzoAcumulado += tarea.esfuerzo;
                 if (esfuerzoAcumulado <= proyectos[0].esfuerzo) {
                     tareasFiltradas.push(tarea);
@@ -43,6 +54,8 @@ router.get('/obtenerTareasLimiteEsfuerzo/:proyectoId', async (req, res) => {
  
                     return;
                 }
+              }
+
             });
 
             res.json({ success: true, tareas: tareasFiltradas });
