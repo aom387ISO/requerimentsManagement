@@ -191,7 +191,7 @@ function InicioAdmin() {
   const handleDependencia = (idProyecto) => {
     console.log('tarea en inicioAdmin ',);
     console.log('handleEditarTarea llamada');
-  console.log('idTarea:', tareaId, 'idProyecto:', idProyecto);
+    console.log('idProyecto:', idProyecto);
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(
       <React.StrictMode>

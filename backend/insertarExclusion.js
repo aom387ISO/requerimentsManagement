@@ -8,8 +8,9 @@ router.post('/insertarExclusion', async (req, res) => {
     const pool = req.app.get('pool');
     try {
         const [rows] = await pool.promise().query(
-            'SELECT * FROM Dependencias WHERE  idTareaPrimaria = ? AND idTareaSecundaria = ?',[tareaExcluyeA, tareaEsExcluidaPor]
-          );
+            'SELECT * FROM Dependencias WHERE (idTareaPrimaria = ? AND idTareaSecundaria = ?) OR (idTareaPrimaria = ? AND idTareaSecundaria = ?)',
+            [tareaExcluyeA, tareaEsExcluidaPor, tareaEsExcluidaPor, tareaExcluyeA]
+            );
 
           if (rows.length > 0) {
             const { dependencia, interdependencia } = rows[0];
@@ -29,8 +30,8 @@ router.post('/insertarExclusion', async (req, res) => {
         }
         else{
             await pool.promise().query(
-                'DELETE FROM Dependencias WHERE idTareaPrimaria = ? AND idTareaSecundaria = ?',
-                [tareaExcluyeA, tareaEsExcluidaPor]
+                'DELETE FROM Dependencias WHERE (idTareaPrimaria = ? AND idTareaSecundaria = ?) OR (idTareaPrimaria = ? AND idTareaSecundaria = ?)',
+                [tareaExcluyeA, tareaEsExcluidaPor, tareaEsExcluidaPor, tareaExcluyeA]
             );
         }
         res.status(201).json({
