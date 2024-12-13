@@ -5,7 +5,7 @@ const router = express.Router();
 router.get('/obtenerTareasLimiteEsfuerzo/:proyectoId', async (req, res) => {
   const { proyectoId } = req.params;
   const pool = req.app.get('pool');
-
+  console.log("Estoy en obtenerTareasLimiteEsfuerzo------------------------------------")
   try {
     const [rows] = await pool.promise().query(
       'SELECT * FROM Tarea WHERE Proyecto_idProyecto = ? AND estaEliminado = ?', [proyectoId, false]
@@ -15,9 +15,13 @@ router.get('/obtenerTareasLimiteEsfuerzo/:proyectoId', async (req, res) => {
         'SELECT * FROM Proyecto WHERE idProyecto = ? AND estaEliminado = ?', [proyectoId, false]
       );
 
-    const [dependencias] = await pool.promise().query(
+    /*const [dependencias] = await pool.promise().query(
       'SELECT * FROM Dependencias WHERE dependencia = ?', [true]
+    );*/
+    const [dependencias] = await pool.promise().query(
+      'SELECT * FROM Dependencias'
     );
+
 
     if (rows.length > 0) {
 
@@ -43,7 +47,41 @@ router.get('/obtenerTareasLimiteEsfuerzo/:proyectoId', async (req, res) => {
             rows2.forEach(tarea => {
 
               const dependenciaEncontrada = dependencias.find(dep => dep.idTareaSecundaria === tarea.idTarea);
+              console.log("Estoy en tarea");
+              console.log("Dependencia encontrada para tarea", tarea.idTarea, ":", dependenciaEncontrada);
 
+              if(dependenciaEncontrada){
+                console.log("Dependencia encontrada:", dependenciaEncontrada);
+                if (dependenciaEncontrada.dependencia === 1) {
+                  /** Falta meter lógica dependencia
+                  esfuerzoAcumulado += tarea.esfuerzo;
+                  if (esfuerzoAcumulado <= proyectos[0].esfuerzo) {
+                    tareasFiltradas.push(tarea);
+                  }*/
+
+                } else if (dependenciaEncontrada.exclusion === 1) {
+                  console.log("---------------------------------------------------------------- Estoy en exclusion")
+                  return;
+                } else if (dependenciaEncontrada.interdependencia === 1) {
+                  const tareaDependiente = rows2.find(t => t.idTarea === dependenciaEncontrada.idTareaPrincipal);
+                  if (tareaDependiente) {
+                    if (esfuerzoAcumulado + tarea.esfuerzo + tareaDependiente.esfuerzo <= proyectos[0].esfuerzo) {
+                      tareasFiltradas.push(tarea);
+                      tareasFiltradas.push(tareaDependiente);
+                      esfuerzoAcumulado += tarea.esfuerzo + tareaDependiente.esfuerzo;
+                    }
+                  }
+                }
+              }else{ //Si no hay dependencia.
+                esfuerzoAcumulado += tarea.esfuerzo;
+                if (esfuerzoAcumulado <= proyectos[0].esfuerzo) {
+                  tareasFiltradas.push(tarea);
+                } else {
+                  return;
+                }
+              }
+
+/*
               if(dependenciaEncontrada){
                 tareasDependientes.push(tarea);
               }else{
@@ -55,7 +93,7 @@ router.get('/obtenerTareasLimiteEsfuerzo/:proyectoId', async (req, res) => {
                     return;
                 }
               }
-
+*/
             });
 
             res.json({ success: true, tareas: tareasFiltradas });
