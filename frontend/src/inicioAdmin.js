@@ -19,7 +19,6 @@ function InicioAdmin() {
   const [expandedRows, setExpandedRows] = useState({});
   const [cuadroEliminar, setCuadroEliminar] = useState(false);
   const [tareaAEliminar, setTareaAEliminar] = useState(null);
-  const [tareaId, setTareaId] = useState(null);
 
   const [data, setData] = useState([]);
   useEffect(() => {
@@ -48,7 +47,6 @@ function InicioAdmin() {
   const cancelarEliminar = () => {
     setCuadroEliminar(false);
     setTareaAEliminar(null); 
-    setTareaId(null);
   };
 
   const handleEliminarTarea = (requisitoId) => {
@@ -191,7 +189,7 @@ function InicioAdmin() {
   const handleDependencia = (idProyecto) => {
     console.log('tarea en inicioAdmin ',);
     console.log('handleEditarTarea llamada');
-  console.log('idTarea:', tareaId, 'idProyecto:', idProyecto);
+    console.log('idProyecto:', idProyecto);
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(
       <React.StrictMode>
