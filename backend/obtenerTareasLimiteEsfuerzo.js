@@ -15,9 +15,6 @@ router.get('/obtenerTareasLimiteEsfuerzo/:proyectoId', async (req, res) => {
         'SELECT * FROM Proyecto WHERE idProyecto = ? AND estaEliminado = ?', [proyectoId, false]
       );
 
-    /*const [dependencias] = await pool.promise().query(
-      'SELECT * FROM Dependencias WHERE dependencia = ?', [true]
-    );*/
     const [dependencias] = await pool.promise().query(
       'SELECT * FROM Dependencias'
     );
@@ -32,7 +29,8 @@ router.get('/obtenerTareasLimiteEsfuerzo/:proyectoId', async (req, res) => {
               [productividad, tarea.idTarea]
             );
           });
-      
+
+    
           try {
             await Promise.all(updatePromises);
 
@@ -43,8 +41,9 @@ router.get('/obtenerTareasLimiteEsfuerzo/:proyectoId', async (req, res) => {
             const tareasFiltradas = [];
             let esfuerzoAcumulado = 0;
             const tareasDependientes = [];
+            const temp2 = [];
 
-            rows2.forEach(tarea => {
+            for (const tarea of rows2) {
 
               const dependenciaEncontrada = dependencias.find(dep => dep.idTareaSecundaria === tarea.idTarea);
               console.log("Estoy en tarea");
@@ -53,16 +52,26 @@ router.get('/obtenerTareasLimiteEsfuerzo/:proyectoId', async (req, res) => {
               if(dependenciaEncontrada){
                 console.log("Dependencia encontrada:", dependenciaEncontrada);
                 if (dependenciaEncontrada.dependencia === 1) {
-                  /** Falta meter lógica dependencia
-                  esfuerzoAcumulado += tarea.esfuerzo;
-                  if (esfuerzoAcumulado <= proyectos[0].esfuerzo) {
-                    tareasFiltradas.push(tarea);
-                  }*/
+                  console.log("---------------------------------------------------------------- Estoy en dependencia")
 
-                } else if (dependenciaEncontrada.exclusion === 1) {
+                  const tareaPrincipal = tareasFiltradas.find(dep => dep.idTarea === dependenciaEncontrada.idTareaPrimaria);
+                  if(tareaPrincipal){
+                    console.log("La tarea a la que dependo ya está en tareas filtradas y miro si me puedo unir");
+                    esfuerzoAcumulado += tarea.esfuerzo;
+                    if (esfuerzoAcumulado <= proyectos[0].esfuerzo) {
+                      console.log("Me puedo unir")
+                      tareasFiltradas.push(tarea);
+                    }
+                  }else{
+                    tareasDependientes.push(dependenciaEncontrada);
+                  }
+
+                if (dependenciaEncontrada.exclusion === 1) {
                   console.log("---------------------------------------------------------------- Estoy en exclusion")
                   return;
-                } else if (dependenciaEncontrada.interdependencia === 1) {
+                } 
+                
+                if (dependenciaEncontrada.interdependencia === 1) {
                   const tareaDependiente = rows2.find(t => t.idTarea === dependenciaEncontrada.idTareaPrincipal);
                   if (tareaDependiente) {
                     if (esfuerzoAcumulado + tarea.esfuerzo + tareaDependiente.esfuerzo <= proyectos[0].esfuerzo) {
@@ -72,29 +81,62 @@ router.get('/obtenerTareasLimiteEsfuerzo/:proyectoId', async (req, res) => {
                     }
                   }
                 }
-              }else{ //Si no hay dependencia.
-                esfuerzoAcumulado += tarea.esfuerzo;
-                if (esfuerzoAcumulado <= proyectos[0].esfuerzo) {
-                  tareasFiltradas.push(tarea);
-                } else {
-                  return;
+              }
+              
+            }else{
+              esfuerzoAcumulado += tarea.esfuerzo;
+              if (esfuerzoAcumulado <= proyectos[0].esfuerzo) {
+                tareasFiltradas.push(tarea);
+              } else {
+                return;
+              }
+            }
+
+            if(tareasDependientes.length>0){
+              console.log("**************************************************");
+
+              if(tareasFiltradas.length>0){
+
+                for (const dp of tareasDependientes) {
+
+                  const tP = tareasFiltradas.find(tf => tf.idTarea === dp.idTareaPrimaria)
+
+                  if(tP){
+                    
+                    const temp = await pool.promise().query(
+                      'SELECT * FROM Tarea WHERE idTarea = ?',
+                      [dp.idTareaSecundaria]
+                    );
+
+                    console.log("\n\n\n\n\n")
+                    console.log(tP);
+                    console.log(temp[0][0])
+                    console.log("\n\n\n\n\n")
+
+                    esfuerzoAcumulado += temp[0][0].esfuerzo;
+                      if (esfuerzoAcumulado <= proyectos[0].esfuerzo) {
+                        console.log("Me puedo unir")
+                        tareasFiltradas.push(temp[0]);
+
+                        if(temp2.length>0){
+                          temp2 = temp2.filter(t2 => t2.idTareaPrimaria !== 2);
+                        }else{
+                          temp2 = tareasDependientes.filter(t2 => t2.idTareaPrimaria !== 2);
+                        }
+
+                      }
+                    
+                  }
+  
+                };
+
+                if(temp2.length>0){
+                  tareasDependientes = temp2;
                 }
               }
 
-/*
-              if(dependenciaEncontrada){
-                tareasDependientes.push(tarea);
-              }else{
-                esfuerzoAcumulado += tarea.esfuerzo;
-                if (esfuerzoAcumulado <= proyectos[0].esfuerzo) {
-                    tareasFiltradas.push(tarea);
-                } else {
- 
-                    return;
-                }
-              }
-*/
-            });
+            }
+            };
 
             res.json({ success: true, tareas: tareasFiltradas });
           } catch (error) {
