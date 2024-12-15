@@ -16,6 +16,7 @@ router.put('/editarSolucion', async (req, res) => {
         }
 
         let errorDependencia = false;
+        let errorInterdependencia = false;
         let errorExclusion = false;
 
         const [proyectos] = await pool.promise().query(
@@ -65,6 +66,27 @@ router.put('/editarSolucion', async (req, res) => {
                     
                 }
 
+                if(depend.interdependencia === 1){
+                    const tareaPrimaria = tareas.find(t => t.idTarea === idTareaPrimaria);
+                    const tareaSecundaria = tareas.find(t => t.idTarea === idTareaSecundaria);
+                    const estaTareaSecundaria = tareasSeleccionadas.find(id => id === idTareaSecundaria);
+                    const estaTareaPrimaria = tareasSeleccionadas.find(id => id === idTareaPrimaria);
+
+                    if(estaTareaSecundaria){
+                        if(!estaTareaPrimaria){
+                            errorInterdependencia = true;
+                        }
+
+                    }
+
+                    if(!estaTareaSecundaria){
+                        if(estaTareaPrimaria){
+                            errorInterdependencia = true;
+                        }
+
+                    }
+                }
+
                 if(depend.exclusion === 1){
                     const tareaPrimaria = tareas.find(t => t.idTarea === idTareaPrimaria);
                     const tareaSecundaria = tareas.find(t => t.idTarea === idTareaSecundaria);
@@ -89,11 +111,15 @@ router.put('/editarSolucion', async (req, res) => {
             }
         });
 
+        console.log(errorExclusion);
+
         if(errorDependencia){
             return res.status(400).json({ success: false, message: 'Falta por añadir las dependencias.' });
         }else if (errorExclusion) {
             return res.status(400).json({ success: false, message: 'Has añadido tareas que se excluyen.' });
-        }else{
+        }else if(errorInterdependencia) {
+            return res.status(400).json({ success: false, message: 'Falta por añadir las tareas para respetar la interdependencia' });
+        }else {
 
             tareasSeleccionadas.forEach((tareaId) => {
                 const tarea = tareas.find(t => t.idTarea === tareaId);
