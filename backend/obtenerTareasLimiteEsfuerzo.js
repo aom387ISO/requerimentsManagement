@@ -85,16 +85,20 @@ router.get('/obtenerTareasLimiteEsfuerzo/:proyectoId', async (req, res) => {
                   console.log("Una de las tareas ya está agregada, se salta la relación.");
                 }
               }
-              continue;
             }
 
             if (dependenciaEncontrada.interdependencia === 1) {
-              const tareaDependiente = rows2.find(t => t.idTarea === dependenciaEncontrada.idTareaPrincipal);
-              if (tareaDependiente) {
-                if (esfuerzoAcumulado + tarea.esfuerzo + tareaDependiente.esfuerzo <= proyectos[0].esfuerzo) {
-                  tareasFiltradas.push(tarea);
-                  tareasFiltradas.push(tareaDependiente);
-                  esfuerzoAcumulado += tarea.esfuerzo + tareaDependiente.esfuerzo;
+              console.log("---------------------------------------------------------------- Estoy en interdependencia");
+              const tarea1 = rows2.find(dep => dep.idTarea === dependenciaEncontrada.idTareaPrimaria);
+              const tarea2 = rows2.find(dep => dep.idTarea === dependenciaEncontrada.idTareaSecundaria);
+
+              console.log("tarea interdependiente:", tarea1);
+              if (tarea1) {
+                if (!tareasFiltradas.some(t => t.idTarea === tarea1.idTarea) && !tareasFiltradas.some(t => t.idTarea === tarea2.idTarea) && esfuerzoAcumulado + tarea1.esfuerzo + tarea2.esfuerzo <= proyectos[0].esfuerzo)
+                  {
+                  tareasFiltradas.push(tarea1);
+                  tareasFiltradas.push(tarea2);
+                  esfuerzoAcumulado += tarea1.esfuerzo + tarea2.esfuerzo;
                 }
               }
             }
