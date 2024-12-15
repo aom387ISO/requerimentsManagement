@@ -68,18 +68,23 @@ router.get('/obtenerTareasLimiteEsfuerzo/:proyectoId', async (req, res) => {
 
             if (dependenciaEncontrada.exclusion === 1) {
               console.log("---------------------------------------------------------------- Estoy en exclusion");
-              const tareaPrincipal = tareasFiltradas.find(dep => dep.idTarea === dependenciaEncontrada.idTareaPrimaria);
-              const tareaSecundaria = tareasFiltradas.find(dep => dep.idTarea === dependenciaEncontrada.idTareaSecundaria);
-              console.log("tprincipal:", tareaPrincipal);
-              if (tareaPrincipal && tareaSecundaria) {
-                console.log("holaaaaaaaaaaaaaaaaaaaaaaaa",tareaPrincipal);
-                console.log(tareaSecundaria);
+              const tarea1 = rows2.find(dep => dep.idTarea === dependenciaEncontrada.idTareaPrimaria);
+              const tarea2 = rows2.find(dep => dep.idTarea === dependenciaEncontrada.idTareaSecundaria);
+              console.log("tprincipal:", tarea1);
+              if (tarea1 && tarea2) {
+                console.log("holaaaaaaaaaaaaaaaaaaaaaaaa",tarea1);
+                console.log(tarea2);
 
-                if (!tareasFiltradas.some(t => t.idTarea === tareaPrincipal.idTarea)) {
-                  tareasFiltradas.push(tareaPrincipal);
+                if (!tareasFiltradas.some(t => t.idTarea === tarea1.idTarea) && !tareasFiltradas.some(t => t.idTarea === tarea2.idTarea)) {
+                  if (tarea1.productividad >= tarea2.productividad) {
+                    tareasFiltradas.push(tarea1);
+                  } else {
+                    tareasFiltradas.push(tarea2);
+                  }
+                } else {
+                  console.log("Una de las tareas ya está agregada, se salta la relación.");
                 }
-
-            }
+              }
               continue;
             }
 
