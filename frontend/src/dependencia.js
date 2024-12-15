@@ -154,7 +154,7 @@ const handleDependencia = () => {
                 {listaTareas}
             </ul>
             <ul>
-            <h2>Dependiente de:</h2>
+            <h2>Va antes de:</h2>
                 {listaTareas2}
             </ul>
           </div>

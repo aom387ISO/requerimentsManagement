@@ -27,11 +27,19 @@ router.post('/insertarExclusion', async (req, res) => {
                 'INSERT INTO Dependencias (idTareaPrimaria, idTareaSecundaria, dependencia, exclusion, interdependencia) VALUES (?, ?, ?, ?, ?)',
                 [tareaExcluyeA, tareaEsExcluidaPor, 0, 1, 0]
             )
+            await pool.promise().query(
+            'INSERT INTO Dependencias (idTareaPrimaria, idTareaSecundaria, dependencia, exclusion, interdependencia) VALUES (?, ?, ?, ?, ?)',
+            [tareaEsExcluidaPor, tareaExcluyeA, 0, 1, 0]
+            )
         }
         else{
             await pool.promise().query(
-                'DELETE FROM Dependencias WHERE (idTareaPrimaria = ? AND idTareaSecundaria = ?) OR (idTareaPrimaria = ? AND idTareaSecundaria = ?)',
-                [tareaExcluyeA, tareaEsExcluidaPor, tareaEsExcluidaPor, tareaExcluyeA]
+                'DELETE FROM Dependencias WHERE (idTareaPrimaria = ? AND idTareaSecundaria = ?)',
+                [tareaExcluyeA, tareaEsExcluidaPor]
+            );
+            await pool.promise().query(
+                'DELETE FROM Dependencias WHERE (idTareaPrimaria = ? AND idTareaSecundaria = ?)',
+                [tareaEsExcluidaPor, tareaExcluyeA]
             );
         }
         res.status(201).json({
