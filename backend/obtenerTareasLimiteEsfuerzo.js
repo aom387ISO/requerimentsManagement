@@ -38,10 +38,10 @@ router.get('/obtenerTareasLimiteEsfuerzo/:proyectoId', async (req, res) => {
                 'SELECT * FROM Tarea WHERE Proyecto_idProyecto = ? AND estaEliminado = ? ORDER BY productividad DESC', [proyectoId, false]
             );
 
-            const tareasFiltradas = [];
+            let tareasFiltradas = [];
             let esfuerzoAcumulado = 0;
-            const tareasDependientes = [];
-            const temp2 = [];
+            let tareasDependientes = [];
+            let temp2 = [];
 
             for (const tarea of rows2) {
 
@@ -81,15 +81,15 @@ router.get('/obtenerTareasLimiteEsfuerzo/:proyectoId', async (req, res) => {
                     }
                   }
                 }
+              }else{
+                esfuerzoAcumulado += tarea.esfuerzo;
+                if (esfuerzoAcumulado <= proyectos[0].esfuerzo) {
+                  tareasFiltradas.push(tarea);
+                } else {
+                  return;
+                }
               }
               
-            }else{
-              esfuerzoAcumulado += tarea.esfuerzo;
-              if (esfuerzoAcumulado <= proyectos[0].esfuerzo) {
-                tareasFiltradas.push(tarea);
-              } else {
-                return;
-              }
             }
 
             if(tareasDependientes.length>0){
@@ -121,7 +121,7 @@ router.get('/obtenerTareasLimiteEsfuerzo/:proyectoId', async (req, res) => {
                         if(temp2.length>0){
                           temp2 = temp2.filter(t2 => t2.idTareaPrimaria !== 2);
                         }else{
-                          temp2 = tareasDependientes.filter(t2 => t2.idTareaPrimaria !== 2);
+                          temp2 = tareasDependientes.filter(t2 => t2.idTareaPrimaria !== 2); //<- Aquí
                         }
 
                       }
