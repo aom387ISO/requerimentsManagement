@@ -66,32 +66,36 @@ router.get('/obtenerTareasLimiteEsfuerzo/:proyectoId', async (req, res) => {
                     tareasDependientes.push(dependenciaEncontrada);
                   }
 
-                if (dependenciaEncontrada.exclusion === 1) {
-                  console.log("---------------------------------------------------------------- Estoy en exclusion")
-                  return;
-                } 
+                  if (dependenciaEncontrada.exclusion === 1) {
+                    console.log("---------------------------------------------------------------- Estoy en exclusion")
+                    continue;
+                  } 
                 
-                if (dependenciaEncontrada.interdependencia === 1) {
-                  const tareaDependiente = rows2.find(t => t.idTarea === dependenciaEncontrada.idTareaPrincipal);
-                  if (tareaDependiente) {
-                    if (esfuerzoAcumulado + tarea.esfuerzo + tareaDependiente.esfuerzo <= proyectos[0].esfuerzo) {
-                      tareasFiltradas.push(tarea);
-                      tareasFiltradas.push(tareaDependiente);
-                      esfuerzoAcumulado += tarea.esfuerzo + tareaDependiente.esfuerzo;
+                  if (dependenciaEncontrada.interdependencia === 1) {
+                    const tareaDependiente = rows2.find(t => t.idTarea === dependenciaEncontrada.idTareaPrincipal);
+                    if (tareaDependiente) {
+                      if (esfuerzoAcumulado + tarea.esfuerzo + tareaDependiente.esfuerzo <= proyectos[0].esfuerzo) {
+                        tareasFiltradas.push(tarea);
+                        tareasFiltradas.push(tareaDependiente);
+                        esfuerzoAcumulado += tarea.esfuerzo + tareaDependiente.esfuerzo;
+                      }
                     }
                   }
                 }
               }else{
+                console.log("Sin dependencias");
                 esfuerzoAcumulado += tarea.esfuerzo;
                 if (esfuerzoAcumulado <= proyectos[0].esfuerzo) {
                   tareasFiltradas.push(tarea);
                 } else {
-                  return;
+                  continue;
                 }
               }
               
             }
-
+            console.log("Esfuerzo acumulado: ",esfuerzoAcumulado);
+            console.log("Tareas dependientes: ", tareasDependientes);
+            console.log("Tareas filtradas: ", tareasFiltradas);
             if(tareasDependientes.length>0){
               console.log("**************************************************");
 
@@ -136,8 +140,6 @@ router.get('/obtenerTareasLimiteEsfuerzo/:proyectoId', async (req, res) => {
               }
 
             }
-            };
-
             res.json({ success: true, tareas: tareasFiltradas });
           } catch (error) {
             console.error('Error al actualizar las tareas:', error);
