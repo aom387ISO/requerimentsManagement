@@ -68,6 +68,18 @@ router.get('/obtenerTareasLimiteEsfuerzo/:proyectoId', async (req, res) => {
 
             if (dependenciaEncontrada.exclusion === 1) {
               console.log("---------------------------------------------------------------- Estoy en exclusion");
+              const tareaPrincipal = tareasFiltradas.find(dep => dep.idTarea === dependenciaEncontrada.idTareaPrimaria);
+              const tareaSecundaria = tareasFiltradas.find(dep => dep.idTarea === dependenciaEncontrada.idTareaSecundaria);
+              console.log("tprincipal:", tareaPrincipal);
+              if (tareaPrincipal && tareaSecundaria) {
+                console.log("holaaaaaaaaaaaaaaaaaaaaaaaa",tareaPrincipal);
+                console.log(tareaSecundaria);
+
+                if (!tareasFiltradas.some(t => t.idTarea === tareaPrincipal.idTarea)) {
+                  tareasFiltradas.push(tareaPrincipal);
+                }
+
+            }
               continue;
             }
 
