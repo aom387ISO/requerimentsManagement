@@ -33,8 +33,12 @@ router.post('/insertarInterdependencia', async (req, res) => {
                 )
         }else{
             await pool.promise().query(
-                'DELETE FROM Dependencias WHERE (idTareaPrimaria = ? AND idTareaSecundaria = ?) AND (idTareaPrimaria = ? AND idTareaSecundaria = ?)',
-                [tareaInterdependeA, tareaEsInterdependidaPor, tareaEsInterdependidaPor, tareaInterdependeA]
+                'DELETE FROM Dependencias WHERE (idTareaPrimaria = ? AND idTareaSecundaria = ?)',
+                [tareaInterdependeA, tareaEsInterdependidaPor]
+            );
+            await pool.promise().query(
+                'DELETE FROM Dependencias WHERE (idTareaPrimaria = ? AND idTareaSecundaria = ?)',
+                [tareaEsInterdependidaPor, tareaInterdependeA]
             );
         }
         res.status(201).json({

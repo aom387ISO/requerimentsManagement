@@ -7,45 +7,61 @@ router.get('/obtenerTareasManual/:proyectoId', async (req, res) => {
   const pool = req.app.get('pool');
 
   try {
-    const [rows] = await pool.promise().query(
-      'SELECT * FROM Tarea WHERE Proyecto_idProyecto = ? AND estaEliminado = ? AND seleccionado = ?', [proyectoId, false, true]
+    const [tareas] = await pool.promise().query(
+      'SELECT * FROM Tarea WHERE Proyecto_idProyecto = ? AND estaEliminado = ? AND seleccionado = ?',
+      [proyectoId, false, true]
     );
 
-    const [proyectos] = await pool.promise().query(
-        'SELECT * FROM Proyecto WHERE idProyecto = ? AND estaEliminado = ?', [proyectoId, false]
-      );
+    const [dependencias] = await pool.promise().query(
+      'SELECT * FROM Dependencias'
+    );
 
-    if (rows.length > 0) {
+    let tareasFinales = [];
+    let tareasExcluidas = new Set();
 
-        const updatePromises = rows.map(tarea => {
-            productividad = tarea.prioridad / tarea.esfuerzo;
-            return pool.promise().query(
-              'UPDATE Tarea SET productividad = ? WHERE idTarea = ?',
-              [productividad, tarea.idTarea]
-            );
-          });
-      
-          try {
-            await Promise.all(updatePromises);
+    const tareaYaIncluida = (idTarea) => tareasFinales.some(t => t.idTarea === idTarea);
 
-            const [rows2] = await pool.promise().query(
-                'SELECT * FROM Tarea WHERE Proyecto_idProyecto = ? AND estaEliminado = ? AND seleccionado = ? ORDER BY productividad DESC', [proyectoId, false, true]
-            );
+    for (const tarea of tareas) {
+      const dependencia = dependencias.find(dep => dep.idTareaSecundaria === tarea.idTarea);
 
-
-            res.json({ success: true, tareas: rows2 });
-          } catch (error) {
-            console.error('Error al actualizar las tareas:', error);
-            res.status(500).json({ success: false, message: 'Error del servidor' });
+      if (dependencia) {
+        if (dependencia.dependencia === 1) {
+          const tareaPrincipal = tareasFinales.find(t => t.idTarea === dependencia.idTareaPrimaria);
+          if (tareaPrincipal && !tareaYaIncluida(tarea.idTarea)) {
+            tareasFinales.push(tarea);
           }
-    } else {
-      res.json({ success: false, message: 'No se encontraron tareas activos' });
+        } else if (dependencia.interdependencia === 1) {
+          const tareaPrincipal = tareas.find(t => t.idTarea === dependencia.idTareaPrimaria);
+          if (tareaPrincipal && 
+              !tareasExcluidas.has(tareaPrincipal.idTarea) && 
+              !tareasExcluidas.has(tarea.idTarea) &&
+              !tareaYaIncluida(tarea.idTarea) &&
+              !tareaYaIncluida(tareaPrincipal.idTarea)) {
+            if (!tareasFinales.some(t => t.idTarea === tareaPrincipal.idTarea)) {
+              tareasFinales.push(tareaPrincipal);
+            }
+            tareasFinales.push(tarea);
+          }
+        } else if (dependencia.exclusion === 1) {
+          const tareaExcluyente = tareas.find(t => t.idTarea === dependencia.idTareaPrimaria);
+          if (!tareaYaIncluida(tarea.idTarea) && !tareaYaIncluida(tareaExcluyente?.idTarea)) {
+            tareasFinales.push(tarea);
+          }
+          tareasExcluidas.add(dependencia.idTareaPrimaria);
+          tareasExcluidas.add(dependencia.idTareaSecundaria);
+        }
+      } else {
+        if (!tareasExcluidas.has(tarea.idTarea) && !tareaYaIncluida(tarea.idTarea)) {
+          tareasFinales.push(tarea);
+        }
+      }
     }
+
+    res.json({ success: true, tareas: tareasFinales });
   } catch (error) {
     console.error('Error al ejecutar la consulta:', error);
     res.status(500).json({ success: false, message: 'Error del servidor' });
   }
 });
-
 
 module.exports = router;
