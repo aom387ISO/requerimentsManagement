@@ -9,6 +9,7 @@ function SolucionManual({proyectoId}) {
   const [tareas, setTareas] = useState([]);
   const [clientes, setClientes] = useState([]);
   const [coberturas, setCoberturas] = useState([]);
+  const [contribucion, setContribucion] = useState([]);
   const [error, setError] = useState('');
   console.log("Id del proyecto en solucion automatica:",proyectoId);
 
@@ -55,6 +56,23 @@ function SolucionManual({proyectoId}) {
             } else {
               setError(dataCobertura.message || 'Error al cargar las coberturas')
             }
+
+            const responseContribucion = await fetch(`/api/calculoContribucion`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ tareas: dataTareas.tareas, clientes:dataClientes.clientes })
+            })
+            const dataContribucion = await responseContribucion.json();
+            console.log("Data contribución", dataContribucion.contribuciones);
+            if (dataContribucion.success && Array.isArray(dataContribucion.contribuciones)) {
+              console.log('contribuciones cargadas:', dataContribucion.contribuciones)
+              setContribucion(dataContribucion.contribuciones);
+              console.log("Soy data",dataContribucion);
+            } else {
+              setError(dataContribucion.message || 'Error al cargar las contribuciones')
+            }
+
+
 
           } else {
             setError(dataClientes.message || 'Error al cargar los clientes')
@@ -121,9 +139,16 @@ function SolucionManual({proyectoId}) {
 
   const listaCliente = clientes.map((cliente, index) => {
     const coberturaValor = coberturas[index] !== undefined ? coberturas[index].toFixed(2) : 'N/A';
+    //const contribucionCliente = contribucion[index] !== undefined ? contribucion[index].toFixed(2) : 'N/A';
+    console.log("Hola soy contribución",contribucion);
+    const contribucionesCliente = contribucion
+    .filter(c => c.clienteId === cliente.idCliente)
+    .map(c => `Tarea ${c.tareaId}: ${c.contribucion.toFixed(3)}`)
+    .join(", ");
+    //    console.log("contribución en index "+contribucion[index]);
     return (
       <li key={cliente.idCliente}>
-        {cliente.correo + " - Cobertura: " + coberturaValor}
+        {cliente.correo + " - Cobertura: " + coberturaValor+ " - Contribución: " + contribucionesCliente}
       </li>
     );
   });

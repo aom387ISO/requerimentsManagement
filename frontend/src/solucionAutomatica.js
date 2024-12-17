@@ -66,10 +66,12 @@ function SolucionAutomatica({proyectoId}) {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ tareas: dataTareas.tareas, clientes:dataClientes.clientes })
             })
-            const dataContribucion = await responseContribucion.json()
-            if (dataContribucion.success && Array.isArray(dataContribucion.contribucion)) {
-              console.log('contribuciones cargadas:', dataContribucion.contribucion)
-              setContribucion(dataContribucion.contribucion)
+            const dataContribucion = await responseContribucion.json();
+            console.log("Data contribución", dataContribucion.contribuciones);
+            if (dataContribucion.success && Array.isArray(dataContribucion.contribuciones)) {
+              console.log('contribuciones cargadas:', dataContribucion.contribuciones)
+              setContribucion(dataContribucion.contribuciones);
+              console.log("Soy data",dataContribucion);
             } else {
               setError(dataContribucion.message || 'Error al cargar las contribuciones')
             }
@@ -142,12 +144,16 @@ function SolucionAutomatica({proyectoId}) {
 
   const listaCliente = clientes.map((cliente, index) => {
     const coberturaValor = coberturas[index] !== undefined ? coberturas[index].toFixed(2) : 'N/A';
-    const contribucionCliente = contribucion[index] !== undefined ? contribucion[index].toFixed(2) : 'N/A';
-    console.log(contribucion);
-    console.log("contribución en index "+contribucion[index]);
+    //const contribucionCliente = contribucion[index] !== undefined ? contribucion[index].toFixed(2) : 'N/A';
+    console.log("Hola soy contribución",contribucion);
+    const contribucionesCliente = contribucion
+    .filter(c => c.clienteId === cliente.idCliente)
+    .map(c => `Tarea ${c.tareaId}: ${c.contribucion.toFixed(3)}`)
+    .join(", ");
+    //    console.log("contribución en index "+contribucion[index]);
     return (
       <li key={cliente.idCliente}>
-        {cliente.correo + " - Cobertura: " + coberturaValor+ " - Contribución: " + contribucionCliente}
+        {cliente.correo + " - Cobertura: " + coberturaValor+ " - Contribución: " + contribucionesCliente}
       </li>
     );
   });
