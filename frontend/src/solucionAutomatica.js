@@ -137,6 +137,8 @@ function SolucionAutomatica({proyectoId}) {
       {tarea.nombreTarea + "‎ ‎ ‎ Satisfacción:‎ "+ tarea.prioridad + "‎ ‎ ‎ Productividad:‎ " + tarea.productividad + "‎ ‎ ‎ Esfuerzo:‎ "+tarea.esfuerzo} 
     </li>
   ))
+  const sumaSatisfaccion = tareas.reduce((suma, tarea) => suma + (tarea.prioridad || 0), 0);
+  const sumaProductividad = tareas.reduce((suma, tarea) => suma + (tarea.productividad || 0), 0);
 
   const listaCliente = clientes.map((cliente, index) => {
     const coberturaValor = coberturas[index] !== undefined ? coberturas[index].toFixed(2) : 'N/A';
@@ -167,6 +169,12 @@ function SolucionAutomatica({proyectoId}) {
             <ul>
                 {listaTareas}
             </ul>
+            <p style={{ fontWeight: 'bold', marginTop: '10px' }}>
+            Satisfacción total: {sumaSatisfaccion}
+            </p>
+            <p style={{ fontWeight: 'bold', marginTop: '10px' }}>
+            Productividad total: {sumaProductividad}
+            </p>
           </div>
           
 
