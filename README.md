@@ -1,4 +1,5 @@
 # Requirements Management System
+A web application for managing project requirements efficiently.
 
 ## Overview
 This project is a web application designed to manage project requirements efficiently. It allows users to create, edit, and delete project requirements while maintaining an organized workflow. The system includes user authentication and different user roles to ensure proper access control.
